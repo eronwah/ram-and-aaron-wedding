@@ -8,8 +8,6 @@
 </head>
 <body>
 
-    <!-- NAVIGATION MENU -->
-    <!-- Ang mga href="#id" ang nagtuturo sa browser na mag-scroll sa partikular na section -->
     <nav>
         <a href="#home">Home</a>
         <a href="#our-story">Our Story</a>
@@ -17,58 +15,48 @@
         <a href="#rsvp">RSVP</a>
     </nav>
 
-
-    <!-- ==========================================
-                    HOME SECTION
-    =========================================== -->
     <header id="home" class="scroll-section animate-in">
         <h1>Aaron & Ram</h1>
         <p class="date">February 14, 2027</p>
         
-        <div class="container" style="background: transparent; box-shadow: none; margin-top: 40px;">
-            <p style="font-size: 1.5em; color: #5a4b41; font-style: italic;">[Countdown Timer will go here]</p>
+        <div style="margin-top: 60px;">
+            <p style="font-size: 1.2em; font-family: 'Playfair Display', serif; color: #7f8c8d;">[Countdown Timer will go here]</p>
         </div>
     </header>
 
-
-    <!-- ==========================================
-                  OUR STORY SECTION
-    =========================================== -->
     <section id="our-story" class="scroll-section">
         <h2>Our Story</h2>
         <div class="container">
-            <p>Every love story is beautiful, but ours is our favorite.</p>
+            <p style="font-size: 1.2em; font-family: 'Playfair Display', serif; color: #1a252f; margin-bottom: 30px;">Every love story is beautiful, but ours is our favorite.</p>
             <p>[A brief storyline of the couple will be placed here...]</p>
         </div>
     </section>
 
-
-    <!-- ==========================================
-                   DETAILS SECTION
-    =========================================== -->
     <section id="details" class="scroll-section">
         <h2>When & Where</h2>
         <div class="container">
             <h3>Ceremony & Reception</h3>
-            <p><strong>Location:</strong> Tagaytay</p>
-            <p><strong>Venue:</strong> [Specific Name of Venue / Church]</p>
-            <p><strong>Time:</strong> 3:00 PM</p>
-            <p style="margin-top: 20px; font-style: italic; font-size: 0.9em;">
+            <p style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.85em; color: #7f8c8d; margin-top: 30px;">Location</p>
+            <p style="font-size: 1.1em; color: #1a252f;">Tagaytay</p>
+            
+            <p style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.85em; color: #7f8c8d; margin-top: 20px;">Venue</p>
+            <p style="font-size: 1.1em; color: #1a252f;">[Specific Name of Venue / Church]</p>
+            
+            <p style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.85em; color: #7f8c8d; margin-top: 20px;">Time</p>
+            <p style="font-size: 1.1em; color: #1a252f;">3:00 PM</p>
+            
+            <p style="margin-top: 40px; font-style: italic; color: #bdc3c7;">
                 [Map overview and venue images will be added here]
             </p>
         </div>
     </section>
 
-
-    <!-- ==========================================
-                    RSVP SECTION
-    =========================================== -->
     <section id="rsvp" class="scroll-section">
         <h2>RSVP</h2>
         <div class="rsvp-wrapper">
             
             <div id="lookup-section">
-                <p style="text-align: center; margin-bottom: 20px;">Please enter your name to find your invitation.</p>
+                <p style="text-align: center; margin-bottom: 30px; font-family: 'Playfair Display', serif; font-size: 1.2em; color: #1a252f;">Please enter your name to find your invitation.</p>
                 <div class="input-group">
                     <label>First Name</label>
                     <input type="text" id="firstName" placeholder="e.g. John" required>
@@ -82,22 +70,22 @@
             </div>
 
             <div id="response-section" style="display: none;">
-                <h4 id="welcome-msg" style="color: #5a4b41; text-align: center; font-size: 1.5em; margin-top: 0;"></h4>
-                <p style="text-align: center;">We have reserved <strong id="max-guests-display"></strong> seat(s) in your honor.</p>
+                <h4 id="welcome-msg" style="text-align: center; font-size: 1.8em; margin-bottom: 10px;"></h4>
+                <p style="text-align: center; margin-bottom: 30px;">We have reserved <strong id="max-guests-display" style="color: #1a252f;"></strong> seat(s) in your honor.</p>
                 
                 <div style="margin: 25px 0;">
-                    <label><strong>Will you be attending?</strong></label><br>
-                    <div style="margin-top: 10px;">
-                        <input type="radio" name="attending" value="Attending" onclick="toggleGuests(true)"> Joyfully Accepts<br>
+                    <label style="font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; color: #7f8c8d;">Will you be attending?</label><br>
+                    <div style="margin-top: 15px;">
+                        <input type="radio" name="attending" value="Attending" onclick="toggleGuests(true)"> <span style="font-family: 'Playfair Display', serif; font-size: 1.1em; color: #1a252f;">Joyfully Accepts</span><br>
                     </div>
-                    <div style="margin-top: 10px;">
-                        <input type="radio" name="attending" value="Not Attending" onclick="toggleGuests(false)"> Regretfully Declines
+                    <div style="margin-top: 15px;">
+                        <input type="radio" name="attending" value="Not Attending" onclick="toggleGuests(false)"> <span style="font-family: 'Playfair Display', serif; font-size: 1.1em; color: #1a252f;">Regretfully Declines</span>
                     </div>
                 </div>
 
-                <div class="input-group" id="guest-count-section" style="display: none;">
+                <div class="input-group" id="guest-count-section" style="display: none; margin-top: 30px;">
                     <label>Number of guests attending:</label>
-                    <input type="number" id="confirmedGuests" min="1" value="1">
+                    <input type="number" id="confirmedGuests" min="1" value="1" style="border: 1px solid #cbd5e1; padding: 10px; border-radius: 4px;">
                 </div>
 
                 <button class="rsvp-btn" onclick="submitRSVP()">Submit RSVP</button>
@@ -105,9 +93,10 @@
             </div>
 
             <div id="already-responded-section" style="display: none; text-align: center;">
-                <h4 style="color: #5cb85c; font-size: 1.3em;">You have already submitted your RSVP. Thank you!</h4>
-                <p style="margin: 20px 0;">Do you need to change your guest count or cancel your attendance?</p>
-                <button class="rsvp-btn" style="background-color: #e8d5c4; color: #5a4b41;" onclick="openContactModal()">Yes, I need to make changes</button>
+                <h4 style="color: #2c3e50; font-size: 1.5em; margin-bottom: 10px;">You have already submitted your RSVP.</h4>
+                <p style="color: #7f8c8d; font-style: italic;">Thank you!</p>
+                <p style="margin: 30px 0;">Do you need to change your guest count or cancel your attendance?</p>
+                <button class="rsvp-btn rsvp-btn-secondary" onclick="openContactModal()">Yes, I need to make changes</button>
             </div>
         </div>
     </section>
@@ -115,20 +104,20 @@
     <!-- Modal for Contact -->
     <div id="contact-modal" class="modal-overlay">
         <div class="modal-content">
-            <h3 style="color: #5a4b41; margin-top: 0;">Update RSVP</h3>
+            <h3 style="margin-top: 0;">Update RSVP</h3>
             <p>Kindly contact Aaron or Ram directly to change your RSVP details:</p>
-            <p style="font-size: 1.2em; color: #333; line-height: 1.6;">
+            <p style="font-size: 1.2em; color: #1a252f; line-height: 1.8; margin: 30px 0; font-family: 'Playfair Display', serif;">
                 <strong>Aaron:</strong> 09770927233<br>
                 <strong>Ram:</strong> 09171607089
             </p>
-            <button class="rsvp-btn" onclick="closeContactModal()" style="margin-top: 20px;">Close</button>
+            <button class="rsvp-btn" onclick="closeContactModal()">Close</button>
         </div>
     </div>
 
     <!-- RSVP Logic -->
     <script>
-        // PALITAN ITO NG IYONG GOOGLE APPS SCRIPT WEB APP URL
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTjQCYlKwZ8li32nrH_GvKIXmULVGZtl39KG9Pz43MSIQN0SP3NCnLeDqJ2fIJXQaR/exec'; 
+        // HUWAG KALIMUTAN: Palitan ito ng iyong Google Apps Script Web App URL
+        const SCRIPT_URL = 'YOUR_WEB_APP_URL_HERE'; 
         
         let currentRow = 0;
         let maxAllowed = 0;
@@ -140,7 +129,7 @@
             const btn = document.querySelector('#lookup-section button');
             
             if(!first || !last) { msg.innerText = "Please enter both first and last name."; return; }
-            msg.innerText = "Searching..."; msg.style.color = "#555"; btn.disabled = true;
+            msg.innerText = "Searching..."; msg.style.color = "#7f8c8d"; btn.disabled = true;
             
             try {
                 const response = await fetch(`${SCRIPT_URL}?firstName=${encodeURIComponent(first)}&lastName=${encodeURIComponent(last)}`);
@@ -158,8 +147,8 @@
                         currentRow = data.row; maxAllowed = data.guestCount;
                         document.getElementById('confirmedGuests').max = maxAllowed;
                     }
-                } else { msg.innerText = data.message; msg.style.color = "#d9534f"; }
-            } catch (error) { msg.innerText = "An error occurred. Please try again."; msg.style.color = "#d9534f"; }
+                } else { msg.innerText = data.message; msg.style.color = "#e74c3c"; }
+            } catch (error) { msg.innerText = "An error occurred. Please try again."; msg.style.color = "#e74c3c"; }
             btn.disabled = false;
         }
 
@@ -174,25 +163,24 @@
             const msg = document.getElementById('submit-msg');
             const btn = document.querySelector('#response-section button');
 
-            if(!attending) { msg.innerText = "Please select an option."; msg.style.color = "#d9534f"; return; }
+            if(!attending) { msg.innerText = "Please select an option."; msg.style.color = "#e74c3c"; return; }
             const status = attending.value; let guests = 0;
             
             if(status === 'Attending') {
                 guests = document.getElementById('confirmedGuests').value;
-                if(guests < 1 || guests > maxAllowed) { msg.innerText = `Enter valid number of guests (1 to ${maxAllowed}).`; msg.style.color = "#d9534f"; return; }
+                if(guests < 1 || guests > maxAllowed) { msg.innerText = `Enter valid number of guests (1 to ${maxAllowed}).`; msg.style.color = "#e74c3c"; return; }
             }
 
-            msg.innerText = "Submitting your response..."; msg.style.color = "#555"; btn.disabled = true;
+            msg.innerText = "Submitting your response..."; msg.style.color = "#7f8c8d"; btn.disabled = true;
 
             try {
-                // Konektado ito sa iyong file na Wedding website - database
                 const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ row: currentRow, rsvpStatus: status, confirmedGuests: guests }) });
                 const data = await response.json();
                 if(data.result === 'success') {
                     document.getElementById('response-section').style.display = 'none';
                     document.getElementById('already-responded-section').style.display = 'block';
                 }
-            } catch (error) { msg.innerText = "An error occurred."; msg.style.color = "#d9534f"; btn.disabled = false; }
+            } catch (error) { msg.innerText = "An error occurred."; msg.style.color = "#e74c3c"; btn.disabled = false; }
         }
 
         function openContactModal() { document.getElementById('contact-modal').style.display = 'flex'; }
