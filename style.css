@@ -51,47 +51,8 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
 }
 
 /* =======================================
-   IPAD & TABLET VIEW
+   ELEGANT COUNTDOWN TIMER STYLES (BASE)
 ======================================== */
-@media (max-width: 1024px) {
-    .monogram-video { 
-        max-width: 70%; 
-    }
-}
-
-/* =======================================
-   MOBILE VIEW (Smartphones) - INAYOS ANG COUNTDOWN
-======================================== */
-@media (max-width: 600px) {
-    .monogram-video { 
-        max-width: 90%; 
-    } 
-    
-    /* Pinilit na maging isang hilera lang */
-    .countdown-container { 
-        gap: 5px; 
-        margin-top: 20px; 
-        flex-wrap: nowrap; /* Ito ang pipigil sa pagbaba sa second row */
-        width: 100%;
-    }
-    .countdown-item { 
-        padding: 12px 5px; 
-        min-width: 0; /* Tinanggal ang limitasyon sa lapad */
-        flex: 1; /* Hahatiin ang screen nang pantay sa 4 na kahon */
-        border-radius: 6px; 
-    }
-    .countdown-number { 
-        font-size: 1.6em; /* Pinaliit nang kaunti para magkasya lahat */
-        margin-bottom: 5px; 
-    }
-    .countdown-label { 
-        font-size: 0.55em; 
-        letter-spacing: 1px; 
-    }
-    nav { gap: 20px; padding: 15px; }
-}
-
-/* Elegant Countdown Timer Styles (Desktop) */
 .countdown-container {
     display: flex; gap: 20px; justify-content: center; margin-top: 30px; flex-wrap: wrap;
 }
@@ -138,3 +99,47 @@ input[type="radio"] { accent-color: #2c3e50; margin-right: 10px; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 .animate-in { animation: fadeIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+
+/* =======================================
+   RESPONSIVE DESIGN (MEDIA QUERIES)
+   Nasa pinaka-ibaba para sigurado ang effect!
+======================================== */
+
+/* IPAD & TABLET VIEW */
+@media (max-width: 1024px) {
+    .monogram-video { 
+        max-width: 70%; 
+    }
+}
+
+/* MOBILE VIEW (Smartphones) */
+@media (max-width: 600px) {
+    .monogram-video { 
+        max-width: 90%; 
+    } 
+    
+    /* GAGARANTIYANG ISANG HILERA NA LANG ANG COUNTDOWN */
+    .countdown-container { 
+        gap: 5px; 
+        margin-top: 20px; 
+        flex-wrap: nowrap !important; /* Pinipigil nito na magkaroon ng second row */
+        width: 100%;
+        padding: 0 5px;
+    }
+    .countdown-item { 
+        padding: 12px 2px; 
+        min-width: 0 !important; /* Papatungan ang desktop limit */
+        flex: 1 1 0; /* Hahatiin ang lapad ng pantay sa 4 na kahon */
+        border-radius: 6px; 
+    }
+    .countdown-number { 
+        font-size: 1.5em !important; 
+        margin-bottom: 5px; 
+    }
+    .countdown-label { 
+        font-size: 0.55em !important; 
+        letter-spacing: 1px !important; 
+    }
+    
+    nav { gap: 20px; padding: 15px; }
+}
