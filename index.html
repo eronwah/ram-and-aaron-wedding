@@ -245,8 +245,26 @@
             } catch (error) { msg.innerText = "An error occurred."; msg.style.color = "#e74c3c"; btn.disabled = false; }
         }
 
-        function openContactModal() { document.getElementById('contact-modal').style.display = 'flex'; }
-        function closeContactModal() { document.getElementById('contact-modal').style.display = 'none'; }
+        /* ==========================================
+                      MODAL LOGIC UPDATE
+        ========================================== */
+        function openContactModal() { 
+            // Ipakita ang contact pop-up
+            document.getElementById('contact-modal').style.display = 'flex'; 
+            
+            // I-reset ang form pabalik sa lookup section sa background
+            document.getElementById('already-responded-section').style.display = 'none';
+            document.getElementById('lookup-section').style.display = 'block';
+            
+            // Linisin ang mga nai-type na pangalan at errors para fresh ulit
+            document.getElementById('firstName').value = '';
+            document.getElementById('lastName').value = '';
+            document.getElementById('search-msg').innerText = '';
+        }
+        
+        function closeContactModal() { 
+            document.getElementById('contact-modal').style.display = 'none'; 
+        }
     </script>
 </body>
 </html>
