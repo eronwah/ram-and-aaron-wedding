@@ -37,16 +37,17 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
 .date { font-family: 'Playfair Display', serif; font-size: 1.4em; margin-top: 10px; color: #7f8c8d; font-style: italic; letter-spacing: 1px; }
 
 /* =======================================
-   MONOGRAM VIDEO (FLEXIBLE / RESPONSIVE)
+   MONOGRAM VIDEO 
 ======================================== */
 .monogram-video {
     width: 100%;
-    max-width: 450px; /* Default limit para sa Desktop web browser */
+    max-width: 450px; 
     height: auto;
     margin: 0 auto 15px auto;
     display: block;
     pointer-events: none; 
     object-fit: contain; 
+    mix-blend-mode: multiply; 
 }
 
 /* =======================================
@@ -54,27 +55,43 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
 ======================================== */
 @media (max-width: 1024px) {
     .monogram-video { 
-        max-width: 70%; /* Sasakto nang maganda sa malalaking tablet screen */
+        max-width: 70%; 
     }
 }
 
 /* =======================================
-   MOBILE VIEW (Smartphones)
+   MOBILE VIEW (Smartphones) - INAYOS ANG COUNTDOWN
 ======================================== */
 @media (max-width: 600px) {
-    /* Mas malaking size para kitang-kita at fit sa cellphone screens */
     .monogram-video { 
         max-width: 90%; 
     } 
     
-    .countdown-container { gap: 10px; margin-top: 20px; }
-    .countdown-item { padding: 15px 10px; min-width: 75px; border-radius: 6px; }
-    .countdown-number { font-size: 2em; margin-bottom: 5px; }
-    .countdown-label { font-size: 0.6em; letter-spacing: 1px; }
+    /* Pinilit na maging isang hilera lang */
+    .countdown-container { 
+        gap: 5px; 
+        margin-top: 20px; 
+        flex-wrap: nowrap; /* Ito ang pipigil sa pagbaba sa second row */
+        width: 100%;
+    }
+    .countdown-item { 
+        padding: 12px 5px; 
+        min-width: 0; /* Tinanggal ang limitasyon sa lapad */
+        flex: 1; /* Hahatiin ang screen nang pantay sa 4 na kahon */
+        border-radius: 6px; 
+    }
+    .countdown-number { 
+        font-size: 1.6em; /* Pinaliit nang kaunti para magkasya lahat */
+        margin-bottom: 5px; 
+    }
+    .countdown-label { 
+        font-size: 0.55em; 
+        letter-spacing: 1px; 
+    }
     nav { gap: 20px; padding: 15px; }
 }
 
-/* Elegant Countdown Timer Styles */
+/* Elegant Countdown Timer Styles (Desktop) */
 .countdown-container {
     display: flex; gap: 20px; justify-content: center; margin-top: 30px; flex-wrap: wrap;
 }
