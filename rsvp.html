@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP - Aaron & Ram</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navigation Menu -->
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="#">Our Story</a>
+        <a href="#">Details</a>
+        <a href="rsvp.html">RSVP</a>
+    </nav>
+
+    <section>
+        <h2>RSVP</h2>
+        
+        <div class="rsvp-wrapper">
+            
+            <div id="lookup-section">
+                <p style="text-align: center; margin-bottom: 20px;">Please enter your name to find your invitation.</p>
+                <div class="input-group">
+                    <label>First Name</label>
+                    <input type="text" id="firstName" placeholder="e.g. John" required>
+                </div>
+                <div class="input-group">
+                    <label>Last Name</label>
+                    <input type="text" id="lastName" placeholder="e.g. Smith" required>
+                </div>
+                <button class="rsvp-btn" onclick="searchGuest()">Find Invitation</button>
+                <p id="search-msg" class="message error-text"></p>
+            </div>
+
+            <div id="response-section" style="display: none;">
+                <h4 id="welcome-msg" style="color: #5a4b41; text-align: center;"></h4>
+                <p style="text-align: center;">We have reserved <strong id="max-guests-display"></strong> seat(s) in your honor.</p>
+                
+                <div style="margin: 15px 0;">
+                    <label><strong>Will you be attending?</strong></label><br>
+                    <input type="radio" name="attending" value="Attending" onclick="toggleGuests(true)"> Joyfully Accepts<br>
+                    <input type="radio" name="attending" value="Not Attending" onclick="toggleGuests(false)" style="margin-top: 10px;"> Regretfully Declines
+                </div>
+
+                <div class="input-group" id="guest-count-section" style="display: none;">
+                    <label>Number of guests attending:</label>
+                    <input type="number" id="confirmedGuests" min="1" value="1">
+                </div>
+
+                <button class="rsvp-btn" onclick="submitRSVP()">Submit RSVP</button>
+                <p id="submit-msg" class="message"></p>
+            </div>
+
+            <div id="already-responded-section" style="display: none; text-align: center;">
+                <h4 style="color: #5cb85c;">You have already submitted your RSVP. Thank you!</h4>
+                <p style="margin: 20px 0;">Do you need to change your guest count or cancel your attendance?</p>
+                <button class="rsvp-btn" style="background-color: #e8d5c4; color: #5a4b41;" onclick="openContactModal()">Yes, I need to make changes</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal for Contact -->
+    <div id="contact-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="color: #5a4b41; margin-top: 0;">Update RSVP</h3>
+            <p>Kindly contact Aaron or Ram directly to change your RSVP details:</p>
+            <p style="font-size: 1.2em; color: #333;">
+                <strong>Aaron:</strong> 09770927233<br>
+                <strong>Ram:</strong> 09171607089
+            </p>
+            <button class="rsvp-btn" onclick="closeContactModal()" style="margin-top: 20px;">Close</button>
+        </div>
+    </div>
+
+    <!-- RSVP Logic -->
+    <script>
+        // PALITAN ITO NG IYONG GOOGLE APPS SCRIPT WEB APP URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTjQCYlKwZ8li32nrH_GvKIXmULVGZtl39KG9Pz43MSIQN0SP3NCnLeDqJ2fIJXQaR/exec'; 
+        
+        let currentRow = 0;
+        let maxAllowed = 0;
+
+        async function searchGuest() {
+            const first = document.getElementById('firstName').value;
+            const last = document.getElementById('lastName').value;
+            const msg = document.getElementById('search-msg');
+            const btn = document.querySelector('#lookup-section button');
+            
+            if(!first || !last) { msg.innerText = "Please enter both first and last name."; return; }
+            msg.innerText = "Searching..."; msg.className = "message"; btn.disabled = true;
+            
+            try {
+                const response = await fetch(`${SCRIPT_URL}?firstName=${encodeURIComponent(first)}&lastName=${encodeURIComponent(last)}`);
+                const data = await response.json();
+                
+                if(data.result === 'success') {
+                    if(data.rsvpStatus) {
+                        document.getElementById('lookup-section').style.display = 'none';
+                        document.getElementById('already-responded-section').style.display = 'block';
+                    } else {
+                        document.getElementById('lookup-section').style.display = 'none';
+                        document.getElementById('response-section').style.display = 'block';
+                        document.getElementById('welcome-msg').innerText = `Hello, ${data.firstName} ${data.lastName}!`;
+                        document.getElementById('max-guests-display').innerText = data.guestCount;
+                        currentRow = data.row; maxAllowed = data.guestCount;
+                        document.getElementById('confirmedGuests').max = maxAllowed;
+                    }
+                } else { msg.innerText = data.message; msg.className = "message error-text"; }
+            } catch (error) { msg.innerText = "An error occurred."; msg.className = "message error-text"; }
+            btn.disabled = false;
+        }
+
+        function toggleGuests(isAttending) {
+            const section = document.getElementById('guest-count-section');
+            if(isAttending) { section.style.display = 'block'; document.getElementById('confirmedGuests').value = maxAllowed; } 
+            else { section.style.display = 'none'; document.getElementById('confirmedGuests').value = 0; }
+        }
+
+        async function submitRSVP() {
+            const attending = document.querySelector('input[name="attending"]:checked');
+            const msg = document.getElementById('submit-msg');
+            const btn = document.querySelector('#response-section button');
+
+            if(!attending) { msg.innerText = "Please select an option."; msg.className = "message error-text"; return; }
+            const status = attending.value; let guests = 0;
+            
+            if(status === 'Attending') {
+                guests = document.getElementById('confirmedGuests').value;
+                if(guests < 1 || guests > maxAllowed) { msg.innerText = `Enter valid number of guests (1 to ${maxAllowed}).`; msg.className = "message error-text"; return; }
+            }
+
+            msg.innerText = "Submitting your response..."; msg.className = "message"; btn.disabled = true;
+
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ row: currentRow, rsvpStatus: status, confirmedGuests: guests }) });
+                const data = await response.json();
+                if(data.result === 'success') {
+                    document.getElementById('response-section').style.display = 'none';
+                    document.getElementById('already-responded-section').style.display = 'block';
+                }
+            } catch (error) { msg.innerText = "An error occurred."; msg.className = "message error-text"; btn.disabled = false; }
+        }
+
+        function openContactModal() { document.getElementById('contact-modal').style.display = 'flex'; }
+        function closeContactModal() { document.getElementById('contact-modal').style.display = 'none'; }
+    </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Georgia', serif;
+    margin: 0;
+    padding: 0;
+    background-color: #faf5f0; 
+    color: #333;
+    text-align: center;
+}
+/* Navigation Menu */
+nav {
+    background-color: #5a4b41;
+    padding: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 1.1em;
+}
+nav a:hover {
+    text-decoration: underline;
+}
+/* Header & Layout */
+header {
+    background-color: #e8d5c4;
+    padding: 60px 20px;
+}
+h1 {
+    font-size: 2.8em;
+    margin: 0;
+    color: #5a4b41;
+}
+.date {
+    font-size: 1.2em;
+    margin-top: 10px;
+    color: #7a6b61;
+    font-style: italic;
+}
+section {
+    padding: 40px 20px;
+}
+.container, .rsvp-wrapper {
+    background-color: white;
+    margin: 20px auto;
+    width: 100%;
+    padding: 30px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.container { max-width: 600px; }
+.rsvp-wrapper { max-width: 500px; text-align: left; }
+
+/* Buttons & Inputs */
+.rsvp-btn {
+    width: 100%;
+    background-color: #5a4b41;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 1.1em;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.rsvp-btn:hover { background-color: #3b312a; }
+.input-group { margin-bottom: 15px; }
+.input-group label { display: block; font-weight: bold; color: #5a4b41; }
+.input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+.message { text-align: center; margin-top: 15px; font-style: italic; }
+.error-text { color: #d9534f; }
+.success-text { color: #5cb85c; }
+
+/* Modal */
+.modal-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; padding: 20px;
+}
+.modal-content {
+    background: white; padding: 30px; border-radius: 10px; width: 100%; max-width: 400px; text-align: center;
+}
