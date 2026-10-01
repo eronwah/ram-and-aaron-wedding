@@ -41,12 +41,37 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
 ======================================== */
 .monogram-video {
     width: 100%;
-    max-width: 350px; /* Sapat na laki para sa Web Browser (Desktop) */
+    max-width: 450px; /* Default limit para sa Desktop web browser */
     height: auto;
-    margin: 0 auto 20px auto;
+    margin: 0 auto 15px auto;
     display: block;
     pointer-events: none; 
-    object-fit: contain; /* Iniiwasan na mabanat o masira ang aspect ratio */
+    object-fit: contain; 
+}
+
+/* =======================================
+   IPAD & TABLET VIEW
+======================================== */
+@media (max-width: 1024px) {
+    .monogram-video { 
+        max-width: 70%; /* Sasakto nang maganda sa malalaking tablet screen */
+    }
+}
+
+/* =======================================
+   MOBILE VIEW (Smartphones)
+======================================== */
+@media (max-width: 600px) {
+    /* Mas malaking size para kitang-kita at fit sa cellphone screens */
+    .monogram-video { 
+        max-width: 90%; 
+    } 
+    
+    .countdown-container { gap: 10px; margin-top: 20px; }
+    .countdown-item { padding: 15px 10px; min-width: 75px; border-radius: 6px; }
+    .countdown-number { font-size: 2em; margin-bottom: 5px; }
+    .countdown-label { font-size: 0.6em; letter-spacing: 1px; }
+    nav { gap: 20px; padding: 15px; }
 }
 
 /* Elegant Countdown Timer Styles */
@@ -63,22 +88,6 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
 .countdown-item:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
 .countdown-number { font-family: 'Playfair Display', serif; font-size: 3.5em; color: #1a252f; line-height: 1; margin-bottom: 8px; }
 .countdown-label { font-size: 0.75em; text-transform: uppercase; letter-spacing: 3px; color: #7f8c8d; font-weight: 500; }
-
-/* =======================================
-   MOBILE VIEW ADJUSTMENTS
-======================================== */
-@media (max-width: 600px) {
-    .countdown-container { gap: 10px; margin-top: 20px; }
-    .countdown-item { padding: 15px 10px; min-width: 75px; border-radius: 6px; }
-    .countdown-number { font-size: 2em; margin-bottom: 5px; }
-    .countdown-label { font-size: 0.6em; letter-spacing: 1px; }
-    nav { gap: 20px; padding: 15px; }
-    
-    /* Maga-adjust palagi sa 75% ng screen size ng cellphone (iPhone man o Android) */
-    .monogram-video { 
-        max-width: 75%; 
-    } 
-}
 
 /* Buttons Container */
 .hero-buttons { display: flex; gap: 20px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
