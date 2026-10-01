@@ -15,9 +15,6 @@
         <a href="#rsvp">RSVP</a>
     </nav>
 
-    <!-- ==========================================
-                    HOME SECTION
-    =========================================== -->
     <header id="home" class="scroll-section animate-in" style="min-height: 100vh; justify-content: center;">
         <h1>Aaron & Ram</h1>
         <p class="date">July 28, 2027 &bull; Silang, Cavite</p>
@@ -35,9 +32,6 @@
         </div>
     </header>
 
-    <!-- ==========================================
-                  OUR STORY & DETAILS
-    =========================================== -->
     <section id="our-story" class="scroll-section">
         <h2>Our Story</h2>
         <div class="container">
@@ -59,9 +53,6 @@
         </div>
     </section>
 
-    <!-- ==========================================
-                    RSVP SECTION
-    =========================================== -->
     <section id="rsvp" class="scroll-section">
         <h2>RSVP</h2>
         <div class="rsvp-wrapper">
@@ -80,6 +71,7 @@
                 <p id="search-msg" class="message error-text"></p>
             </div>
 
+            <!-- Form para sa bagong RSVP -->
             <div id="response-section" style="display: none;">
                 <h4 id="welcome-msg" style="text-align: center; font-size: 1.8em; margin-bottom: 10px;"></h4>
                 <p id="eligibility-msg" style="text-align: center; margin-bottom: 30px;"></p>
@@ -94,14 +86,10 @@
                     </div>
                 </div>
 
-                <!-- DYNAMIC GUEST COUNT & NAMES BOXES -->
                 <div class="input-group" id="guest-count-section" style="display: none; margin-top: 30px;">
-                    <label>Number of additional guests you are bringing:</label>
-                    <select id="confirmedGuests" onchange="generateGuestNameInputs()" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 4px; font-family: 'Montserrat', sans-serif; background: transparent; color: #2c3e50; cursor: pointer;">
-                        <!-- Options will be generated here -->
+                    <label>How many additional guests will you bring?</label>
+                    <select id="confirmedGuests" onchange="generateGuestNameInputs()" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 4px; font-family: 'Montserrat', sans-serif; background: #ffffff; color: #2c3e50; cursor: pointer; appearance: auto;">
                     </select>
-                    
-                    <!-- Container para sa lalabas na text boxes -->
                     <div id="guest-names-container" style="margin-top: 20px;"></div>
                 </div>
 
@@ -109,6 +97,13 @@
                 <p id="submit-msg" class="message"></p>
             </div>
 
+            <!-- BAGONG SECTION: Para lang sa kakatapos mag-submit (Walang prompt na magbago) -->
+            <div id="success-section" style="display: none; text-align: center;">
+                <h4 style="color: #2c3e50; font-size: 1.8em; margin-bottom: 10px; font-family: 'Playfair Display', serif;">RSVP Submitted!</h4>
+                <p style="color: #7f8c8d; font-style: italic; font-size: 1.1em;">Thank you for letting us know. We can't wait to celebrate with you!</p>
+            </div>
+
+            <!-- Para sa nag-search pero nakapag-submit na dati (May prompt na magbago) -->
             <div id="already-responded-section" style="display: none; text-align: center;">
                 <h4 style="color: #2c3e50; font-size: 1.5em; margin-bottom: 10px;">You have already submitted your RSVP.</h4>
                 <p style="color: #7f8c8d; font-style: italic;">Thank you!</p>
@@ -148,7 +143,7 @@
             document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
         }, 1000);
 
-        // API URL (Updated)
+        // API URL
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTjQCYlKwZ8li32nrH_GvKIXmULVGZtl39KG9Pz43MSIQN0SP3NCnLeDqJ2fIJXQaR/exec'; 
         
         let currentRow = 0;
@@ -169,16 +164,16 @@
                 
                 if(data.result === 'success') {
                     if(data.rsvpStatus) {
+                        // Kapag nakapag-submit na noon at nag-search ulit, lalabas ang option to change
                         document.getElementById('lookup-section').style.display = 'none';
                         document.getElementById('already-responded-section').style.display = 'block';
                     } else {
+                        // Kapag bago palang magsasagot ng form
                         document.getElementById('lookup-section').style.display = 'none';
                         document.getElementById('response-section').style.display = 'block';
                         document.getElementById('welcome-msg').innerText = `Hello, ${data.firstName} ${data.lastName}!`;
                         
                         currentRow = data.row; 
-                        
-                        // Bagong Logic: Ang numero sa database ay ang exact number of additional guests na pwede isama
                         extraCompanionsAllowed = parseInt(data.guestCount) || 0; 
                         
                         let eligibilityMsg = "We have reserved a seat in your honor.";
@@ -200,17 +195,14 @@
             if(isAttending) { 
                 if(extraCompanionsAllowed > 0) {
                     section.style.display = 'block'; 
-                    select.innerHTML = '';
+                    select.innerHTML = '<option value="" disabled selected>Select number of guests...</option>';
+                    select.innerHTML += '<option value="0">0 (Just me)</option>';
                     
-                    // Gumagawa ng Dropdown options depende sa dami ng allowed companions
-                    for(let i = 0; i <= extraCompanionsAllowed; i++) {
-                        const option = document.createElement('option');
-                        option.value = i;
-                        option.text = i === 0 ? "None (Just me)" : `${i} Guest(s)`;
-                        select.appendChild(option);
+                    for(let i = 1; i <= extraCompanionsAllowed; i++) {
+                        select.innerHTML += `<option value="${i}">${i}</option>`;
                     }
-                    select.value = 0;
-                    generateGuestNameInputs();
+                    
+                    container.innerHTML = ''; 
                 } else {
                     section.style.display = 'none'; 
                     select.innerHTML = '<option value="0">0</option>';
@@ -218,13 +210,15 @@
                 }
             } else { 
                 section.style.display = 'none'; 
+                container.innerHTML = '';
             }
         }
 
         function generateGuestNameInputs() {
             const container = document.getElementById('guest-names-container');
-            container.innerHTML = '';
-            const count = parseInt(document.getElementById('confirmedGuests').value);
+            container.innerHTML = ''; 
+            
+            const count = parseInt(document.getElementById('confirmedGuests').value) || 0;
             
             for(let i = 0; i < count; i++) {
                 const input = document.createElement('input');
@@ -260,8 +254,14 @@
             let guestNamesArray = [];
             
             if(status === 'Attending') {
-                const extraSelected = parseInt(document.getElementById('confirmedGuests').value) || 0;
-                // Ang i-sa-save natin na total attendees ay: 1 (Primary) + Extra Selected Guests
+                const selectValue = document.getElementById('confirmedGuests').value;
+                if(extraCompanionsAllowed > 0 && selectValue === "") {
+                    msg.innerText = "Please select the number of additional guests from the dropdown.";
+                    msg.style.color = "#e74c3c";
+                    return;
+                }
+                
+                const extraSelected = parseInt(selectValue) || 0;
                 totalConfirmedGuests = 1 + extraSelected; 
                 
                 if(extraSelected > 0) {
@@ -278,7 +278,6 @@
             }
 
             msg.innerText = "Submitting your response..."; msg.style.color = "#7f8c8d"; btn.disabled = true;
-
             const finalGuestNames = guestNamesArray.join(', ');
 
             try {
@@ -293,8 +292,9 @@
                 });
                 const data = await response.json();
                 if(data.result === 'success') {
+                    // Kapag naging successful ang bago at unang submit, sa Success Section mapupunta
                     document.getElementById('response-section').style.display = 'none';
-                    document.getElementById('already-responded-section').style.display = 'block';
+                    document.getElementById('success-section').style.display = 'block';
                 }
             } catch (error) { msg.innerText = "An error occurred."; msg.style.color = "#e74c3c"; btn.disabled = false; }
         }
