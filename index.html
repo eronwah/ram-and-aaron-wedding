@@ -13,9 +13,30 @@
             color: #333;
             text-align: center;
         }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-up {
+            opacity: 0;
+            animation: fadeInUp 1.2s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.4s; }
+        .delay-2 { animation-delay: 0.8s; }
+
         header {
             background-color: #e8d5c4;
-            padding: 60px 20px;
+            padding: 80px 20px;
         }
         h1 {
             font-size: 3.5em;
@@ -38,7 +59,15 @@
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+        
+        /* Container Hover Effect */
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
         h3 {
             color: #5a4b41;
             font-size: 1.8em;
@@ -53,30 +82,34 @@
             cursor: pointer;
             border-radius: 5px;
             margin-top: 15px;
+            transition: all 0.3s ease;
         }
+        
+        /* Button Hover Effect */
         button:hover {
             background-color: #3b312a;
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
 
-    <header>
+    <header class="animate-up">
         <h1>Aaron & Ram</h1>
         <p class="date">[Date of Wedding, e.g., February 14, 2027]</p>
     </header>
 
     <section>
-        <h2>You are invited to our special day!</h2>
+        <h2 class="animate-up delay-1">You are invited to our special day!</h2>
         
-        <div class="container">
+        <div class="container animate-up delay-1">
             <h3>When & Where</h3>
             <p><strong>Location:</strong> Tagaytay</p>
             <p><strong>Venue:</strong> [Specific Name of Venue / Church]</p>
             <p><strong>Time:</strong> [Time of Wedding, e.g., 3:00 PM]</p>
         </div>
 
-        <div class="container">
+        <div class="container animate-up delay-2">
             <h3>RSVP</h3>
             <p>Please confirm your attendance by [Deadline Date].</p>
             <!-- Replace [YOUR_FORM_LINK] with your actual Google Form or RSVP link -->
