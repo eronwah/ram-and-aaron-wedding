@@ -97,10 +97,12 @@
                 <p id="submit-msg" class="message"></p>
             </div>
 
-            <!-- BAGONG SECTION: Para lang sa kakatapos mag-submit (Walang prompt na magbago) -->
+            <!-- BAGONG SECTION: Success Section na may 'Back to form' button -->
             <div id="success-section" style="display: none; text-align: center;">
                 <h4 style="color: #2c3e50; font-size: 1.8em; margin-bottom: 10px; font-family: 'Playfair Display', serif;">RSVP Submitted!</h4>
                 <p style="color: #7f8c8d; font-style: italic; font-size: 1.1em;">Thank you for letting us know. We can't wait to celebrate with you!</p>
+                
+                <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" style="margin-top: 30px;" onclick="resetRSVPForm()">Back to form</button>
             </div>
 
             <!-- Para sa nag-search pero nakapag-submit na dati (May prompt na magbago) -->
@@ -109,6 +111,7 @@
                 <p style="color: #7f8c8d; font-style: italic;">Thank you!</p>
                 <p style="margin: 30px 0;">Do you need to change your guest count or cancel your attendance?</p>
                 <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" onclick="openContactModal()">Yes, I need to make changes</button>
+                <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" style="margin-top: 10px; border: none; background: transparent; text-decoration: underline;" onclick="resetRSVPForm()">Search another name</button>
             </div>
         </div>
     </section>
@@ -164,11 +167,9 @@
                 
                 if(data.result === 'success') {
                     if(data.rsvpStatus) {
-                        // Kapag nakapag-submit na noon at nag-search ulit, lalabas ang option to change
                         document.getElementById('lookup-section').style.display = 'none';
                         document.getElementById('already-responded-section').style.display = 'block';
                     } else {
-                        // Kapag bago palang magsasagot ng form
                         document.getElementById('lookup-section').style.display = 'none';
                         document.getElementById('response-section').style.display = 'block';
                         document.getElementById('welcome-msg').innerText = `Hello, ${data.firstName} ${data.lastName}!`;
@@ -292,20 +293,33 @@
                 });
                 const data = await response.json();
                 if(data.result === 'success') {
-                    // Kapag naging successful ang bago at unang submit, sa Success Section mapupunta
                     document.getElementById('response-section').style.display = 'none';
                     document.getElementById('success-section').style.display = 'block';
                 }
             } catch (error) { msg.innerText = "An error occurred."; msg.style.color = "#e74c3c"; btn.disabled = false; }
         }
 
-        function openContactModal() { 
-            document.getElementById('contact-modal').style.display = 'flex'; 
+        // BAGONG FUNCTION: Ito ang magre-reset ng form kapag pinindot ang 'Back to form'
+        function resetRSVPForm() {
+            // Itago ang mga success/already responded screens
+            document.getElementById('success-section').style.display = 'none';
             document.getElementById('already-responded-section').style.display = 'none';
+            
+            // Ipakita ulit ang search box
             document.getElementById('lookup-section').style.display = 'block';
+            
+            // Linisin ang mga input
             document.getElementById('firstName').value = '';
             document.getElementById('lastName').value = '';
             document.getElementById('search-msg').innerText = '';
+            
+            // I-reset din ang submit button message kung sakali
+            document.getElementById('submit-msg').innerText = '';
+        }
+
+        function openContactModal() { 
+            document.getElementById('contact-modal').style.display = 'flex'; 
+            resetRSVPForm(); // Ginamit na rin natin yung bagong function para mas malinis ang code
         }
         
         function closeContactModal() { 
