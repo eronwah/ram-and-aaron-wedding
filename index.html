@@ -15,15 +15,43 @@
         <a href="#rsvp">RSVP</a>
     </nav>
 
-    <header id="home" class="scroll-section animate-in">
+    <!-- ==========================================
+                    HOME SECTION
+    =========================================== -->
+    <header id="home" class="scroll-section animate-in" style="min-height: 100vh; justify-content: center;">
         <h1>Aaron & Ram</h1>
-        <p class="date">February 14, 2027</p>
+        <p class="date">July 28, 2027 &bull; Silang, Cavite</p>
         
-        <div style="margin-top: 60px;">
-            <p style="font-size: 1.2em; font-family: 'Playfair Display', serif; color: #7f8c8d;">[Countdown Timer will go here]</p>
+        <!-- Live Countdown Timer -->
+        <div class="countdown-container">
+            <div class="countdown-item">
+                <span id="days" class="countdown-number">00</span>
+                <span class="countdown-label">Days</span>
+            </div>
+            <div class="countdown-item">
+                <span id="hours" class="countdown-number">00</span>
+                <span class="countdown-label">Hours</span>
+            </div>
+            <div class="countdown-item">
+                <span id="minutes" class="countdown-number">00</span>
+                <span class="countdown-label">Minutes</span>
+            </div>
+            <div class="countdown-item">
+                <span id="seconds" class="countdown-number">00</span>
+                <span class="countdown-label">Seconds</span>
+            </div>
+        </div>
+
+        <!-- Quick Access Buttons -->
+        <div class="hero-buttons">
+            <a href="#rsvp" class="rsvp-btn">RSVP Now</a>
+            <a href="#our-story" class="rsvp-btn rsvp-btn-secondary">Our Story</a>
         </div>
     </header>
 
+    <!-- ==========================================
+                  OUR STORY SECTION
+    =========================================== -->
     <section id="our-story" class="scroll-section">
         <h2>Our Story</h2>
         <div class="container">
@@ -32,18 +60,21 @@
         </div>
     </section>
 
+    <!-- ==========================================
+                   DETAILS SECTION
+    =========================================== -->
     <section id="details" class="scroll-section">
         <h2>When & Where</h2>
         <div class="container">
             <h3>Ceremony & Reception</h3>
             <p style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.85em; color: #7f8c8d; margin-top: 30px;">Location</p>
-            <p style="font-size: 1.1em; color: #1a252f;">Tagaytay</p>
+            <p style="font-size: 1.1em; color: #1a252f;">Silang, Cavite</p>
             
             <p style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.85em; color: #7f8c8d; margin-top: 20px;">Venue</p>
             <p style="font-size: 1.1em; color: #1a252f;">[Specific Name of Venue / Church]</p>
             
-            <p style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.85em; color: #7f8c8d; margin-top: 20px;">Time</p>
-            <p style="font-size: 1.1em; color: #1a252f;">3:00 PM</p>
+            <p style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.85em; color: #7f8c8d; margin-top: 20px;">Date & Time</p>
+            <p style="font-size: 1.1em; color: #1a252f;">July 28, 2027 &bull; 3:00 PM</p>
             
             <p style="margin-top: 40px; font-style: italic; color: #bdc3c7;">
                 [Map overview and venue images will be added here]
@@ -51,6 +82,9 @@
         </div>
     </section>
 
+    <!-- ==========================================
+                    RSVP SECTION
+    =========================================== -->
     <section id="rsvp" class="scroll-section">
         <h2>RSVP</h2>
         <div class="rsvp-wrapper">
@@ -65,7 +99,7 @@
                     <label>Last Name</label>
                     <input type="text" id="lastName" placeholder="e.g. Smith" required>
                 </div>
-                <button class="rsvp-btn" onclick="searchGuest()">Find Invitation</button>
+                <button class="rsvp-btn form-submit-btn" onclick="searchGuest()">Find Invitation</button>
                 <p id="search-msg" class="message error-text"></p>
             </div>
 
@@ -88,7 +122,7 @@
                     <input type="number" id="confirmedGuests" min="1" value="1" style="border: 1px solid #cbd5e1; padding: 10px; border-radius: 4px;">
                 </div>
 
-                <button class="rsvp-btn" onclick="submitRSVP()">Submit RSVP</button>
+                <button class="rsvp-btn form-submit-btn" onclick="submitRSVP()">Submit RSVP</button>
                 <p id="submit-msg" class="message"></p>
             </div>
 
@@ -96,7 +130,7 @@
                 <h4 style="color: #2c3e50; font-size: 1.5em; margin-bottom: 10px;">You have already submitted your RSVP.</h4>
                 <p style="color: #7f8c8d; font-style: italic;">Thank you!</p>
                 <p style="margin: 30px 0;">Do you need to change your guest count or cancel your attendance?</p>
-                <button class="rsvp-btn rsvp-btn-secondary" onclick="openContactModal()">Yes, I need to make changes</button>
+                <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" onclick="openContactModal()">Yes, I need to make changes</button>
             </div>
         </div>
     </section>
@@ -110,14 +144,44 @@
                 <strong>Aaron:</strong> 09770927233<br>
                 <strong>Ram:</strong> 09171607089
             </p>
-            <button class="rsvp-btn" onclick="closeContactModal()">Close</button>
+            <button class="rsvp-btn form-submit-btn" onclick="closeContactModal()">Close</button>
         </div>
     </div>
 
-    <!-- RSVP Logic -->
+    <!-- JavaScript Logic -->
     <script>
-        // HUWAG KALIMUTAN: Palitan ito ng iyong Google Apps Script Web App URL
-        const SCRIPT_URL = 'YOUR_WEB_APP_URL_HERE'; 
+        /* ==========================================
+                 COUNTDOWN TIMER LOGIC
+        ========================================== */
+        // Naka-set ito sa July 28, 2027 ng 3:00 PM (15:00:00)
+        const weddingDate = new Date("July 28, 2027 15:00:00").getTime();
+
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance < 0) {
+                clearInterval(timer);
+                document.querySelector('.countdown-container').innerHTML = "<h3 style='font-size: 2em;'>The Big Day is Here!</h3>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+        }, 1000);
+
+        /* ==========================================
+                      RSVP LOGIC
+        ========================================== */
+        // Nakakabit na ang iyong Google Apps Script API!
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTjQCYlKwZ8li32nrH_GvKIXmULVGZtl39KG9Pz43MSIQN0SP3NCnLeDqJ2fIJXQaR/exec'; 
         
         let currentRow = 0;
         let maxAllowed = 0;
