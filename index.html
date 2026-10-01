@@ -22,27 +22,13 @@
         <h1>Aaron & Ram</h1>
         <p class="date">July 28, 2027 &bull; Silang, Cavite</p>
         
-        <!-- Elegant Live Countdown Timer -->
         <div class="countdown-container">
-            <div class="countdown-item">
-                <span id="days" class="countdown-number">00</span>
-                <span class="countdown-label">Days</span>
-            </div>
-            <div class="countdown-item">
-                <span id="hours" class="countdown-number">00</span>
-                <span class="countdown-label">Hours</span>
-            </div>
-            <div class="countdown-item">
-                <span id="minutes" class="countdown-number">00</span>
-                <span class="countdown-label">Minutes</span>
-            </div>
-            <div class="countdown-item">
-                <span id="seconds" class="countdown-number">00</span>
-                <span class="countdown-label">Seconds</span>
-            </div>
+            <div class="countdown-item"><span id="days" class="countdown-number">00</span><span class="countdown-label">Days</span></div>
+            <div class="countdown-item"><span id="hours" class="countdown-number">00</span><span class="countdown-label">Hours</span></div>
+            <div class="countdown-item"><span id="minutes" class="countdown-number">00</span><span class="countdown-label">Minutes</span></div>
+            <div class="countdown-item"><span id="seconds" class="countdown-number">00</span><span class="countdown-label">Seconds</span></div>
         </div>
 
-        <!-- Quick Access Buttons -->
         <div class="hero-buttons">
             <a href="#rsvp" class="rsvp-btn">RSVP Now</a>
             <a href="#our-story" class="rsvp-btn rsvp-btn-secondary">Our Story</a>
@@ -50,7 +36,7 @@
     </header>
 
     <!-- ==========================================
-                  OUR STORY SECTION
+                  OUR STORY & DETAILS
     =========================================== -->
     <section id="our-story" class="scroll-section">
         <h2>Our Story</h2>
@@ -60,25 +46,16 @@
         </div>
     </section>
 
-    <!-- ==========================================
-                   DETAILS SECTION
-    =========================================== -->
     <section id="details" class="scroll-section">
         <h2>When & Where</h2>
         <div class="container">
             <h3>Ceremony & Reception</h3>
             <p style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.85em; color: #7f8c8d; margin-top: 30px;">Location</p>
             <p style="font-size: 1.1em; color: #1a252f;">Silang, Cavite</p>
-            
             <p style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.85em; color: #7f8c8d; margin-top: 20px;">Venue</p>
             <p style="font-size: 1.1em; color: #1a252f;">[Specific Name of Venue / Church]</p>
-            
             <p style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.85em; color: #7f8c8d; margin-top: 20px;">Date & Time</p>
             <p style="font-size: 1.1em; color: #1a252f;">July 28, 2027 &bull; 3:00 PM</p>
-            
-            <p style="margin-top: 40px; font-style: italic; color: #bdc3c7;">
-                [Map overview and venue images will be added here]
-            </p>
         </div>
     </section>
 
@@ -105,7 +82,7 @@
 
             <div id="response-section" style="display: none;">
                 <h4 id="welcome-msg" style="text-align: center; font-size: 1.8em; margin-bottom: 10px;"></h4>
-                <p style="text-align: center; margin-bottom: 30px;">We have reserved <strong id="max-guests-display" style="color: #1a252f;"></strong> seat(s) in your honor.</p>
+                <p id="eligibility-msg" style="text-align: center; margin-bottom: 30px;"></p>
                 
                 <div style="margin: 25px 0;">
                     <label style="font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; color: #7f8c8d;">Will you be attending?</label><br>
@@ -117,9 +94,15 @@
                     </div>
                 </div>
 
+                <!-- DYNAMIC GUEST COUNT & NAMES BOXES -->
                 <div class="input-group" id="guest-count-section" style="display: none; margin-top: 30px;">
-                    <label>Number of guests attending:</label>
-                    <input type="number" id="confirmedGuests" min="1" value="1" style="border: 1px solid #cbd5e1; padding: 10px; border-radius: 4px;">
+                    <label>Number of additional guests you are bringing:</label>
+                    <select id="confirmedGuests" onchange="generateGuestNameInputs()" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 4px; font-family: 'Montserrat', sans-serif; background: transparent; color: #2c3e50; cursor: pointer;">
+                        <!-- Options will be generated here -->
+                    </select>
+                    
+                    <!-- Container para sa lalabas na text boxes -->
+                    <div id="guest-names-container" style="margin-top: 20px;"></div>
                 </div>
 
                 <button class="rsvp-btn form-submit-btn" onclick="submitRSVP()">Submit RSVP</button>
@@ -150,39 +133,26 @@
 
     <!-- JavaScript Logic -->
     <script>
-        /* ==========================================
-                 COUNTDOWN TIMER LOGIC
-        ========================================== */
         const weddingDate = new Date("July 28, 2027 15:00:00").getTime();
-
         const timer = setInterval(function() {
             const now = new Date().getTime();
             const distance = weddingDate - now;
-
             if (distance < 0) {
                 clearInterval(timer);
                 document.querySelector('.countdown-container').innerHTML = "<h3 style='font-size: 2em;'>The Big Day is Here!</h3>";
                 return;
             }
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("days").innerText = days.toString().padStart(2, '0');
-            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
-            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
-            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+            document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
         }, 1000);
 
-        /* ==========================================
-                      RSVP LOGIC
-        ========================================== */
+        // API URL (Updated)
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTjQCYlKwZ8li32nrH_GvKIXmULVGZtl39KG9Pz43MSIQN0SP3NCnLeDqJ2fIJXQaR/exec'; 
         
         let currentRow = 0;
-        let maxAllowed = 0;
+        let extraCompanionsAllowed = 0;
 
         async function searchGuest() {
             const first = document.getElementById('firstName').value;
@@ -205,9 +175,17 @@
                         document.getElementById('lookup-section').style.display = 'none';
                         document.getElementById('response-section').style.display = 'block';
                         document.getElementById('welcome-msg').innerText = `Hello, ${data.firstName} ${data.lastName}!`;
-                        document.getElementById('max-guests-display').innerText = data.guestCount;
-                        currentRow = data.row; maxAllowed = data.guestCount;
-                        document.getElementById('confirmedGuests').max = maxAllowed;
+                        
+                        currentRow = data.row; 
+                        
+                        // Bagong Logic: Ang numero sa database ay ang exact number of additional guests na pwede isama
+                        extraCompanionsAllowed = parseInt(data.guestCount) || 0; 
+                        
+                        let eligibilityMsg = "We have reserved a seat in your honor.";
+                        if(extraCompanionsAllowed > 0) {
+                            eligibilityMsg = `We have reserved a seat in your honor. You are also eligible to bring up to <strong style="color:#1a252f;">${extraCompanionsAllowed} additional guest(s)</strong>.`;
+                        }
+                        document.getElementById('eligibility-msg').innerHTML = eligibilityMsg;
                     }
                 } else { msg.innerText = data.message; msg.style.color = "#e74c3c"; }
             } catch (error) { msg.innerText = "An error occurred. Please try again."; msg.style.color = "#e74c3c"; }
@@ -216,8 +194,58 @@
 
         function toggleGuests(isAttending) {
             const section = document.getElementById('guest-count-section');
-            if(isAttending) { section.style.display = 'block'; document.getElementById('confirmedGuests').value = maxAllowed; } 
-            else { section.style.display = 'none'; document.getElementById('confirmedGuests').value = 0; }
+            const select = document.getElementById('confirmedGuests');
+            const container = document.getElementById('guest-names-container');
+            
+            if(isAttending) { 
+                if(extraCompanionsAllowed > 0) {
+                    section.style.display = 'block'; 
+                    select.innerHTML = '';
+                    
+                    // Gumagawa ng Dropdown options depende sa dami ng allowed companions
+                    for(let i = 0; i <= extraCompanionsAllowed; i++) {
+                        const option = document.createElement('option');
+                        option.value = i;
+                        option.text = i === 0 ? "None (Just me)" : `${i} Guest(s)`;
+                        select.appendChild(option);
+                    }
+                    select.value = 0;
+                    generateGuestNameInputs();
+                } else {
+                    section.style.display = 'none'; 
+                    select.innerHTML = '<option value="0">0</option>';
+                    container.innerHTML = '';
+                }
+            } else { 
+                section.style.display = 'none'; 
+            }
+        }
+
+        function generateGuestNameInputs() {
+            const container = document.getElementById('guest-names-container');
+            container.innerHTML = '';
+            const count = parseInt(document.getElementById('confirmedGuests').value);
+            
+            for(let i = 0; i < count; i++) {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'companion-name-input';
+                input.placeholder = `Name of Additional Guest ${i + 1}`;
+                input.style.width = '100%';
+                input.style.padding = '12px';
+                input.style.border = 'none';
+                input.style.borderBottom = '1px solid #cbd5e1';
+                input.style.fontFamily = "'Montserrat', sans-serif";
+                input.style.marginBottom = '15px';
+                input.style.background = 'transparent';
+                input.style.outline = 'none';
+                input.required = true;
+                
+                input.addEventListener('focus', function() { this.style.borderBottom = '1px solid #2c3e50'; });
+                input.addEventListener('blur', function() { this.style.borderBottom = '1px solid #cbd5e1'; });
+                
+                container.appendChild(input);
+            }
         }
 
         async function submitRSVP() {
@@ -226,17 +254,43 @@
             const btn = document.querySelector('#response-section button');
 
             if(!attending) { msg.innerText = "Please select an option."; msg.style.color = "#e74c3c"; return; }
-            const status = attending.value; let guests = 0;
+            
+            const status = attending.value; 
+            let totalConfirmedGuests = 0;
+            let guestNamesArray = [];
             
             if(status === 'Attending') {
-                guests = document.getElementById('confirmedGuests').value;
-                if(guests < 1 || guests > maxAllowed) { msg.innerText = `Enter valid number of guests (1 to ${maxAllowed}).`; msg.style.color = "#e74c3c"; return; }
+                const extraSelected = parseInt(document.getElementById('confirmedGuests').value) || 0;
+                // Ang i-sa-save natin na total attendees ay: 1 (Primary) + Extra Selected Guests
+                totalConfirmedGuests = 1 + extraSelected; 
+                
+                if(extraSelected > 0) {
+                    const inputs = document.querySelectorAll('.companion-name-input');
+                    for (let input of inputs) {
+                        if (!input.value.trim()) {
+                            msg.innerText = "Please provide names for all additional guests.";
+                            msg.style.color = "#e74c3c";
+                            return;
+                        }
+                        guestNamesArray.push(input.value.trim());
+                    }
+                }
             }
 
             msg.innerText = "Submitting your response..."; msg.style.color = "#7f8c8d"; btn.disabled = true;
 
+            const finalGuestNames = guestNamesArray.join(', ');
+
             try {
-                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ row: currentRow, rsvpStatus: status, confirmedGuests: guests }) });
+                const response = await fetch(SCRIPT_URL, { 
+                    method: 'POST', 
+                    body: JSON.stringify({ 
+                        row: currentRow, 
+                        rsvpStatus: status, 
+                        confirmedGuests: totalConfirmedGuests,
+                        guestNames: finalGuestNames
+                    }) 
+                });
                 const data = await response.json();
                 if(data.result === 'success') {
                     document.getElementById('response-section').style.display = 'none';
@@ -245,18 +299,10 @@
             } catch (error) { msg.innerText = "An error occurred."; msg.style.color = "#e74c3c"; btn.disabled = false; }
         }
 
-        /* ==========================================
-                      MODAL LOGIC UPDATE
-        ========================================== */
         function openContactModal() { 
-            // Ipakita ang contact pop-up
             document.getElementById('contact-modal').style.display = 'flex'; 
-            
-            // I-reset ang form pabalik sa lookup section sa background
             document.getElementById('already-responded-section').style.display = 'none';
             document.getElementById('lookup-section').style.display = 'block';
-            
-            // Linisin ang mga nai-type na pangalan at errors para fresh ulit
             document.getElementById('firstName').value = '';
             document.getElementById('lastName').value = '';
             document.getElementById('search-msg').innerText = '';
