@@ -16,7 +16,10 @@
     </nav>
 
     <header id="home" class="scroll-section animate-in" style="min-height: 100vh; justify-content: center;">
-        <h1>Aaron & Ram</h1>
+        
+        <!-- DITO NAKALAGAY ANG MONOGRAM MOV VIDEO NA NAGLO-LOOP -->
+        <video src="monogram.mp4" class="monogram-video" autoplay loop muted playsinline></video>
+        
         <p class="date">July 28, 2027 &bull; Silang, Cavite</p>
         
         <div class="countdown-container">
@@ -71,7 +74,6 @@
                 <p id="search-msg" class="message error-text"></p>
             </div>
 
-            <!-- Form para sa bagong RSVP -->
             <div id="response-section" style="display: none;">
                 <h4 id="welcome-msg" style="text-align: center; font-size: 1.8em; margin-bottom: 10px;"></h4>
                 <p id="eligibility-msg" style="text-align: center; margin-bottom: 30px;"></p>
@@ -97,15 +99,12 @@
                 <p id="submit-msg" class="message"></p>
             </div>
 
-            <!-- BAGONG SECTION: Success Section na may 'Back to form' button -->
             <div id="success-section" style="display: none; text-align: center;">
                 <h4 style="color: #2c3e50; font-size: 1.8em; margin-bottom: 10px; font-family: 'Playfair Display', serif;">RSVP Submitted!</h4>
                 <p style="color: #7f8c8d; font-style: italic; font-size: 1.1em;">Thank you for letting us know. We can't wait to celebrate with you!</p>
-                
                 <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" style="margin-top: 30px;" onclick="resetRSVPForm()">Back to form</button>
             </div>
 
-            <!-- Para sa nag-search pero nakapag-submit na dati (May prompt na magbago) -->
             <div id="already-responded-section" style="display: none; text-align: center;">
                 <h4 style="color: #2c3e50; font-size: 1.5em; margin-bottom: 10px;">You have already submitted your RSVP.</h4>
                 <p style="color: #7f8c8d; font-style: italic;">Thank you!</p>
@@ -146,7 +145,6 @@
             document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
         }, 1000);
 
-        // API URL
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTjQCYlKwZ8li32nrH_GvKIXmULVGZtl39KG9Pz43MSIQN0SP3NCnLeDqJ2fIJXQaR/exec'; 
         
         let currentRow = 0;
@@ -299,27 +297,19 @@
             } catch (error) { msg.innerText = "An error occurred."; msg.style.color = "#e74c3c"; btn.disabled = false; }
         }
 
-        // BAGONG FUNCTION: Ito ang magre-reset ng form kapag pinindot ang 'Back to form'
         function resetRSVPForm() {
-            // Itago ang mga success/already responded screens
             document.getElementById('success-section').style.display = 'none';
             document.getElementById('already-responded-section').style.display = 'none';
-            
-            // Ipakita ulit ang search box
             document.getElementById('lookup-section').style.display = 'block';
-            
-            // Linisin ang mga input
             document.getElementById('firstName').value = '';
             document.getElementById('lastName').value = '';
             document.getElementById('search-msg').innerText = '';
-            
-            // I-reset din ang submit button message kung sakali
             document.getElementById('submit-msg').innerText = '';
         }
 
         function openContactModal() { 
             document.getElementById('contact-modal').style.display = 'flex'; 
-            resetRSVPForm(); // Ginamit na rin natin yung bagong function para mas malinis ang code
+            resetRSVPForm(); 
         }
         
         function closeContactModal() { 
