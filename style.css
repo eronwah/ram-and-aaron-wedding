@@ -19,12 +19,13 @@ nav {
     backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     padding: 20px 40px; z-index: 1000;
     
-    /* Nakatago sa simula, lilitaw kapag nag-scroll */
     transform: translateY(-100%); 
     opacity: 0;
     transition: transform 0.4s ease, opacity 0.4s ease;
     
-    display: flex; justify-content: center; align-items: center;
+    display: flex; 
+    justify-content: flex-end; /* Menu sa kanan */
+    align-items: center;
 }
 nav.nav-scrolled {
     transform: translateY(0);
@@ -32,8 +33,21 @@ nav.nav-scrolled {
     box-shadow: 0 2px 15px rgba(0,0,0,0.05);
 }
 
+/* NAKA-CENTER NA TITLE SA NAVBAR */
+.nav-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2em;
+    color: #1a252f;
+    text-decoration: none;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
 .nav-links {
-    display: flex; gap: 40px; justify-content: center;
+    display: flex; gap: 40px;
 }
 .nav-links a {
     color: #2c3e50; text-decoration: none; font-size: 0.85em;
@@ -42,7 +56,7 @@ nav.nav-scrolled {
 }
 .nav-links a:hover { color: #7f8c8d; }
 
-/* Hamburger Button (Nakatago sa Desktop) */
+/* Hamburger Button */
 .menu-toggle {
     display: none; flex-direction: column; gap: 6px; 
     cursor: pointer; z-index: 1001;
@@ -53,12 +67,17 @@ nav.nav-scrolled {
 }
 
 /* =======================================
-   MOBILE VIEW (Hamburger Menu sa Kanan)
+   MOBILE VIEW (Hamburger Menu)
 ======================================== */
 @media (max-width: 768px) {
     nav { 
-        justify-content: flex-end; /* Inilagay sa kanan ang burger */
-        padding: 20px;
+        justify-content: flex-end; /* Hamburger menu sa kanan */
+        padding: 15px 20px;
+    }
+    
+    /* Adjust text size sa mobile para laging kasya */
+    .nav-title {
+        font-size: 1em;
     }
     
     .menu-toggle { display: flex; }
@@ -71,14 +90,12 @@ nav.nav-scrolled {
         width: 220px; padding: 30px 20px;
         box-shadow: -5px 10px 20px rgba(0,0,0,0.05);
         
-        /* Nakatago ang menu panel pakanan */
         transform: translateX(100%);
         opacity: 0;
         transition: transform 0.4s ease, opacity 0.4s ease;
         display: flex;
     }
     
-    /* Kapag pinindot ang burger */
     .nav-links.nav-active {
         transform: translateX(0);
         opacity: 1;
