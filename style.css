@@ -93,6 +93,38 @@ nav {
     nav.nav-scrolled .menu-toggle { opacity: 1; pointer-events: auto; }
 }
 
+/* =======================================
+   PARALLAX & TRANSLUCENT TRANSITIONS
+======================================== */
+.parallax-section {
+    position: relative;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.parallax-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    /* Gradient mask para lumabo sa gitna at maging solid sa dulo (smooth transition) */
+    background: linear-gradient(to bottom, 
+        rgba(252, 252, 252, 1) 0%, 
+        rgba(252, 252, 252, 0.65) 15%, 
+        rgba(252, 252, 252, 0.65) 85%, 
+        rgba(252, 252, 252, 1) 100%);
+    z-index: 1;
+}
+.content-wrapper {
+    position: relative; z-index: 2; width: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+
+/* Mobile Fix: Prevent iOS Safari zooming bug on fixed backgrounds */
+@media (max-width: 768px) {
+    .parallax-section {
+        background-attachment: scroll; 
+    }
+}
+
 /* Spacing & Layout */
 .scroll-section {
     min-height: 85vh; display: flex; flex-direction: column;
@@ -105,7 +137,7 @@ h2 { font-size: 3em; margin-bottom: 20px; position: relative; display: inline-bl
 h2::after { content: ''; display: block; width: 50px; height: 1px; background-color: #2c3e50; margin: 15px auto 0; }
 .date { font-family: 'Playfair Display', serif; font-size: 1.4em; margin-top: 10px; color: #7f8c8d; font-style: italic; letter-spacing: 1px; }
 
-/* BIG MONOGRAM MP4 VIDEO (STRICTLY FOR HOME SECTION) */
+/* BIG MONOGRAM MP4 VIDEO */
 .monogram-video {
     width: 100%; max-width: 450px; height: auto; margin: 0 auto 15px auto;
     display: block; pointer-events: none; object-fit: contain; mix-blend-mode: multiply; 
@@ -114,9 +146,7 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
 @media (max-width: 600px) { .monogram-video { max-width: 90%; } }
 
 /* ELEGANT COUNTDOWN TIMER STYLES */
-.countdown-container {
-    display: flex; gap: 20px; justify-content: center; margin-top: 30px; flex-wrap: wrap;
-}
+.countdown-container { display: flex; gap: 20px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
 .countdown-item {
     background: #ffffff; border: 1px solid #e2e8f0; border-top: 3px solid #2c3e50; 
     border-radius: 8px; padding: 25px 20px; min-width: 120px;
@@ -134,7 +164,7 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
     .countdown-label { font-size: 0.55em !important; letter-spacing: 1px !important; }
 }
 
-/* Buttons Container & Layouts */
+/* Containers */
 .hero-buttons { display: flex; gap: 20px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
 .container, .rsvp-wrapper { background-color: #ffffff; margin: 30px auto; width: 100%; padding: 50px 40px; border-radius: 4px; box-shadow: 0 15px 35px rgba(0,0,0,0.03); }
 .container { max-width: 700px; }
@@ -143,14 +173,8 @@ h3 { font-size: 1.6em; margin-bottom: 15px; }
 p { font-size: 0.95em; font-weight: 300; }
 
 /* Clickable Images for Zoom */
-.clickable-image {
-    cursor: zoom-in;
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
-.clickable-image:hover {
-    transform: scale(1.03);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
-}
+.clickable-image { cursor: zoom-in; transition: transform 0.4s ease, box-shadow 0.4s ease; }
+.clickable-image:hover { transform: scale(1.03); box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important; }
 
 /* Form Elements */
 .input-group { margin-bottom: 25px; }
@@ -165,51 +189,36 @@ p { font-size: 0.95em; font-weight: 300; }
 .rsvp-btn-secondary:hover { background-color: #f8f9fa; }
 .form-submit-btn { width: 100%; margin-top: 20px; }
 
-/* =======================================
-   CONTACT US SECTION 
-======================================== */
+/* CONTACT US SECTION */
 #contact {
-    position: relative;
-    background-color: #e2e8f0; 
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    position: relative; background-color: #e2e8f0; 
+    background-size: cover; background-position: center; background-attachment: fixed;
 }
 .contact-overlay {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(26, 37, 47, 0.7); 
-    z-index: 1;
+    background: rgba(26, 37, 47, 0.7); z-index: 1;
 }
 .contact-content {
-    position: relative; z-index: 2;
-    background: rgba(255, 255, 255, 0.95);
+    position: relative; z-index: 2; background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
 }
 
 .error-text { color: #e74c3c; }
 .message { text-align: center; margin-top: 20px; font-style: italic; font-size: 0.9em; }
 
-/* =======================================
-   MODALS (Generic Overlay & Image Modal)
-======================================== */
+/* MODALS */
 .modal-overlay { 
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
     background: rgba(26, 37, 47, 0.85); backdrop-filter: blur(8px); z-index: 1005; 
     align-items: center; justify-content: center; padding: 20px; 
 }
-
-/* Image Zoom Content */
 .modal-content-img {
-    display: block; margin: auto;
-    max-width: 95%; max-height: 90vh; /* Responsive boundaries */
-    border-radius: 6px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-    animation: zoomIn 0.3s ease;
-    object-fit: contain;
+    display: block; margin: auto; max-width: 95%; max-height: 90vh; 
+    border-radius: 6px; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    animation: zoomIn 0.3s ease; object-fit: contain;
 }
 .close-modal-btn {
-    position: absolute; top: 20px; right: 30px;
-    font-size: 45px; color: #ffffff; cursor: pointer;
+    position: absolute; top: 20px; right: 30px; font-size: 45px; color: #ffffff; cursor: pointer;
     transition: color 0.3s ease; z-index: 1006;
 }
 .close-modal-btn:hover { color: #cbd5e1; }

@@ -41,70 +41,79 @@
     </nav>
 
     <!-- ==========================================
-                    HOME SECTION
+                    HOME SECTION (Parallax)
     =========================================== -->
-    <header id="home" class="scroll-section animate-in" style="min-height: 100vh; justify-content: center;">
-        
-        <video src="monogram.mp4" class="monogram-video" autoplay loop muted playsinline></video>
-        
-        <p class="date" style="margin-top: 5px;">Silang, Cavite</p>
-        
-        <div class="countdown-container">
-            <div class="countdown-item"><span id="days" class="countdown-number">00</span><span class="countdown-label">Days</span></div>
-            <div class="countdown-item"><span id="hours" class="countdown-number">00</span><span class="countdown-label">Hours</span></div>
-            <div class="countdown-item"><span id="minutes" class="countdown-number">00</span><span class="countdown-label">Minutes</span></div>
-            <div class="countdown-item"><span id="seconds" class="countdown-number">00</span><span class="countdown-label">Seconds</span></div>
-        </div>
+    <header id="home" class="scroll-section animate-in parallax-section" style="background-image: url('assets/home-bg.jpg'); min-height: 100vh;">
+        <div class="parallax-overlay"></div>
+        <div class="content-wrapper">
+            <video src="monogram.mp4" class="monogram-video" autoplay loop muted playsinline></video>
+            
+            <p class="date" style="margin-top: 5px;">Silang, Cavite</p>
+            
+            <div class="countdown-container">
+                <div class="countdown-item"><span id="days" class="countdown-number">00</span><span class="countdown-label">Days</span></div>
+                <div class="countdown-item"><span id="hours" class="countdown-number">00</span><span class="countdown-label">Hours</span></div>
+                <div class="countdown-item"><span id="minutes" class="countdown-number">00</span><span class="countdown-label">Minutes</span></div>
+                <div class="countdown-item"><span id="seconds" class="countdown-number">00</span><span class="countdown-label">Seconds</span></div>
+            </div>
 
-        <div class="hero-buttons">
-            <a href="#rsvp" class="rsvp-btn">RSVP Now</a>
-            <a href="#details" class="rsvp-btn rsvp-btn-secondary">Details</a>
+            <div class="hero-buttons">
+                <a href="#rsvp" class="rsvp-btn">RSVP Now</a>
+                <a href="#details" class="rsvp-btn rsvp-btn-secondary">Details</a>
+            </div>
         </div>
     </header>
 
-    <section id="our-story" class="scroll-section">
-        <h2>Our Story</h2>
-        <div class="container">
-            <p style="font-size: 1.2em; font-family: 'Playfair Display', serif; color: #1a252f; margin-bottom: 30px;">Every love story is beautiful, but ours is our favorite.</p>
-            <p>[A brief storyline of the couple will be placed here...]</p>
+    <!-- ==========================================
+                    STORY SECTION (Parallax)
+    =========================================== -->
+    <section id="our-story" class="scroll-section parallax-section" style="background-image: url('assets/story-bg.jpg');">
+        <div class="parallax-overlay"></div>
+        <div class="content-wrapper">
+            <h2>Our Story</h2>
+            <div class="container">
+                <p style="font-size: 1.2em; font-family: 'Playfair Display', serif; color: #1a252f; margin-bottom: 30px;">Every love story is beautiful, but ours is our favorite.</p>
+                <p>[A brief storyline of the couple will be placed here...]</p>
+            </div>
         </div>
     </section>
 
     <!-- ==========================================
-              DETAILS SECTION (WITH CLICKABLE IMAGES)
+                    DETAILS SECTION (Parallax)
     =========================================== -->
-    <section id="details" class="scroll-section">
-        <h2>When & Where</h2>
-        <p style="color: #7f8c8d; font-style: italic; margin-bottom: 40px;">July 28, 2027 &bull; Silang, Cavite</p>
+    <section id="details" class="scroll-section parallax-section" style="background-image: url('assets/details-bg.jpg');">
+        <div class="parallax-overlay"></div>
+        <div class="content-wrapper">
+            <h2>When & Where</h2>
+            <p style="color: #7f8c8d; font-style: italic; margin-bottom: 40px;">July 28, 2027 &bull; Silang, Cavite</p>
 
-        <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; width: 100%; max-width: 900px; margin: 0 auto;">
-            
-            <div class="container" style="flex: 1 1 380px; margin: 0; text-align: center;">
-                <!-- CHURCH IMAGE: Nilagyan ng onclick at class -->
-                <img src="church.jpg" alt="St. Benedict Parish" class="clickable-image" onclick="openImageModal(this.src)" style="width: 100%; height: 220px; object-fit: cover; border-radius: 4px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+            <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; width: 100%; max-width: 900px; margin: 0 auto;">
                 
-                <p style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; color: #7f8c8d; margin-bottom: 5px; font-weight: 500;">Ceremony</p>
-                <h3 style="margin-top: 0; font-size: 1.8em; color: #1a252f;">St. Benedict Parish</h3>
-                <p style="color: #4a5568; margin: 15px 0 25px 0; font-size: 0.95em; line-height: 1.6;">
-                    Ayala Westgrove Heights, South Blvd,<br>Silang, 4118 Cavite
-                </p>
-                <a href="https://maps.app.goo.gl/S6TyCWT5BRZ5Q8U66" target="_blank" rel="noopener noreferrer" class="rsvp-btn rsvp-btn-secondary" style="padding: 12px 20px; font-size: 0.8em; display: inline-block;">
-                    View on Google Maps
-                </a>
-            </div>
+                <div class="container" style="flex: 1 1 380px; margin: 0; text-align: center;">
+                    <img src="church.jpg" alt="St. Benedict Parish" class="clickable-image" onclick="openImageModal(this.src)" style="width: 100%; height: 220px; object-fit: cover; border-radius: 4px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                    
+                    <p style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; color: #7f8c8d; margin-bottom: 5px; font-weight: 500;">Ceremony</p>
+                    <h3 style="margin-top: 0; font-size: 1.8em; color: #1a252f;">St. Benedict Parish</h3>
+                    <p style="color: #4a5568; margin: 15px 0 25px 0; font-size: 0.95em; line-height: 1.6;">
+                        Ayala Westgrove Heights, South Blvd,<br>Silang, 4118 Cavite
+                    </p>
+                    <a href="https://maps.app.goo.gl/S6TyCWT5BRZ5Q8U66" target="_blank" rel="noopener noreferrer" class="rsvp-btn rsvp-btn-secondary" style="padding: 12px 20px; font-size: 0.8em; display: inline-block;">
+                        View on Google Maps
+                    </a>
+                </div>
 
-            <div class="container" style="flex: 1 1 380px; margin: 0; text-align: center;">
-                <!-- VENUE IMAGE: Inayos ang typo at nilagyan ng onclick -->
-                <img src="venue.jpg" alt="Alta Veranda De Tibig" class="clickable-image" onclick="openImageModal(this.src)" style="width: 100%; height: 220px; object-fit: cover; border-radius: 4px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                
-                <p style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; color: #7f8c8d; margin-bottom: 5px; font-weight: 500;">Reception</p>
-                <h3 style="margin-top: 0; font-size: 1.8em; color: #1a252f;">Alta Veranda De Tibig</h3>
-                <p style="color: #4a5568; margin: 15px 0 25px 0; font-size: 0.95em; line-height: 1.6;">
-                    Silang, Cavite
-                </p>
-                <a href="https://maps.app.goo.gl/7rUXzCJksbCY1UrXA" target="_blank" rel="noopener noreferrer" class="rsvp-btn rsvp-btn-secondary" style="padding: 12px 20px; font-size: 0.8em; display: inline-block;">
-                    View on Google Maps
-                </a>
+                <div class="container" style="flex: 1 1 380px; margin: 0; text-align: center;">
+                    <img src="venue.jpg" alt="Alta Veranda De Tibig" class="clickable-image" onclick="openImageModal(this.src)" style="width: 100%; height: 220px; object-fit: cover; border-radius: 4px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                    
+                    <p style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; color: #7f8c8d; margin-bottom: 5px; font-weight: 500;">Reception</p>
+                    <h3 style="margin-top: 0; font-size: 1.8em; color: #1a252f;">Alta Veranda De Tibig</h3>
+                    <p style="color: #4a5568; margin: 15px 0 25px 0; font-size: 0.95em; line-height: 1.6;">
+                        Silang, Cavite
+                    </p>
+                    <a href="https://maps.app.goo.gl/7rUXzCJksbCY1UrXA" target="_blank" rel="noopener noreferrer" class="rsvp-btn rsvp-btn-secondary" style="padding: 12px 20px; font-size: 0.8em; display: inline-block;">
+                        View on Google Maps
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -193,9 +202,7 @@
         </div>
     </section>
 
-    <!-- ==========================================
-         IMAGE MODAL (For zooming Church/Venue)
-    =========================================== -->
+    <!-- IMAGE MODAL -->
     <div id="image-modal" class="modal-overlay" onclick="closeImageModal()">
         <span class="close-modal-btn" onclick="closeImageModal()">&times;</span>
         <img id="modal-image" class="modal-content-img" src="" alt="Zoomed View">
@@ -222,7 +229,6 @@
             document.getElementById('burgerMenu').classList.remove('toggle-active');
         }
 
-        /* Logic para sa Image Modal */
         function openImageModal(imgSrc) {
             const modal = document.getElementById('image-modal');
             const modalImg = document.getElementById('modal-image');
@@ -249,6 +255,7 @@
             document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
         }, 1000);
 
+        // Ang RSVP functionality ay nananatiling nakakonekta sa iyong Wedding website - database
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTjQCYlKwZ8li32nrH_GvKIXmULVGZtl39KG9Pz43MSIQN0SP3NCnLeDqJ2fIJXQaR/exec'; 
         
         let currentRow = 0;
