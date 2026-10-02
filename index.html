@@ -4,30 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
+    <link rel="icon" type="image/png" href="monogram.png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <nav id="navbar">
-        <!-- NAKA-CENTER NA TITLE -->
-        <a href="#home" class="nav-title">Ram and Aaron Wedding</a>
-        
-        <!-- BURGER MENU SA KANAN -->
-        <div class="menu-toggle" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
+        <!-- Kaliwang Bahagi: Hamburger -->
+        <div class="nav-left">
+            <div class="menu-toggle" id="burgerMenu" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <!-- Gitnang Bahagi: Links at PNG Monogram (Fix Alignment) -->
+        <div class="nav-center">
+            <a href="#home" class="text-link">Home</a>
+            <a href="#details" class="text-link">Details</a>
+            
+            <a href="#home" class="nav-monogram">
+                <!-- PNG NA MONOGRAM PARA SA NAVIGATION -->
+                <img src="monogram.png" alt="Aaron & Ram Monogram">
+            </a>
+            
+            <a href="#rsvp" class="text-link">RSVP</a>
+            <a href="#" onclick="openContactModal(); return false;" class="text-link">Contact Us</a>
         </div>
         
+        <!-- Kanang Bahagi: Spacer (Wag aalisin para nasa gitna palagi) -->
+        <div class="nav-right"></div>
+        
+        <!-- Hamburger Dropdown Menu Content -->
         <div class="nav-links" id="navLinks">
             <a href="#home" onclick="closeMenu()">Home</a>
             <a href="#details" onclick="closeMenu()">Details</a>
             <a href="#rsvp" onclick="closeMenu()">RSVP</a>
+            <a href="#" onclick="openContactModal(); closeMenu(); return false;">Contact Us</a>
         </div>
     </nav>
 
+    <!-- ==========================================
+                    HOME SECTION
+    =========================================== -->
     <header id="home" class="scroll-section animate-in" style="min-height: 100vh; justify-content: center;">
         
+        <!-- MP4 VIDEO STRICTLY PARA SA HOME PAGE -->
         <video src="monogram.mp4" class="monogram-video" autoplay loop muted playsinline></video>
         
         <p class="date" style="margin-top: 5px;">Silang, Cavite</p>
@@ -165,9 +188,11 @@
 
     <!-- JavaScript Logic -->
     <script>
+        // Scroll Logic: Mag-ttrigger lang ang paglitaw ng Hamburger sa mobile kapag lumagpas sa Home page
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) {
+            // Ginawang window.innerHeight * 0.8 (80% ng screen size) para lumitaw ang hamburger kapag malapit na umalis sa unang section
+            if (window.scrollY > (window.innerHeight * 0.8)) {
                 nav.classList.add('nav-scrolled');
             } else {
                 nav.classList.remove('nav-scrolled');
@@ -175,17 +200,13 @@
         });
 
         function toggleMenu() {
-            if(window.innerWidth <= 768) {
-                document.getElementById('navLinks').classList.toggle('nav-active');
-                document.querySelector('.menu-toggle').classList.toggle('toggle-active');
-            }
+            document.getElementById('navLinks').classList.toggle('nav-active');
+            document.getElementById('burgerMenu').classList.toggle('toggle-active');
         }
 
         function closeMenu() {
-            if(window.innerWidth <= 768) {
-                document.getElementById('navLinks').classList.remove('nav-active');
-                document.querySelector('.menu-toggle').classList.remove('toggle-active');
-            }
+            document.getElementById('navLinks').classList.remove('nav-active');
+            document.getElementById('burgerMenu').classList.remove('toggle-active');
         }
 
         const weddingDate = new Date("July 28, 2027 15:00:00").getTime();
@@ -383,6 +404,7 @@
         function openContactModal() { 
             document.getElementById('contact-modal').style.display = 'flex'; 
             resetRSVPForm(); 
+            closeMenu(); 
         }
         
         function closeContactModal() { 
