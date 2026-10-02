@@ -9,20 +9,86 @@ body {
     text-align: center; line-height: 1.8;
 }
 
-/* Elegant Frosted Glass Navigation */
+/* =======================================
+   ELEGANT SCROLL-TRIGGERED NAVIGATION 
+======================================== */
 nav {
-    background-color: rgba(255, 255, 255, 0.85);
+    position: fixed; 
+    top: 0; left: 0; width: 100%;
+    background-color: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    padding: 20px; position: sticky; top: 0; z-index: 1000;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.05);
-    display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
+    padding: 20px 40px; z-index: 1000;
+    
+    /* Nakatago sa simula, lilitaw kapag nag-scroll */
+    transform: translateY(-100%); 
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    
+    display: flex; justify-content: center; align-items: center;
 }
-nav a {
+nav.nav-scrolled {
+    transform: translateY(0);
+    opacity: 1;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+}
+
+.nav-links {
+    display: flex; gap: 40px; justify-content: center;
+}
+.nav-links a {
     color: #2c3e50; text-decoration: none; font-size: 0.85em;
     text-transform: uppercase; letter-spacing: 2.5px; font-weight: 500;
-    transition: color 0.3s ease, transform 0.3s ease;
+    transition: color 0.3s ease;
 }
-nav a:hover { color: #7f8c8d; transform: translateY(-2px); }
+.nav-links a:hover { color: #7f8c8d; }
+
+/* Hamburger Button (Nakatago sa Desktop) */
+.menu-toggle {
+    display: none; flex-direction: column; gap: 6px; 
+    cursor: pointer; z-index: 1001;
+}
+.menu-toggle span {
+    width: 25px; height: 2px; background-color: #2c3e50;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* =======================================
+   MOBILE VIEW (Hamburger Menu sa Kanan)
+======================================== */
+@media (max-width: 768px) {
+    nav { 
+        justify-content: flex-end; /* Inilagay sa kanan ang burger */
+        padding: 20px;
+    }
+    
+    .menu-toggle { display: flex; }
+    
+    .nav-links {
+        position: absolute; top: 100%; right: 0;
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        flex-direction: column; gap: 20px;
+        width: 220px; padding: 30px 20px;
+        box-shadow: -5px 10px 20px rgba(0,0,0,0.05);
+        
+        /* Nakatago ang menu panel pakanan */
+        transform: translateX(100%);
+        opacity: 0;
+        transition: transform 0.4s ease, opacity 0.4s ease;
+        display: flex;
+    }
+    
+    /* Kapag pinindot ang burger */
+    .nav-links.nav-active {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    
+    /* Hamburger "X" Animation */
+    .toggle-active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .toggle-active span:nth-child(2) { opacity: 0; }
+    .toggle-active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+}
 
 /* Spacing & Layout */
 .scroll-section {
@@ -36,23 +102,15 @@ h2 { font-size: 3em; margin-bottom: 20px; position: relative; display: inline-bl
 h2::after { content: ''; display: block; width: 50px; height: 1px; background-color: #2c3e50; margin: 15px auto 0; }
 .date { font-family: 'Playfair Display', serif; font-size: 1.4em; margin-top: 10px; color: #7f8c8d; font-style: italic; letter-spacing: 1px; }
 
-/* =======================================
-   MONOGRAM VIDEO 
-======================================== */
+/* MONOGRAM VIDEO */
 .monogram-video {
-    width: 100%;
-    max-width: 450px; 
-    height: auto;
-    margin: 0 auto 15px auto;
-    display: block;
-    pointer-events: none; 
-    object-fit: contain; 
-    mix-blend-mode: multiply; 
+    width: 100%; max-width: 450px; height: auto; margin: 0 auto 15px auto;
+    display: block; pointer-events: none; object-fit: contain; mix-blend-mode: multiply; 
 }
+@media (max-width: 1024px) { .monogram-video { max-width: 70%; } }
+@media (max-width: 600px) { .monogram-video { max-width: 90%; } }
 
-/* =======================================
-   ELEGANT COUNTDOWN TIMER STYLES (BASE)
-======================================== */
+/* ELEGANT COUNTDOWN TIMER STYLES */
 .countdown-container {
     display: flex; gap: 20px; justify-content: center; margin-top: 30px; flex-wrap: wrap;
 }
@@ -67,10 +125,19 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
 .countdown-number { font-family: 'Playfair Display', serif; font-size: 3.5em; color: #1a252f; line-height: 1; margin-bottom: 8px; }
 .countdown-label { font-size: 0.75em; text-transform: uppercase; letter-spacing: 3px; color: #7f8c8d; font-weight: 500; }
 
-/* Buttons Container */
-.hero-buttons { display: flex; gap: 20px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
+@media (max-width: 600px) {
+    .countdown-container { 
+        gap: 5px; margin-top: 20px; flex-wrap: nowrap !important; width: 100%; padding: 0 5px;
+    }
+    .countdown-item { 
+        padding: 12px 2px; min-width: 0 !important; flex: 1 1 0; border-radius: 6px; 
+    }
+    .countdown-number { font-size: 1.5em !important; margin-bottom: 5px; }
+    .countdown-label { font-size: 0.55em !important; letter-spacing: 1px !important; }
+}
 
-/* Containers */
+/* Buttons Container & Layouts */
+.hero-buttons { display: flex; gap: 20px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
 .container, .rsvp-wrapper { background-color: #ffffff; margin: 30px auto; width: 100%; padding: 50px 40px; border-radius: 4px; box-shadow: 0 15px 35px rgba(0,0,0,0.03); }
 .container { max-width: 700px; }
 .rsvp-wrapper { max-width: 550px; text-align: left; }
@@ -99,47 +166,3 @@ input[type="radio"] { accent-color: #2c3e50; margin-right: 10px; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 .animate-in { animation: fadeIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-
-/* =======================================
-   RESPONSIVE DESIGN (MEDIA QUERIES)
-   Nasa pinaka-ibaba para sigurado ang effect!
-======================================== */
-
-/* IPAD & TABLET VIEW */
-@media (max-width: 1024px) {
-    .monogram-video { 
-        max-width: 70%; 
-    }
-}
-
-/* MOBILE VIEW (Smartphones) */
-@media (max-width: 600px) {
-    .monogram-video { 
-        max-width: 90%; 
-    } 
-    
-    /* GAGARANTIYANG ISANG HILERA NA LANG ANG COUNTDOWN */
-    .countdown-container { 
-        gap: 5px; 
-        margin-top: 20px; 
-        flex-wrap: nowrap !important; /* Pinipigil nito na magkaroon ng second row */
-        width: 100%;
-        padding: 0 5px;
-    }
-    .countdown-item { 
-        padding: 12px 2px; 
-        min-width: 0 !important; /* Papatungan ang desktop limit */
-        flex: 1 1 0; /* Hahatiin ang lapad ng pantay sa 4 na kahon */
-        border-radius: 6px; 
-    }
-    .countdown-number { 
-        font-size: 1.5em !important; 
-        margin-bottom: 5px; 
-    }
-    .countdown-label { 
-        font-size: 0.55em !important; 
-        letter-spacing: 1px !important; 
-    }
-    
-    nav { gap: 20px; padding: 15px; }
-}
