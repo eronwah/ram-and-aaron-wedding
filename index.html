@@ -15,9 +15,6 @@
         <a href="#rsvp">RSVP</a>
     </nav>
 
-    <!-- ==========================================
-                    HOME SECTION
-    =========================================== -->
     <header id="home" class="scroll-section animate-in" style="min-height: 100vh; justify-content: center;">
         
         <video src="monogram.mp4" class="monogram-video" autoplay loop muted playsinline></video>
@@ -37,9 +34,6 @@
         </div>
     </header>
 
-    <!-- ==========================================
-                  OUR STORY SECTION
-    =========================================== -->
     <section id="our-story" class="scroll-section">
         <h2>Our Story</h2>
         <div class="container">
@@ -48,9 +42,6 @@
         </div>
     </section>
 
-    <!-- ==========================================
-              DETAILS SECTION (CHURCH & VENUE)
-    =========================================== -->
     <section id="details" class="scroll-section">
         <h2>When & Where</h2>
         <p style="color: #7f8c8d; font-style: italic; margin-bottom: 40px;">July 28, 2027 &bull; Silang, Cavite</p>
@@ -59,19 +50,14 @@
             
             <!-- CHURCH CARD -->
             <div class="container" style="flex: 1 1 380px; margin: 0; text-align: center;">
-                
-                <!-- Image Placeholder para sa Simbahan -->
                 <div style="width: 100%; height: 220px; background-color: #f1f5f9; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 0.9em; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 25px; border: 1px dashed #cbd5e1;">
                     [ Church Photo Placeholder ]
                 </div>
-
                 <p style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; color: #7f8c8d; margin-bottom: 5px; font-weight: 500;">Ceremony</p>
                 <h3 style="margin-top: 0; font-size: 1.8em; color: #1a252f;">St. Benedict Parish</h3>
-                
                 <p style="color: #4a5568; margin: 15px 0 25px 0; font-size: 0.95em; line-height: 1.6;">
                     Ayala Westgrove Heights, South Blvd,<br>Silang, 4118 Cavite
                 </p>
-
                 <a href="https://maps.app.goo.gl/S6TyCWT5BRZ5Q8U66" target="_blank" rel="noopener noreferrer" class="rsvp-btn rsvp-btn-secondary" style="padding: 12px 20px; font-size: 0.8em; display: inline-block;">
                     View on Google Maps
                 </a>
@@ -79,19 +65,14 @@
 
             <!-- VENUE CARD -->
             <div class="container" style="flex: 1 1 380px; margin: 0; text-align: center;">
-                
-                <!-- Image Placeholder para sa Reception -->
                 <div style="width: 100%; height: 220px; background-color: #f1f5f9; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 0.9em; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 25px; border: 1px dashed #cbd5e1;">
                     [ Venue Photo Placeholder ]
                 </div>
-
                 <p style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; color: #7f8c8d; margin-bottom: 5px; font-weight: 500;">Reception</p>
                 <h3 style="margin-top: 0; font-size: 1.8em; color: #1a252f;">Alta Veranda De Tibig</h3>
-                
                 <p style="color: #4a5568; margin: 15px 0 25px 0; font-size: 0.95em; line-height: 1.6;">
                     Silang, Cavite
                 </p>
-
                 <a href="https://maps.app.goo.gl/7rUXzCJksbCY1UrXA" target="_blank" rel="noopener noreferrer" class="rsvp-btn rsvp-btn-secondary" style="padding: 12px 20px; font-size: 0.8em; display: inline-block;">
                     View on Google Maps
                 </a>
@@ -121,7 +102,11 @@
                 <p id="search-msg" class="message error-text"></p>
             </div>
 
-            <div id="response-section" style="display: none;">
+            <div id="response-section" style="display: none; position: relative;">
+                
+                <!-- BAGONG BUTTON PARA BUMALIK SA FORM -->
+                <button onclick="resetRSVPForm()" style="background: transparent; border: none; color: #7f8c8d; cursor: pointer; font-size: 0.9em; text-decoration: underline; padding: 0; margin-bottom: 20px; font-family: 'Montserrat', sans-serif;">&larr; Not your name? Search again</button>
+                
                 <h4 id="welcome-msg" style="text-align: center; font-size: 1.8em; margin-bottom: 10px;"></h4>
                 <p id="eligibility-msg" style="text-align: center; margin-bottom: 30px;"></p>
                 
@@ -137,7 +122,7 @@
 
                 <div class="input-group" id="guest-count-section" style="display: none; margin-top: 30px;">
                     <label>How many additional guests will you bring?</label>
-                    <select id="confirmedGuests" onchange="generateGuestNameInputs()" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 4px; font-family: 'Montserrat', sans-serif; background: #ffffff; color: #2c3e50; cursor: pointer; appearance: auto;">
+                    <select id="confirmedGuests" onchange="generateGuestNameInputs()" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 4px; font-family: 'Montserrat', sans-serif; background: #ffffff; color: #2c3e50; cursor: pointer; appearance: auto;" required>
                     </select>
                     <div id="guest-names-container" style="margin-top: 20px;"></div>
                 </div>
@@ -198,12 +183,19 @@
         let extraCompanionsAllowed = 0;
 
         async function searchGuest() {
-            const first = document.getElementById('firstName').value;
-            const last = document.getElementById('lastName').value;
+            // Gumamit ng .trim() para hindi ma-bypass gamit ang spacebar
+            const first = document.getElementById('firstName').value.trim();
+            const last = document.getElementById('lastName').value.trim();
             const msg = document.getElementById('search-msg');
             const btn = document.querySelector('#lookup-section button');
             
-            if(!first || !last) { msg.innerText = "Please enter both first and last name."; return; }
+            // Required checking para sa First and Last name
+            if(!first || !last) { 
+                msg.innerText = "Please enter both first and last name."; 
+                msg.style.color = "#e74c3c";
+                return; 
+            }
+            
             msg.innerText = "Searching..."; msg.style.color = "#7f8c8d"; btn.disabled = true;
             
             try {
@@ -270,7 +262,7 @@
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.className = 'companion-name-input';
-                input.placeholder = `Name of Additional Guest ${i + 1}`;
+                input.placeholder = `Name of Additional Guest ${i + 1} *`;
                 input.style.width = '100%';
                 input.style.padding = '12px';
                 input.style.border = 'none';
@@ -291,9 +283,9 @@
         async function submitRSVP() {
             const attending = document.querySelector('input[name="attending"]:checked');
             const msg = document.getElementById('submit-msg');
-            const btn = document.querySelector('#response-section button');
+            const btn = document.querySelector('#response-section button.form-submit-btn');
 
-            if(!attending) { msg.innerText = "Please select an option."; msg.style.color = "#e74c3c"; return; }
+            if(!attending) { msg.innerText = "Please select if you are attending or not."; msg.style.color = "#e74c3c"; return; }
             
             const status = attending.value; 
             let totalConfirmedGuests = 0;
@@ -301,6 +293,8 @@
             
             if(status === 'Attending') {
                 const selectValue = document.getElementById('confirmedGuests').value;
+                
+                // Required ang pagpili sa Dropdown kung may available additional guests
                 if(extraCompanionsAllowed > 0 && selectValue === "") {
                     msg.innerText = "Please select the number of additional guests from the dropdown.";
                     msg.style.color = "#e74c3c";
@@ -310,13 +304,17 @@
                 const extraSelected = parseInt(selectValue) || 0;
                 totalConfirmedGuests = 1 + extraSelected; 
                 
+                // Required ang mga Text Boxes kapag nakapili na
                 if(extraSelected > 0) {
                     const inputs = document.querySelectorAll('.companion-name-input');
                     for (let input of inputs) {
                         if (!input.value.trim()) {
                             msg.innerText = "Please provide names for all additional guests.";
                             msg.style.color = "#e74c3c";
+                            input.style.borderBottom = "1px solid #e74c3c"; // Papupulahin ang linya kung empty
                             return;
+                        } else {
+                            input.style.borderBottom = "1px solid #cbd5e1"; // Ibabalik sa normal kapag may laman
                         }
                         guestNamesArray.push(input.value.trim());
                     }
@@ -345,13 +343,24 @@
         }
 
         function resetRSVPForm() {
+            document.getElementById('response-section').style.display = 'none';
             document.getElementById('success-section').style.display = 'none';
             document.getElementById('already-responded-section').style.display = 'none';
             document.getElementById('lookup-section').style.display = 'block';
+            
+            // I-clear lahat ng inputs at messages
             document.getElementById('firstName').value = '';
             document.getElementById('lastName').value = '';
             document.getElementById('search-msg').innerText = '';
             document.getElementById('submit-msg').innerText = '';
+            
+            // I-uncheck ang radio buttons
+            const radios = document.querySelectorAll('input[name="attending"]');
+            radios.forEach(radio => radio.checked = false);
+            
+            // Itago ang guest count section
+            document.getElementById('guest-count-section').style.display = 'none';
+            document.getElementById('guest-names-container').innerHTML = '';
         }
 
         function openContactModal() { 
