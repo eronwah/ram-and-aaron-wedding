@@ -17,14 +17,15 @@ nav {
     top: 0; left: 0; width: 100%;
     background-color: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    padding: 20px 40px; z-index: 1000;
+    padding: 20px 50px; /* Nilakihan nang kaunti ang gilid para mas malinis */
+    z-index: 1000;
     
     transform: translateY(-100%); 
     opacity: 0;
     transition: transform 0.4s ease, opacity 0.4s ease;
     
     display: flex; 
-    justify-content: flex-end; /* Menu sa kanan */
+    justify-content: space-between; /* Title sa kaliwa, menu sa kanan */
     align-items: center;
 }
 nav.nav-scrolled {
@@ -33,21 +34,20 @@ nav.nav-scrolled {
     box-shadow: 0 2px 15px rgba(0,0,0,0.05);
 }
 
-/* NAKA-CENTER NA TITLE SA NAVBAR */
+/* NAVBAR TITLE (Nasa Kaliwa na para maaliwalas) */
 .nav-title {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     font-family: 'Playfair Display', serif;
-    font-size: 1.2em;
+    font-size: 1.4em; /* Pinalaki nang kaunti para mag-stand out */
     color: #1a252f;
     text-decoration: none;
     letter-spacing: 1px;
     white-space: nowrap;
+    font-weight: 600;
 }
 
 .nav-links {
     display: flex; gap: 40px;
+    align-items: center;
 }
 .nav-links a {
     color: #2c3e50; text-decoration: none; font-size: 0.85em;
@@ -67,17 +67,15 @@ nav.nav-scrolled {
 }
 
 /* =======================================
-   MOBILE VIEW (Hamburger Menu)
+   MOBILE & TABLET VIEW (Hamburger Menu)
 ======================================== */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     nav { 
-        justify-content: flex-end; /* Hamburger menu sa kanan */
         padding: 15px 20px;
     }
     
-    /* Adjust text size sa mobile para laging kasya */
     .nav-title {
-        font-size: 1em;
+        font-size: 1.1em; /* Tamang sukat lang sa mobile */
     }
     
     .menu-toggle { display: flex; }
