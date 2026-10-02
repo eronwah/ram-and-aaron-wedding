@@ -10,22 +10,15 @@
 <body>
 
     <nav id="navbar">
-        <!-- Kaliwang Bahagi: Hamburger -->
-        <div class="nav-left">
-            <div class="menu-toggle" id="burgerMenu" onclick="toggleMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
+        <!-- Kaliwang Bahagi: Spacer na lamang -->
+        <div class="nav-left"></div>
 
-        <!-- Gitnang Bahagi: Links at PNG Monogram (Fix Alignment) -->
+        <!-- Gitnang Bahagi: Links at PNG Monogram -->
         <div class="nav-center">
             <a href="#home" class="text-link">Home</a>
             <a href="#details" class="text-link">Details</a>
             
             <a href="#home" class="nav-monogram">
-                <!-- PNG NA MONOGRAM PARA SA NAVIGATION -->
                 <img src="monogram.png" alt="Aaron & Ram Monogram">
             </a>
             
@@ -33,8 +26,14 @@
             <a href="#" onclick="openContactModal(); return false;" class="text-link">Contact Us</a>
         </div>
         
-        <!-- Kanang Bahagi: Spacer (Wag aalisin para nasa gitna palagi) -->
-        <div class="nav-right"></div>
+        <!-- Kanang Bahagi: Hamburger Icon -->
+        <div class="nav-right">
+            <div class="menu-toggle" id="burgerMenu" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
         
         <!-- Hamburger Dropdown Menu Content -->
         <div class="nav-links" id="navLinks">
@@ -188,10 +187,8 @@
 
     <!-- JavaScript Logic -->
     <script>
-        // Scroll Logic: Mag-ttrigger lang ang paglitaw ng Hamburger sa mobile kapag lumagpas sa Home page
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('navbar');
-            // Ginawang window.innerHeight * 0.8 (80% ng screen size) para lumitaw ang hamburger kapag malapit na umalis sa unang section
             if (window.scrollY > (window.innerHeight * 0.8)) {
                 nav.classList.add('nav-scrolled');
             } else {

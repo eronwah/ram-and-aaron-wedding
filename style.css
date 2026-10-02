@@ -26,14 +26,12 @@ nav {
     box-shadow: 0 2px 15px rgba(0,0,0,0.05);
 }
 
-/* Nav Left (Hamburger) at Nav Right (Spacer) para manatiling nasa sentro ang menu */
 .nav-left, .nav-right {
     width: 30px; 
     display: flex;
     align-items: center;
 }
 
-/* Center Links & Monogram */
 .nav-center {
     display: flex;
     align-items: center;
@@ -48,24 +46,23 @@ nav {
 }
 .text-link:hover { color: #7f8c8d; }
 
-/* PNG Monogram inside Nav - INAYOS ANG SIZING PARA SAKTO LAGI */
 .nav-monogram {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 10px; /* Kaunting espasyo sa gilid para hindi dikit na dikit sa text */
+    padding: 0 10px;
 }
 .nav-monogram img {
     height: auto;
-    max-height: 45px; /* Ito ang limit ng taas sa desktop */
+    max-height: 45px; 
     width: auto;
-    max-width: 120px; /* Limit ng lapad para hindi sakupin ang buong menu */
-    object-fit: contain; /* Para mapanatili ang tamang aspect ratio */
+    max-width: 120px; 
+    object-fit: contain; 
     pointer-events: none;
 }
 
 /* =======================================
-   HAMBURGER BUTTON (Laging nakalabas sa Web View)
+   HAMBURGER BUTTON & SIDE MENU
 ======================================== */
 .menu-toggle {
     display: flex; 
@@ -78,25 +75,24 @@ nav {
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-/* Hamburger "X" Animation */
 .toggle-active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .toggle-active span:nth-child(2) { opacity: 0; }
 .toggle-active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* SIDE MENU PANEL */
+/* SIDE MENU PANEL (Nasa kanan na) */
 .nav-links {
-    position: absolute; top: 100%; left: 0;
+    position: absolute; top: 100%; right: 0; left: auto;
     background-color: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     flex-direction: column; gap: 20px;
     width: 220px; padding: 30px 20px;
-    box-shadow: 5px 10px 20px rgba(0,0,0,0.05);
+    box-shadow: -5px 10px 20px rgba(0,0,0,0.05);
     
-    transform: translateX(-100%); 
+    transform: translateX(100%); /* Nakatago sa kanan */
     opacity: 0;
     transition: transform 0.4s ease, opacity 0.4s ease;
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end; /* Naka-align sa kanan ang text ng menu */
 }
 .nav-links.nav-active {
     transform: translateX(0);
@@ -113,26 +109,22 @@ nav {
 @media (max-width: 768px) {
     nav { padding: 10px 10px; }
     
-    /* Pinagkasya ang lahat sa iisang hilera */
     .nav-center { gap: 8px; } 
     .text-link {
         font-size: 0.55em; 
         letter-spacing: 0.5px;
     }
     
-    /* Awtomatikong liliit ang Monogram PNG sa Mobile */
     .nav-monogram { padding: 0 5px; }
     .nav-monogram img { 
         max-height: 32px; 
         max-width: 80px; 
     }
 
-    /* Nakatago sa simula ang hamburger sa Mobile View */
     .menu-toggle {
         opacity: 0;
         pointer-events: none;
     }
-    /* Lilitaw lang ito kapag nag-scroll lagpas sa unang section */
     nav.nav-scrolled .menu-toggle {
         opacity: 1;
         pointer-events: auto;
