@@ -21,15 +21,12 @@ nav {
     padding: 10px 30px; 
     z-index: 1000;
     
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
+    display: flex; justify-content: space-between; align-items: center;
     box-shadow: 0 2px 15px rgba(0,0,0,0.05);
 }
 
 .nav-left, .nav-right { width: 30px; display: flex; align-items: center; }
 .nav-right { justify-content: flex-end; }
-
 .nav-center { display: flex; align-items: center; justify-content: center; gap: 30px; }
 .text-link {
     color: #2c3e50; text-decoration: none; font-size: 0.85em;
@@ -39,96 +36,71 @@ nav {
 .text-link:hover { color: #7f8c8d; }
 
 .nav-monogram { display: flex; align-items: center; justify-content: center; padding: 0 10px; }
-.nav-monogram img {
-    height: auto; max-height: 45px; width: auto; max-width: 120px; 
-    object-fit: contain; pointer-events: none;
-}
+.nav-monogram img { height: auto; max-height: 45px; width: auto; max-width: 120px; object-fit: contain; pointer-events: none; }
 
 /* =======================================
    HAMBURGER BUTTON & SIDE MENU
 ======================================== */
 .menu-toggle {
-    display: flex; flex-direction: column; gap: 5px; 
-    cursor: pointer; z-index: 1001; transition: opacity 0.4s ease;
-    opacity: 1; pointer-events: auto;
+    display: flex; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1001; 
+    transition: opacity 0.4s ease; opacity: 1; pointer-events: auto;
 }
-.menu-toggle span {
-    width: 25px; height: 2px; background-color: #2c3e50;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
+.menu-toggle span { width: 25px; height: 2px; background-color: #2c3e50; transition: transform 0.3s ease, opacity 0.3s ease; }
 .toggle-active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .toggle-active span:nth-child(2) { opacity: 0; }
 .toggle-active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 .nav-links {
     position: absolute; top: 100%; right: 0; left: auto;
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     flex-direction: column; gap: 20px; width: 220px; padding: 30px 20px;
     box-shadow: -5px 10px 20px rgba(0,0,0,0.05); border-bottom-left-radius: 10px; 
-    
-    transform: translateX(100%); opacity: 0;
-    transition: transform 0.4s ease, opacity 0.4s ease;
+    transform: translateX(100%); opacity: 0; transition: transform 0.4s ease, opacity 0.4s ease;
     display: flex; align-items: flex-end; text-align: right;
 }
 .nav-links.nav-active { transform: translateX(0); opacity: 1; }
-.nav-links a {
-    color: #2c3e50; text-decoration: none; font-size: 1em;
-    text-transform: uppercase; letter-spacing: 2px; font-weight: 500;
-}
+.nav-links a { color: #2c3e50; text-decoration: none; font-size: 1em; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; }
 
-/* =======================================
-   MOBILE VIEW (Smartphones)
-======================================== */
 @media (max-width: 768px) {
     nav { padding: 10px 10px; }
     .nav-center { gap: 8px; } 
     .text-link { font-size: 0.55em; letter-spacing: 0.5px; }
-    
     .nav-monogram { padding: 0 5px; }
     .nav-monogram img { max-height: 32px; max-width: 80px; }
-
     .menu-toggle { opacity: 0; pointer-events: none; }
     nav.nav-scrolled .menu-toggle { opacity: 1; pointer-events: auto; }
 }
 
 /* =======================================
-   PARALLAX & TRANSLUCENT TRANSITIONS
+   TRUE PARALLAX & TRANSLUCENT TRANSITIONS
 ======================================== */
-.parallax-section {
-    position: relative;
-    background-attachment: fixed;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+.scroll-section {
+    position: relative; overflow: hidden; /* Ensures parallax images don't spill over */
+    min-height: 85vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 80px 20px;
 }
+
+.parallax-bg {
+    position: absolute; top: -20%; left: 0; 
+    width: 100%; height: 140%; /* Extra height to allow movement */
+    background-size: cover; background-position: center; background-repeat: no-repeat;
+    z-index: 0; will-change: transform; /* Performance boost */
+}
+
 .parallax-overlay {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    /* Gradient mask para lumabo sa gitna at maging solid sa dulo (smooth transition) */
+    /* Elegant fading frosted glass effect */
     background: linear-gradient(to bottom, 
         rgba(252, 252, 252, 1) 0%, 
-        rgba(252, 252, 252, 0.65) 15%, 
-        rgba(252, 252, 252, 0.65) 85%, 
+        rgba(252, 252, 252, 0.70) 15%, 
+        rgba(252, 252, 252, 0.70) 85%, 
         rgba(252, 252, 252, 1) 100%);
     z-index: 1;
 }
+
 .content-wrapper {
     position: relative; z-index: 2; width: 100%;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-
-/* Mobile Fix: Prevent iOS Safari zooming bug on fixed backgrounds */
-@media (max-width: 768px) {
-    .parallax-section {
-        background-attachment: scroll; 
-    }
-}
-
-/* Spacing & Layout */
-.scroll-section {
-    min-height: 85vh; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; padding: 80px 20px;
 }
 
 /* Typography */
@@ -137,10 +109,13 @@ h2 { font-size: 3em; margin-bottom: 20px; position: relative; display: inline-bl
 h2::after { content: ''; display: block; width: 50px; height: 1px; background-color: #2c3e50; margin: 15px auto 0; }
 .date { font-family: 'Playfair Display', serif; font-size: 1.4em; margin-top: 10px; color: #7f8c8d; font-style: italic; letter-spacing: 1px; }
 
-/* BIG MONOGRAM MP4 VIDEO */
+/* BIG MONOGRAM MP4 VIDEO (FIXED WHITE BG ON MOBILE) */
 .monogram-video {
     width: 100%; max-width: 450px; height: auto; margin: 0 auto 15px auto;
-    display: block; pointer-events: none; object-fit: contain; mix-blend-mode: multiply; 
+    display: block; pointer-events: none; object-fit: contain; 
+    mix-blend-mode: multiply; 
+    -webkit-mix-blend-mode: multiply; /* Fix for Apple/iOS White Background Bug */
+    background-color: transparent;
 }
 @media (max-width: 1024px) { .monogram-video { max-width: 70%; } }
 @media (max-width: 600px) { .monogram-video { max-width: 90%; } }
@@ -191,18 +166,10 @@ p { font-size: 0.95em; font-weight: 300; }
 
 /* CONTACT US SECTION */
 #contact {
-    position: relative; background-color: #e2e8f0; 
-    background-size: cover; background-position: center; background-attachment: fixed;
+    position: relative; background-color: #e2e8f0; background-size: cover; background-position: center; 
 }
-.contact-overlay {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(26, 37, 47, 0.7); z-index: 1;
-}
-.contact-content {
-    position: relative; z-index: 2; background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
-}
-
+.contact-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26, 37, 47, 0.7); z-index: 1; }
+.contact-content { position: relative; z-index: 2; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
 .error-text { color: #e74c3c; }
 .message { text-align: center; margin-top: 20px; font-style: italic; font-size: 0.9em; }
 

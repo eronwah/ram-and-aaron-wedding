@@ -41,10 +41,13 @@
     </nav>
 
     <!-- ==========================================
-                    HOME SECTION (Parallax)
+                    HOME SECTION
     =========================================== -->
-    <header id="home" class="scroll-section animate-in parallax-section" style="background-image: url('assets/home-bg.jpg'); min-height: 100vh;">
+    <header id="home" class="scroll-section animate-in" style="min-height: 100vh; justify-content: center;">
+        
+        <div class="parallax-bg" style="background-image: url('assets/home-bg.jpg');"></div>
         <div class="parallax-overlay"></div>
+        
         <div class="content-wrapper">
             <video src="monogram.mp4" class="monogram-video" autoplay loop muted playsinline></video>
             
@@ -65,10 +68,13 @@
     </header>
 
     <!-- ==========================================
-                    STORY SECTION (Parallax)
+                    OUR STORY SECTION
     =========================================== -->
-    <section id="our-story" class="scroll-section parallax-section" style="background-image: url('assets/story-bg.jpg');">
+    <section id="our-story" class="scroll-section">
+        
+        <div class="parallax-bg" style="background-image: url('assets/story-bg.jpg');"></div>
         <div class="parallax-overlay"></div>
+        
         <div class="content-wrapper">
             <h2>Our Story</h2>
             <div class="container">
@@ -79,10 +85,14 @@
     </section>
 
     <!-- ==========================================
-                    DETAILS SECTION (Parallax)
+                    DETAILS SECTION
     =========================================== -->
-    <section id="details" class="scroll-section parallax-section" style="background-image: url('assets/details-bg.jpg');">
+    <section id="details" class="scroll-section">
+        
+        <!-- INAYOS: Siniguradong nandidito ang parallax tags para sa Details -->
+        <div class="parallax-bg" style="background-image: url('assets/details-bg.jpg');"></div>
         <div class="parallax-overlay"></div>
+        
         <div class="content-wrapper">
             <h2>When & Where</h2>
             <p style="color: #7f8c8d; font-style: italic; margin-bottom: 40px;">July 28, 2027 &bull; Silang, Cavite</p>
@@ -91,7 +101,6 @@
                 
                 <div class="container" style="flex: 1 1 380px; margin: 0; text-align: center;">
                     <img src="church.jpg" alt="St. Benedict Parish" class="clickable-image" onclick="openImageModal(this.src)" style="width: 100%; height: 220px; object-fit: cover; border-radius: 4px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                    
                     <p style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; color: #7f8c8d; margin-bottom: 5px; font-weight: 500;">Ceremony</p>
                     <h3 style="margin-top: 0; font-size: 1.8em; color: #1a252f;">St. Benedict Parish</h3>
                     <p style="color: #4a5568; margin: 15px 0 25px 0; font-size: 0.95em; line-height: 1.6;">
@@ -104,7 +113,6 @@
 
                 <div class="container" style="flex: 1 1 380px; margin: 0; text-align: center;">
                     <img src="venue.jpg" alt="Alta Veranda De Tibig" class="clickable-image" onclick="openImageModal(this.src)" style="width: 100%; height: 220px; object-fit: cover; border-radius: 4px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                    
                     <p style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; color: #7f8c8d; margin-bottom: 5px; font-weight: 500;">Reception</p>
                     <h3 style="margin-top: 0; font-size: 1.8em; color: #1a252f;">Alta Veranda De Tibig</h3>
                     <p style="color: #4a5568; margin: 15px 0 25px 0; font-size: 0.95em; line-height: 1.6;">
@@ -210,6 +218,7 @@
 
     <!-- JavaScript Logic -->
     <script>
+        // TRUE PARALLAX SCRIPT NA NAGREREACT KADA SCROLL
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('navbar');
             if (window.scrollY > (window.innerHeight * 0.8)) {
@@ -217,6 +226,18 @@
             } else {
                 nav.classList.remove('nav-scrolled');
             }
+
+            // Gagalaw lang ang background images nang pino at maganda
+            const parallaxBgs = document.querySelectorAll('.parallax-bg');
+            let scrolled = window.scrollY;
+            
+            parallaxBgs.forEach(function(bg) {
+                let section = bg.parentElement;
+                let offset = section.offsetTop;
+                let speed = 0.35; // Kung gaano kabilis gumalaw
+                let yPos = (scrolled - offset) * speed;
+                bg.style.transform = `translateY(${yPos}px)`;
+            });
         });
 
         function toggleMenu() {
@@ -255,7 +276,6 @@
             document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
         }, 1000);
 
-        // Ang RSVP functionality ay nananatiling nakakonekta sa iyong Wedding website - database
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTjQCYlKwZ8li32nrH_GvKIXmULVGZtl39KG9Pz43MSIQN0SP3NCnLeDqJ2fIJXQaR/exec'; 
         
         let currentRow = 0;
