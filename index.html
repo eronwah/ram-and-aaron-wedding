@@ -10,10 +10,8 @@
 <body>
 
     <nav id="navbar">
-        <!-- Spacer sa Kaliwa para sa perpektong gitna -->
         <div class="nav-left"></div>
 
-        <!-- Gitnang Bahagi: Links at PNG Monogram (Fix Alignment) -->
         <div class="nav-center">
             <a href="#home" class="text-link">Home</a>
             <a href="#details" class="text-link">Details</a>
@@ -23,10 +21,10 @@
             </a>
             
             <a href="#rsvp" class="text-link">RSVP</a>
-            <a href="#" onclick="openContactModal(); return false;" class="text-link">Contact Us</a>
+            <!-- Na-update na link -->
+            <a href="#contact" class="text-link">Contact Us</a> 
         </div>
         
-        <!-- Kanang Bahagi: Hamburger Icon -->
         <div class="nav-right">
             <div class="menu-toggle" id="burgerMenu" onclick="toggleMenu()">
                 <span></span>
@@ -35,21 +33,17 @@
             </div>
         </div>
         
-        <!-- Hamburger Dropdown Menu Content (Lalabas mula sa Kanan) -->
         <div class="nav-links" id="navLinks">
             <a href="#home" onclick="closeMenu()">Home</a>
             <a href="#details" onclick="closeMenu()">Details</a>
             <a href="#rsvp" onclick="closeMenu()">RSVP</a>
-            <a href="#" onclick="openContactModal(); closeMenu(); return false;">Contact Us</a>
+            <!-- Na-update na link -->
+            <a href="#contact" onclick="closeMenu()">Contact Us</a>
         </div>
     </nav>
 
-    <!-- ==========================================
-                    HOME SECTION
-    =========================================== -->
     <header id="home" class="scroll-section animate-in" style="min-height: 100vh; justify-content: center;">
         
-        <!-- MP4 VIDEO STRICTLY PARA SA HOME PAGE -->
         <video src="monogram.mp4" class="monogram-video" autoplay loop muted playsinline></video>
         
         <p class="date" style="margin-top: 5px;">Silang, Cavite</p>
@@ -166,28 +160,42 @@
                 <h4 style="color: #2c3e50; font-size: 1.5em; margin-bottom: 10px;">You have already submitted your RSVP.</h4>
                 <p style="color: #7f8c8d; font-style: italic;">Thank you!</p>
                 <p style="margin: 30px 0;">Do you need to change your guest count or cancel your attendance?</p>
-                <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" onclick="openContactModal()">Yes, I need to make changes</button>
+                <!-- Ang button na ito ay didiretso na sa Contact Section imbes na magbukas ng modal -->
+                <a href="#contact" class="rsvp-btn rsvp-btn-secondary form-submit-btn" style="display: block; text-decoration: none;">Yes, I need to make changes</a>
                 <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" style="margin-top: 10px; border: none; background: transparent; text-decoration: underline;" onclick="resetRSVPForm()">Search another name</button>
             </div>
         </div>
     </section>
 
-    <!-- Modal for Contact -->
-    <div id="contact-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 style="margin-top: 0;">Update RSVP</h3>
-            <p>Kindly contact Aaron or Ram directly to change your RSVP details:</p>
-            <p style="font-size: 1.2em; color: #1a252f; line-height: 1.8; margin: 30px 0; font-family: 'Playfair Display', serif;">
-                <strong>Aaron:</strong> 09770927233<br>
-                <strong>Ram:</strong> 09171607089
-            </p>
-            <button class="rsvp-btn form-submit-btn" onclick="closeContactModal()">Close</button>
+    <!-- BAGONG CONTACT US SECTION -->
+    <section id="contact" class="scroll-section">
+        <!-- Overlay para masiguro na mababasa ang text kahit may background image -->
+        <div class="contact-overlay"></div>
+        
+        <div class="container contact-content">
+            <h2 style="color: #1a252f;">Contact Us</h2>
+            <p style="font-size: 1.1em; color: #7f8c8d; font-style: italic; margin-bottom: 40px;">For more questions and concerns, kindly contact us.</p>
+            
+            <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap;">
+                <!-- Aaron's Details -->
+                <div style="text-align: center; flex: 1; min-width: 250px;">
+                    <h3 style="font-size: 1.8em; margin-bottom: 15px; color: #2c3e50; font-family: 'Playfair Display', serif;">Aaron</h3>
+                    <p style="margin: 8px 0; color: #4a5568;"><strong style="color: #1a252f; font-weight: 500;">Phone:</strong> 09770927233</p>
+                    <p style="margin: 8px 0; color: #4a5568;"><strong style="color: #1a252f; font-weight: 500;">Email:</strong> Eroncuartero@gmail.com</p>
+                </div>
+                
+                <!-- Ram's Details -->
+                <div style="text-align: center; flex: 1; min-width: 250px;">
+                    <h3 style="font-size: 1.8em; margin-bottom: 15px; color: #2c3e50; font-family: 'Playfair Display', serif;">Ram</h3>
+                    <p style="margin: 8px 0; color: #4a5568;"><strong style="color: #1a252f; font-weight: 500;">Phone:</strong> 09171607089</p>
+                    <p style="margin: 8px 0; color: #4a5568;"><strong style="color: #1a252f; font-weight: 500;">Email:</strong> Ramramos01493@gmail.com</p>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
     <!-- JavaScript Logic -->
     <script>
-        // Scroll Logic: Mag-ttrigger lang ang paglitaw ng Hamburger sa mobile kapag lumagpas sa Home page
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('navbar');
             if (window.scrollY > (window.innerHeight * 0.8)) {
@@ -197,7 +205,6 @@
             }
         });
 
-        // Hamburger Menu - Bubukas mula sa Kanan
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('nav-active');
             document.getElementById('burgerMenu').classList.toggle('toggle-active');
@@ -398,16 +405,6 @@
             
             document.getElementById('guest-count-section').style.display = 'none';
             document.getElementById('guest-names-container').innerHTML = '';
-        }
-
-        function openContactModal() { 
-            document.getElementById('contact-modal').style.display = 'flex'; 
-            resetRSVPForm(); 
-            closeMenu(); 
-        }
-        
-        function closeContactModal() { 
-            document.getElementById('contact-modal').style.display = 'none'; 
         }
     </script>
 </body>
