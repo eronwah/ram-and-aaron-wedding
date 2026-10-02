@@ -10,10 +10,10 @@
 <body>
 
     <nav id="navbar">
-        <!-- Kaliwang Bahagi: Spacer na lamang -->
+        <!-- Spacer sa Kaliwa para sa perpektong gitna -->
         <div class="nav-left"></div>
 
-        <!-- Gitnang Bahagi: Links at PNG Monogram -->
+        <!-- Gitnang Bahagi: Links at PNG Monogram (Fix Alignment) -->
         <div class="nav-center">
             <a href="#home" class="text-link">Home</a>
             <a href="#details" class="text-link">Details</a>
@@ -35,7 +35,7 @@
             </div>
         </div>
         
-        <!-- Hamburger Dropdown Menu Content -->
+        <!-- Hamburger Dropdown Menu Content (Lalabas mula sa Kanan) -->
         <div class="nav-links" id="navLinks">
             <a href="#home" onclick="closeMenu()">Home</a>
             <a href="#details" onclick="closeMenu()">Details</a>
@@ -187,6 +187,7 @@
 
     <!-- JavaScript Logic -->
     <script>
+        // Scroll Logic: Mag-ttrigger lang ang paglitaw ng Hamburger sa mobile kapag lumagpas sa Home page
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('navbar');
             if (window.scrollY > (window.innerHeight * 0.8)) {
@@ -196,6 +197,7 @@
             }
         });
 
+        // Hamburger Menu - Bubukas mula sa Kanan
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('nav-active');
             document.getElementById('burgerMenu').classList.toggle('toggle-active');
