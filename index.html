@@ -21,7 +21,6 @@
             </a>
             
             <a href="#rsvp" class="text-link">RSVP</a>
-            <!-- Na-update na link -->
             <a href="#contact" class="text-link">Contact Us</a> 
         </div>
         
@@ -37,11 +36,13 @@
             <a href="#home" onclick="closeMenu()">Home</a>
             <a href="#details" onclick="closeMenu()">Details</a>
             <a href="#rsvp" onclick="closeMenu()">RSVP</a>
-            <!-- Na-update na link -->
             <a href="#contact" onclick="closeMenu()">Contact Us</a>
         </div>
     </nav>
 
+    <!-- ==========================================
+                    HOME SECTION
+    =========================================== -->
     <header id="home" class="scroll-section animate-in" style="min-height: 100vh; justify-content: center;">
         
         <video src="monogram.mp4" class="monogram-video" autoplay loop muted playsinline></video>
@@ -69,6 +70,9 @@
         </div>
     </section>
 
+    <!-- ==========================================
+              DETAILS SECTION (WITH CLICKABLE IMAGES)
+    =========================================== -->
     <section id="details" class="scroll-section">
         <h2>When & Where</h2>
         <p style="color: #7f8c8d; font-style: italic; margin-bottom: 40px;">July 28, 2027 &bull; Silang, Cavite</p>
@@ -76,9 +80,9 @@
         <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; width: 100%; max-width: 900px; margin: 0 auto;">
             
             <div class="container" style="flex: 1 1 380px; margin: 0; text-align: center;">
-                <div style="width: 100%; height: 220px; background-color: #f1f5f9; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 0.9em; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 25px; border: 1px dashed #cbd5e1;">
-                    [ Church Photo Placeholder ]
-                </div>
+                <!-- CHURCH IMAGE: Nilagyan ng onclick at class -->
+                <img src="church.jpg" alt="St. Benedict Parish" class="clickable-image" onclick="openImageModal(this.src)" style="width: 100%; height: 220px; object-fit: cover; border-radius: 4px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                
                 <p style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; color: #7f8c8d; margin-bottom: 5px; font-weight: 500;">Ceremony</p>
                 <h3 style="margin-top: 0; font-size: 1.8em; color: #1a252f;">St. Benedict Parish</h3>
                 <p style="color: #4a5568; margin: 15px 0 25px 0; font-size: 0.95em; line-height: 1.6;">
@@ -90,9 +94,9 @@
             </div>
 
             <div class="container" style="flex: 1 1 380px; margin: 0; text-align: center;">
-                <div style="width: 100%; height: 220px; background-color: #f1f5f9; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 0.9em; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 25px; border: 1px dashed #cbd5e1;">
-                    [ Venue Photo Placeholder ]
-                </div>
+                <!-- VENUE IMAGE: Inayos ang typo at nilagyan ng onclick -->
+                <img src="venue.jpg" alt="Alta Veranda De Tibig" class="clickable-image" onclick="openImageModal(this.src)" style="width: 100%; height: 220px; object-fit: cover; border-radius: 4px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                
                 <p style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.75em; color: #7f8c8d; margin-bottom: 5px; font-weight: 500;">Reception</p>
                 <h3 style="margin-top: 0; font-size: 1.8em; color: #1a252f;">Alta Veranda De Tibig</h3>
                 <p style="color: #4a5568; margin: 15px 0 25px 0; font-size: 0.95em; line-height: 1.6;">
@@ -160,31 +164,26 @@
                 <h4 style="color: #2c3e50; font-size: 1.5em; margin-bottom: 10px;">You have already submitted your RSVP.</h4>
                 <p style="color: #7f8c8d; font-style: italic;">Thank you!</p>
                 <p style="margin: 30px 0;">Do you need to change your guest count or cancel your attendance?</p>
-                <!-- Ang button na ito ay didiretso na sa Contact Section imbes na magbukas ng modal -->
                 <a href="#contact" class="rsvp-btn rsvp-btn-secondary form-submit-btn" style="display: block; text-decoration: none;">Yes, I need to make changes</a>
                 <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" style="margin-top: 10px; border: none; background: transparent; text-decoration: underline;" onclick="resetRSVPForm()">Search another name</button>
             </div>
         </div>
     </section>
 
-    <!-- BAGONG CONTACT US SECTION -->
+    <!-- CONTACT US SECTION -->
     <section id="contact" class="scroll-section">
-        <!-- Overlay para masiguro na mababasa ang text kahit may background image -->
         <div class="contact-overlay"></div>
-        
         <div class="container contact-content">
             <h2 style="color: #1a252f;">Contact Us</h2>
             <p style="font-size: 1.1em; color: #7f8c8d; font-style: italic; margin-bottom: 40px;">For more questions and concerns, kindly contact us.</p>
             
             <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap;">
-                <!-- Aaron's Details -->
                 <div style="text-align: center; flex: 1; min-width: 250px;">
                     <h3 style="font-size: 1.8em; margin-bottom: 15px; color: #2c3e50; font-family: 'Playfair Display', serif;">Aaron</h3>
                     <p style="margin: 8px 0; color: #4a5568;"><strong style="color: #1a252f; font-weight: 500;">Phone:</strong> 09770927233</p>
                     <p style="margin: 8px 0; color: #4a5568;"><strong style="color: #1a252f; font-weight: 500;">Email:</strong> Eroncuartero@gmail.com</p>
                 </div>
                 
-                <!-- Ram's Details -->
                 <div style="text-align: center; flex: 1; min-width: 250px;">
                     <h3 style="font-size: 1.8em; margin-bottom: 15px; color: #2c3e50; font-family: 'Playfair Display', serif;">Ram</h3>
                     <p style="margin: 8px 0; color: #4a5568;"><strong style="color: #1a252f; font-weight: 500;">Phone:</strong> 09171607089</p>
@@ -193,6 +192,14 @@
             </div>
         </div>
     </section>
+
+    <!-- ==========================================
+         IMAGE MODAL (For zooming Church/Venue)
+    =========================================== -->
+    <div id="image-modal" class="modal-overlay" onclick="closeImageModal()">
+        <span class="close-modal-btn" onclick="closeImageModal()">&times;</span>
+        <img id="modal-image" class="modal-content-img" src="" alt="Zoomed View">
+    </div>
 
     <!-- JavaScript Logic -->
     <script>
@@ -213,6 +220,18 @@
         function closeMenu() {
             document.getElementById('navLinks').classList.remove('nav-active');
             document.getElementById('burgerMenu').classList.remove('toggle-active');
+        }
+
+        /* Logic para sa Image Modal */
+        function openImageModal(imgSrc) {
+            const modal = document.getElementById('image-modal');
+            const modalImg = document.getElementById('modal-image');
+            modalImg.src = imgSrc;
+            modal.style.display = 'flex';
+        }
+
+        function closeImageModal() {
+            document.getElementById('image-modal').style.display = 'none';
         }
 
         const weddingDate = new Date("July 28, 2027 15:00:00").getTime();
