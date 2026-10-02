@@ -48,16 +48,19 @@ nav {
 }
 .text-link:hover { color: #7f8c8d; }
 
-/* PNG Monogram inside Nav */
+/* PNG Monogram inside Nav - INAYOS ANG SIZING PARA SAKTO LAGI */
 .nav-monogram {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0 10px; /* Kaunting espasyo sa gilid para hindi dikit na dikit sa text */
 }
 .nav-monogram img {
-    height: 40px; 
+    height: auto;
+    max-height: 45px; /* Ito ang limit ng taas sa desktop */
     width: auto;
-    object-fit: contain;
+    max-width: 120px; /* Limit ng lapad para hindi sakupin ang buong menu */
+    object-fit: contain; /* Para mapanatili ang tamang aspect ratio */
     pointer-events: none;
 }
 
@@ -116,14 +119,20 @@ nav {
         font-size: 0.55em; 
         letter-spacing: 0.5px;
     }
-    .nav-monogram img { height: 28px; }
+    
+    /* Awtomatikong liliit ang Monogram PNG sa Mobile */
+    .nav-monogram { padding: 0 5px; }
+    .nav-monogram img { 
+        max-height: 32px; 
+        max-width: 80px; 
+    }
 
     /* Nakatago sa simula ang hamburger sa Mobile View */
     .menu-toggle {
         opacity: 0;
         pointer-events: none;
     }
-    /* Lilitaw lang ito kapag nag-scroll lagpas sa unang section (kinokontrol ng JavaScript) */
+    /* Lilitaw lang ito kapag nag-scroll lagpas sa unang section */
     nav.nav-scrolled .menu-toggle {
         opacity: 1;
         pointer-events: auto;
