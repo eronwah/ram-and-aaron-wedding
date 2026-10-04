@@ -912,8 +912,17 @@ p { font-size: 0.95em; font-weight: 300; }
 
     .party-table th,
     .party-table td {
-        padding: 13px 8px;
-        font-size: 0.82em;
+        height: clamp(56px, 14vw, 70px);
+        padding: 10px 7px;
+        font-size: clamp(0.68rem, 2.8vw, 0.84rem);
+        line-height: 1.35;
+    }
+
+    .party-table th {
+        height: 50px;
+        padding: 8px 5px;
+        font-size: clamp(0.68rem, 2.7vw, 0.78rem);
+        letter-spacing: 0.07em;
     }
 
     .secondary-sponsors-grid {
@@ -934,7 +943,12 @@ p { font-size: 0.95em; font-weight: 300; }
 
     .party-table th,
     .party-table td {
-        padding: 12px 5px;
-        font-size: 0.76em;
+        padding-right: 5px;
+        padding-left: 5px;
+        font-size: clamp(0.66rem, 3vw, 0.74rem);
+    }
+
+    .party-table th {
+        font-size: clamp(0.64rem, 2.8vw, 0.72rem);
     }
 }
