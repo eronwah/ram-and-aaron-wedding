@@ -754,7 +754,7 @@ p { font-size: 0.95em; font-weight: 300; }
     max-width: 100%;
     color: #7f8c8d;
     font-family: 'Playfair Display', serif;
-    font-size: clamp(0.74rem, calc(0.72rem + 0.25cqi), 0.86rem);
+    font-size: clamp(0.80rem, calc(0.76rem + 0.30cqi), 0.95rem);
     font-style: italic;
     line-height: 1.45;
     text-align: center;
@@ -771,10 +771,10 @@ p { font-size: 0.95em; font-weight: 300; }
 }
 
 .secondary-sponsor-amp {
-    margin: 2px 0;
+    margin: 3px 0;
     color: #2c3e50;
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.88em;
+    font-size: 1rem;
     font-style: normal;
     line-height: 1.1;
 }
