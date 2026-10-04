@@ -96,29 +96,29 @@ nav {
     .details-cards-container {
         flex-direction: row !important;
         flex-wrap: nowrap !important;
-        gap: 8px !important;
-        align-items: flex-start !important; /* Siguradong pantay lahat sa itaas */
+        gap: 5px !important;
+        align-items: flex-start !important; 
     }
     .info-card {
         min-width: 0 !important;
         flex: 1 1 0 !important;
-        padding: 0 5px !important; /* Inalis ang padding para mas compact */
+        padding: 0 2px !important; 
         background: transparent !important; 
         box-shadow: none !important; 
         border-top: none !important; 
         display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
     }
-    .info-icon { margin-bottom: 5px; }
-    .info-icon svg { width: 22px; height: 22px; } 
+    .info-icon { margin-bottom: 4px; }
+    .info-icon svg { width: 18px; height: 18px; } /* Pinaliit ang icons */
     
-    /* Pinaliit din ang titulo at oras/petsa */
-    .info-title { font-size: 0.65em; margin-bottom: 2px; line-height: 1.2; }
-    .info-subtitle { font-size: 0.5em; margin-bottom: 5px; line-height: 1.2; font-weight: bold; }
+    /* Pinaliit nang husto ang titulo at oras/petsa */
+    .info-title { font-size: 0.5em; margin-bottom: 2px; line-height: 1.2; }
+    .info-subtitle { font-size: 0.4em; margin-bottom: 5px; line-height: 1.2; font-weight: bold; }
     
-    /* Pinaliit ang messages at ipinakita */
+    /* Pinaliit ang messages */
     .info-text { 
         display: block !important; 
-        font-size: 0.45em !important; 
+        font-size: 0.38em !important; 
         line-height: 1.4 !important; 
         margin: 0;
     }
