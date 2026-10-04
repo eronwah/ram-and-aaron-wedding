@@ -116,6 +116,7 @@
                 <p style="text-align: center; margin-bottom: 30px; font-family: 'Playfair Display', serif; font-size: 1.2em; color: #1a252f;">Please enter your name to find your invitation.</p>
                 <div class="input-group">
                     <label>First Name</label>
+                    <!-- Ibinabalik natin ang required at aalisin ang "(Optional)" -->
                     <input type="text" id="firstName" placeholder="e.g. John" required>
                 </div>
                 <div class="input-group">
@@ -162,14 +163,13 @@
                 <h4 style="color: #2c3e50; font-size: 1.5em; margin-bottom: 10px;">You have already submitted your RSVP.</h4>
                 <p style="color: #7f8c8d; font-style: italic;">Thank you!</p>
                 <p style="margin: 30px 0;">Do you need to change your guest count or cancel your attendance?</p>
-                <!-- NA-UPDATE NA BUTTON: Magbubukas muli ng RSVP Modal -->
                 <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" onclick="openContactModal()">Yes, I need to make changes</button>
                 <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" style="margin-top: 10px; border: none; background: transparent; text-decoration: underline;" onclick="resetRSVPForm()">Search another name</button>
             </div>
         </div>
     </section>
 
-    <!-- CONTACT US SECTION (HIWALAY SA IBABA) -->
+    <!-- CONTACT US SECTION -->
     <section id="contact" class="scroll-section">
         <div class="contact-overlay"></div>
         <div class="container contact-content">
@@ -273,10 +273,17 @@
 
         // Enter key to search
         document.getElementById('firstName').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') searchGuest();
+            if (e.key === 'Enter') {
+                e.preventDefault(); 
+                document.getElementById('lastName').focus(); 
+            }
         });
+
         document.getElementById('lastName').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') searchGuest();
+            if (e.key === 'Enter') {
+                e.preventDefault(); 
+                searchGuest(); 
+            }
         });
 
         async function searchGuest() {
@@ -285,8 +292,17 @@
             const msg = document.getElementById('search-msg');
             const btn = document.querySelector('#lookup-section button');
             
-            if(!first || !last) { 
+            // Ibinalik natin ang condition: Hihingi ng parehong pangalan bago mag-search
+            if(!first && !last) { 
                 msg.innerText = "Please enter both first and last name."; 
+                msg.style.color = "#e74c3c";
+                return; 
+            } else if(!first) {
+                msg.innerText = "Please enter your first name."; 
+                msg.style.color = "#e74c3c";
+                return; 
+            } else if(!last) {
+                msg.innerText = "Please enter your last name."; 
                 msg.style.color = "#e74c3c";
                 return; 
             }
