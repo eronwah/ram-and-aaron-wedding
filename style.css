@@ -467,6 +467,22 @@ p { font-size: 0.95em; font-weight: 300; }
     line-height: 1.7;
 }
 
+.wedding-party-status {
+    margin: -34px auto 26px;
+    color: #7f8c8d;
+    text-align: center;
+    font-size: 0.82em;
+    font-style: italic;
+}
+
+.wedding-party-status[hidden] {
+    display: none;
+}
+
+.wedding-party-status.is-error {
+    color: #a33f3f;
+}
+
 .wedding-party-content {
     width: 100%;
     max-width: 1120px;
@@ -731,6 +747,11 @@ p { font-size: 0.95em; font-weight: 300; }
         max-width: 380px;
         margin-bottom: 36px;
         font-size: 0.9em;
+    }
+
+    .wedding-party-status {
+        margin: -22px auto 20px;
+        font-size: 0.76em;
     }
 
     .party-group {
