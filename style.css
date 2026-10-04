@@ -61,16 +61,6 @@ nav {
 .nav-links.nav-active { transform: translateX(0); opacity: 1; }
 .nav-links a { color: #2c3e50; text-decoration: none; font-size: 1em; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; }
 
-@media (max-width: 768px) {
-    nav { padding: 10px 5px; } /* Inadjust ang padding para magkasya ang 6 links */
-    .nav-center { gap: 6px; } 
-    .text-link { font-size: 0.48em; letter-spacing: 0.5px; } /* Pinaliit nang konti ang font */
-    .nav-monogram { padding: 0 5px; }
-    .nav-monogram img { max-height: 28px; max-width: 70px; }
-    .menu-toggle { opacity: 0; pointer-events: none; }
-    nav.nav-scrolled .menu-toggle { opacity: 1; pointer-events: auto; }
-}
-
 /* =======================================
    GENERAL LAYOUT
 ======================================== */
@@ -91,8 +81,6 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
     display: block; pointer-events: none; object-fit: contain; 
     mix-blend-mode: multiply; -webkit-mix-blend-mode: multiply; background-color: transparent;
 }
-@media (max-width: 1024px) { .monogram-video { max-width: 70%; } }
-@media (max-width: 600px) { .monogram-video { max-width: 90%; } }
 
 /* COUNTDOWN TIMER */
 .countdown-container { display: flex; gap: 20px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
@@ -106,16 +94,14 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
 .countdown-number { font-family: 'Playfair Display', serif; font-size: 3.5em; color: #1a252f; line-height: 1; margin-bottom: 8px; }
 .countdown-label { font-size: 0.75em; text-transform: uppercase; letter-spacing: 3px; color: #7f8c8d; font-weight: 500; }
 
-@media (max-width: 600px) {
-    .countdown-container { gap: 5px; margin-top: 20px; flex-wrap: nowrap !important; width: 100%; padding: 0 5px; }
-    .countdown-item { padding: 12px 2px; min-width: 0 !important; flex: 1 1 0; border-radius: 6px; }
-    .countdown-number { font-size: 1.5em !important; margin-bottom: 5px; }
-    .countdown-label { font-size: 0.55em !important; letter-spacing: 1px !important; }
-}
-
 /* =======================================
    DETAILS SECTION: CARDS & TIMELINE
 ======================================== */
+.details-cards-container {
+    display: flex; gap: 30px; justify-content: center; flex-wrap: nowrap; 
+    width: 100%; max-width: 1000px; margin: 0 auto;
+}
+
 .info-card {
     flex: 1; min-width: 260px; background: #ffffff; padding: 40px 25px;
     border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
@@ -147,20 +133,75 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
 }
 .timeline-time { font-family: 'Montserrat', sans-serif; font-size: 0.85em; letter-spacing: 2px; text-transform: uppercase; color: #7f8c8d; font-weight: 600; display: block; margin-bottom: 5px; }
 .timeline-event { font-family: 'Playfair Display', serif; font-size: 1.3em; color: #1a252f; }
+.timeline-desc { font-size: 0.9em; color: #4a5568; }
 
 .program-image-placeholder {
     flex: 1; border-radius: 8px; background-color: #f1f5f9; border: 2px dashed #cbd5e1;
     display: flex; align-items: center; justify-content: center; color: #94a3b8;
     font-size: 0.9em; letter-spacing: 1px; text-transform: uppercase; min-height: 350px;
-    /* object-fit cover is prepared here for when you swap it to an actual img tag later */
     background-size: cover; background-position: center;
 }
 
+/* =======================================
+   MOBILE VIEW (Smartphones)
+======================================== */
 @media (max-width: 768px) {
-    .program-container { flex-direction: column; padding: 30px 20px; }
-    .program-image-placeholder { min-height: 250px; width: 100%; }
-    .info-card { min-width: 100%; }
+    nav { padding: 10px 5px; } 
+    .nav-center { gap: 6px; } 
+    .text-link { font-size: 0.48em; letter-spacing: 0.5px; } 
+    .nav-monogram { padding: 0 5px; }
+    .nav-monogram img { max-height: 28px; max-width: 70px; }
+    .menu-toggle { opacity: 0; pointer-events: none; }
+    nav.nav-scrolled .menu-toggle { opacity: 1; pointer-events: auto; }
+    
+    .monogram-video { max-width: 90%; }
+    
+    .countdown-container { gap: 5px; margin-top: 20px; flex-wrap: nowrap !important; width: 100%; padding: 0 5px; }
+    .countdown-item { padding: 12px 2px; min-width: 0 !important; flex: 1 1 0; border-radius: 6px; }
+    .countdown-number { font-size: 1.5em !important; margin-bottom: 5px; }
+    .countdown-label { font-size: 0.55em !important; letter-spacing: 1px !important; }
+
+    /* MOBILE: FORCED HORIZONTAL CARDS */
+    .details-cards-container {
+        flex-wrap: nowrap !important; /* Pilitin na magkakatabi */
+        gap: 8px !important;
+    }
+    .info-card {
+        min-width: 0 !important;
+        flex: 1 1 0 !important;
+        padding: 15px 5px !important; /* Pinaliit ang box para magkasya */
+    }
+    .info-icon { margin-bottom: 10px; }
+    .info-icon svg { width: 28px; height: 28px; }
+    .info-title { font-size: 0.85em; }
+    .info-subtitle { font-size: 0.65em; margin-bottom: 8px; }
+    .info-text { font-size: 0.55em; line-height: 1.4; }
+
+    /* MOBILE: TIMELINE SA KALIWA, IMAGE SA KANAN */
+    .program-container { 
+        flex-direction: row !important; 
+        padding: 20px 10px !important; 
+        gap: 15px !important;
+    }
+    .timeline-wrapper { flex: 1.5; }
+    .timeline-wrapper h3 { font-size: 1.2em; margin-bottom: 15px; }
+    .timeline { padding-left: 15px; margin-top: 10px; }
+    .timeline-item { margin-bottom: 15px; }
+    .timeline-item::before { left: -21px; width: 10px; height: 10px; }
+    .timeline-time { font-size: 0.6em; }
+    .timeline-event { font-size: 0.8em; }
+    .timeline-desc { font-size: 0.6em; }
+    
+    .program-image-placeholder { 
+        flex: 1; 
+        min-height: 0 !important; 
+        height: auto;
+        font-size: 0.55em; 
+        padding: 5px;
+    }
 }
+
+@media (max-width: 1024px) { .monogram-video { max-width: 70%; } }
 
 /* Layouts & Buttons */
 .hero-buttons { display: flex; gap: 20px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
