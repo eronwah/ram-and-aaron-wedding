@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=10">
+    <link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
 
@@ -217,7 +217,8 @@
                 </div>
             </section>
             <section class="details-followup-section">
-                <h3>Dress Code</h3>
+                <h3>DRESS CODE</h3>
+                <div id="dress-code-grid" class="dress-code-grid" aria-label="Dress code samples"></div>
             </section>
         </div>
     </section>
@@ -1055,6 +1056,60 @@
             }
         }
 
+        function setupDressCodeCards() {
+            const grid = document.getElementById('dress-code-grid');
+            const categories = [
+                ['Best Man', 'best-man'],
+                ['Maid of Honor', 'maid-of-honor'],
+                ['Man of Honor', 'man-of-honor'],
+                ['Bridesmen', 'bridesmen'],
+                ['Principal Sponsors', 'principal-sponsors'],
+                ['Secondary Sponsors', 'secondary-sponsors'],
+                ['Groomsmen', 'groomsmen'],
+                ['Bridesmaids', 'bridesmaids'],
+                ['Guests', 'guests']
+            ];
+
+            categories.forEach(([label, filePrefix]) => {
+                const card = document.createElement('article');
+                card.className = 'dress-code-card';
+
+                const heading = document.createElement('h4');
+                heading.textContent = label;
+
+                const sampleFrame = document.createElement('div');
+                sampleFrame.className = 'dress-code-art-frame';
+                const sample = document.createElement('img');
+                sample.className = 'dress-code-sample';
+                sample.alt = `${label} dress code sample`;
+                sample.loading = 'lazy';
+                const samplePlaceholder = document.createElement('span');
+                samplePlaceholder.className = 'dress-code-placeholder';
+                samplePlaceholder.textContent = 'Sample image coming soon';
+                sample.addEventListener('load', () => samplePlaceholder.remove(), { once: true });
+                sample.addEventListener('error', () => sample.remove(), { once: true });
+                sampleFrame.append(sample, samplePlaceholder);
+                sample.src = `assets/dresscode/${filePrefix}-sample.jpg?v=1`;
+
+                const paletteFrame = document.createElement('div');
+                paletteFrame.className = 'dress-code-palette-frame';
+                const palette = document.createElement('img');
+                palette.className = 'dress-code-palette';
+                palette.alt = `${label} color palette`;
+                palette.loading = 'lazy';
+                const palettePlaceholder = document.createElement('span');
+                palettePlaceholder.className = 'dress-code-palette-placeholder';
+                palettePlaceholder.textContent = 'Color palette coming soon';
+                palette.addEventListener('load', () => palettePlaceholder.remove(), { once: true });
+                palette.addEventListener('error', () => palette.remove(), { once: true });
+                paletteFrame.append(palette, palettePlaceholder);
+                palette.src = `assets/dresscode/${filePrefix}-palette.jpg?v=1`;
+
+                card.append(heading, sampleFrame, paletteFrame);
+                grid.appendChild(card);
+            });
+        }
+
         function setupPartyPhotoPlaceholders() {
             const mobileViewport = window.matchMedia('(max-width: 767px)');
 
@@ -1125,6 +1180,7 @@
         setupPartyPhotoPlaceholders();
         loadWeddingPartyDetails();
         loadAccommodationDetails();
+        setupDressCodeCards();
 
     </script>
 </body>
