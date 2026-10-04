@@ -26,12 +26,21 @@ nav {
     box-shadow: 0 2px 15px rgba(0,0,0,0.05);
 }
 
+/* Three balanced columns keep the monogram at the true center. */
+nav#navbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    column-gap: 0;
+}
+
 /* MATHEMATICALLY CENTERED MONOGRAM */
 .nav-monogram {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+    align-self: center;
+    position: relative;
+    transform: none;
     z-index: 10000;
     display: flex;
     justify-content: center;
@@ -41,19 +50,23 @@ nav {
 
 /* DESKTOP FLEX GROUPS (HINDI MAG-OOVERLAP) */
 .desktop-nav-left {
-    flex: 1; 
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
     display: flex;
     justify-content: flex-end; 
-    padding-right: 70px; 
+    padding-right: 24px;
     gap: 30px;
 }
 
 .desktop-nav-right {
-    flex: 1; 
+    grid-column: 3;
+    grid-row: 1;
+    min-width: 0;
     display: flex;
     justify-content: flex-start; 
-    padding-left: 70px; 
-    padding-right: 60px;
+    padding-left: 24px;
+    padding-right: 58px;
     gap: 30px;
 }
 
@@ -99,7 +112,7 @@ nav {
 .nav-links.nav-active { transform: translateX(0); opacity: 1; pointer-events: auto; }
 .nav-links a { color: #2c3e50; text-decoration: none; font-size: 1em; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; }
 
-/* TABLET AND MOBILE: keep navigation links visible beside the centered logo */
+/* TABLET AND MOBILE: preserve equal space on each side of the centered logo. */
 @media (max-width: 960px) {
     nav#navbar {
         padding: 12px 20px !important;
@@ -108,30 +121,24 @@ nav {
     .desktop-nav-left,
     .desktop-nav-right {
         display: flex !important;
-        flex: 1 1 0;
         min-width: 0;
-        gap: clamp(5px, 1.4vw, 14px);
-        padding: 0;
+        gap: clamp(8px, 1.5vw, 14px);
     }
 
     .desktop-nav-left {
         justify-content: flex-end;
-        padding-right: clamp(34px, 9vw, 68px);
+        padding-right: 18px;
     }
 
     .desktop-nav-right {
         justify-content: flex-start;
-        padding-left: clamp(34px, 9vw, 68px);
-        padding-right: 54px;
+        padding-left: 18px;
+        padding-right: 58px;
     }
 
     .text-link {
         font-size: 0.82em;
         letter-spacing: 0.5px;
-    }
-
-    .nav-monogram {
-        pointer-events: auto;
     }
 
     .nav-monogram img {
@@ -159,21 +166,21 @@ nav {
     }
 
     .desktop-nav-left {
-        padding-right: 30px;
+        padding-right: 12px;
     }
 
     .desktop-nav-right {
-        padding-left: 30px;
-        padding-right: 50px;
+        padding-left: 12px;
+        padding-right: 52px;
     }
 
     .desktop-nav-left,
     .desktop-nav-right {
-        gap: 4px;
+        gap: 6px;
     }
 
     .text-link {
-        font-size: 0.58em;
+        font-size: 0.62em;
         letter-spacing: 0;
     }
 
@@ -191,7 +198,30 @@ nav {
         padding: 15px 20px !important; 
     } 
     
-    /* Navigation links remain visible on both sides of the centered monogram. */
+    /* Keep quick links beside the logo; the hamburger opens the full link list. */
+    .desktop-nav-left a:nth-child(3),
+    .desktop-nav-right a:nth-child(2) {
+        display: none;
+    }
+
+    .desktop-nav-left,
+    .desktop-nav-right {
+        gap: 10px;
+    }
+
+    .desktop-nav-left {
+        padding-right: 12px;
+    }
+
+    .desktop-nav-right {
+        padding-left: 12px;
+        padding-right: 58px;
+    }
+
+    .text-link {
+        font-size: 0.72em;
+        letter-spacing: 0.2px;
+    }
 
     /* MOBILE: TIMERS */
     .countdown-container { gap: 5px; margin-top: 20px; flex-wrap: nowrap !important; width: 100%; padding: 0 5px; }
