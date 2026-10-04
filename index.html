@@ -22,7 +22,8 @@
             </a>
             
             <a href="#rsvp" class="text-link">RSVP</a>
-            <a href="#contact" class="text-link">Contact Us</a> 
+            <!-- Pinalitan ang Contact Us ng FAQs -->
+            <a href="#faq" class="text-link">FAQs</a> 
         </div>
         
         <div class="nav-right">
@@ -38,11 +39,14 @@
             <a href="#venue" onclick="closeMenu()">Venue</a>
             <a href="#details" onclick="closeMenu()">Details</a>
             <a href="#rsvp" onclick="closeMenu()">RSVP</a>
-            <a href="#contact" onclick="closeMenu()">Contact Us</a>
+            <!-- Pinalitan ang Contact Us ng FAQs -->
+            <a href="#faq" onclick="closeMenu()">FAQs</a>
         </div>
     </nav>
 
-    <!-- HOME SECTION -->
+    <!-- ==========================================
+                    HOME SECTION 
+    =========================================== -->
     <header id="home" class="scroll-section animate-in" style="min-height: 100vh; justify-content: center;">
         <p style="font-family: 'Playfair Display', serif; font-size: 1.5em; color: #1a252f; font-style: italic; margin-bottom: 10px;">We are getting married!</p>
         
@@ -63,7 +67,9 @@
         </div>
     </header>
 
-    <!-- OUR STORY SECTION -->
+    <!-- ==========================================
+                    OUR STORY SECTION 
+    =========================================== -->
     <section id="our-story" class="scroll-section">
         <h2>Our Story</h2>
         <div class="container">
@@ -72,7 +78,9 @@
         </div>
     </section>
 
-    <!-- VENUE SECTION -->
+    <!-- ==========================================
+                    VENUE SECTION 
+    =========================================== -->
     <section id="venue" class="scroll-section">
         <h2>Venues</h2>
         <p style="color: #7f8c8d; font-style: italic; margin-bottom: 40px;">Where the magic happens</p>
@@ -105,7 +113,9 @@
         </div>
     </section>
 
-    <!-- DETAILS SECTION -->
+    <!-- ==========================================
+                    DETAILS SECTION 
+    =========================================== -->
     <section id="details" class="scroll-section" style="background-color: #f8fafc; width: 100%;">
         <h2>Date & Location</h2>
         
@@ -255,26 +265,33 @@
         </div>
     </section>
 
-    <!-- CONTACT US SECTION -->
-    <section id="contact" class="scroll-section">
-        <div class="contact-overlay"></div>
-        <div class="container contact-content">
-            <h2 style="color: #1a252f;">Contact Us</h2>
-            <p style="font-size: 1.1em; color: #7f8c8d; font-style: italic; margin-bottom: 40px;">For more questions and concerns, kindly contact us.</p>
-            
-            <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap;">
-                <div style="text-align: center; flex: 1; min-width: 250px;">
-                    <h3 style="font-size: 1.8em; margin-bottom: 15px; color: #2c3e50; font-family: 'Playfair Display', serif;">Aaron</h3>
-                    <p style="margin: 8px 0; color: #4a5568;"><strong style="color: #1a252f; font-weight: 500;">Phone:</strong> 09770927233</p>
-                    <p style="margin: 8px 0; color: #4a5568;"><strong style="color: #1a252f; font-weight: 500;">Email:</strong> Eroncuartero@gmail.com</p>
-                </div>
-                
-                <div style="text-align: center; flex: 1; min-width: 250px;">
-                    <h3 style="font-size: 1.8em; margin-bottom: 15px; color: #2c3e50; font-family: 'Playfair Display', serif;">Ram</h3>
-                    <p style="margin: 8px 0; color: #4a5568;"><strong style="color: #1a252f; font-weight: 500;">Phone:</strong> 09171607089</p>
-                    <p style="margin: 8px 0; color: #4a5568;"><strong style="color: #1a252f; font-weight: 500;">Email:</strong> Ramramos01493@gmail.com</p>
-                </div>
-            </div>
+    <!-- ==========================================
+                    FAQ SECTION (BAGONG DAGDAG)
+    =========================================== -->
+    <section id="faq" class="scroll-section" style="background-color: #f8fafc; width: 100%;">
+        <h2>Frequently Asked Questions</h2>
+        <p style="color: #7f8c8d; font-style: italic; margin-bottom: 40px;">Some details to help you prepare for our big day.</p>
+        
+        <div class="faq-container">
+            <details class="faq-item">
+                <summary>What is the dress code?</summary>
+                <p>We'd love to see our family and friends dress up with us! We are requesting formal attire in our wedding colors.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>Can I bring a plus one?</summary>
+                <p>Due to limited venue capacity, we are only able to accommodate the guests formally invited on your wedding invitation. If you received a plus one, it will appear when you search your name on the RSVP page.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>Are kids allowed at the wedding?</summary>
+                <p>While we love your little ones, our wedding is going to be an adults-only event so that everyone can relax and enjoy the evening.</p>
+            </details>
+
+            <details class="faq-item">
+                <summary>Is there parking available at the venue?</summary>
+                <p>Yes! There is free and ample parking available at both the church and the reception venue for all our guests.</p>
+            </details>
         </div>
     </section>
 
@@ -284,7 +301,7 @@
         <img id="modal-image" class="modal-content-img" src="" alt="Zoomed View">
     </div>
 
-    <!-- RSVP POP-UP MODAL -->
+    <!-- RSVP POP-UP MODAL (MANANATILI PARA SA RSVP UPDATE) -->
     <div id="contact-modal" class="modal-overlay">
         <div class="modal-content">
             <h3 style="margin-top: 0;">Update RSVP</h3>
