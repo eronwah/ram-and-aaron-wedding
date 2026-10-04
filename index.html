@@ -10,29 +10,28 @@
 <body>
 
     <nav id="navbar">
-        <div class="nav-left"></div>
-
-        <div class="nav-center">
+        <div class="nav-left-links">
             <a href="#home" class="text-link">Home</a>
             <a href="#venue" class="text-link">Venue</a>
             <a href="#details" class="text-link">Details</a>
-            
-            <a href="#home" class="nav-monogram">
-                <img src="monogram.png" alt="Aaron & Ram Monogram">
-            </a>
-            
-            <a href="#rsvp" class="text-link">RSVP</a>
-            <a href="#faq" class="text-link">FAQs</a> 
         </div>
         
-        <div class="nav-right">
+        <a href="#home" class="nav-monogram">
+            <img src="monogram.png" alt="Aaron & Ram Monogram">
+        </a>
+        
+        <div class="nav-right-section">
+            <div class="nav-right-links">
+                <a href="#rsvp" class="text-link">RSVP</a>
+                <a href="#faq" class="text-link">FAQs</a>
+            </div>
             <div class="menu-toggle" id="burgerMenu" onclick="toggleMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
         </div>
-        
+
         <div class="nav-links" id="navLinks">
             <a href="#home" onclick="closeMenu()">Home</a>
             <a href="#venue" onclick="closeMenu()">Venue</a>
@@ -269,7 +268,6 @@
             </details>
         </div>
         
-        <!-- BUTTON UPDATE: BACK TO TOP NAKALAGAY NA ANG TEXT NA HILING MO -->
         <a href="#home" class="back-to-top">
             <svg viewBox="0 0 24 24">
                 <line x1="12" y1="19" x2="12" y2="5"></line>
@@ -285,7 +283,7 @@
         <img id="modal-image" class="modal-content-img" src="" alt="Zoomed View">
     </div>
 
-    <!-- RSVP POP-UP MODAL (MANANATILI PARA SA RSVP UPDATE) -->
+    <!-- RSVP POP-UP MODAL -->
     <div id="contact-modal" class="modal-overlay">
         <div class="modal-content">
             <h3 style="margin-top: 0;">Update RSVP</h3>
