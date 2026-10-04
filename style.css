@@ -68,6 +68,9 @@ nav {
     display: none; /* Nakatago sa Desktop */
     flex-direction: column; gap: 5px; cursor: pointer; z-index: 10001; 
     transition: opacity 0.4s ease, transform 0.3s ease;
+    padding: 8px;
+    border: 0;
+    background: transparent;
 }
 .menu-toggle span { width: 25px; height: 2px; background-color: #2c3e50; transition: transform 0.3s ease, opacity 0.3s ease; }
 .toggle-active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
@@ -85,6 +88,81 @@ nav {
 .nav-links.nav-active { transform: translateX(0); opacity: 1; }
 .nav-links a { color: #2c3e50; text-decoration: none; font-size: 1em; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; }
 
+/* TABLET AND MOBILE: keep navigation links visible beside the centered logo */
+@media (max-width: 960px) {
+    nav#navbar {
+        padding: 12px 20px !important;
+    }
+
+    .desktop-nav-left,
+    .desktop-nav-right {
+        display: flex !important;
+        flex: 1 1 0;
+        min-width: 0;
+        gap: clamp(5px, 1.4vw, 14px);
+        padding: 0;
+    }
+
+    .desktop-nav-left {
+        justify-content: flex-end;
+        padding-right: clamp(34px, 9vw, 68px);
+    }
+
+    .desktop-nav-right {
+        justify-content: flex-start;
+        padding-left: clamp(34px, 9vw, 68px);
+    }
+
+    .text-link {
+        font-size: clamp(0.52em, 1.1vw, 0.78em);
+        letter-spacing: clamp(0px, 0.18vw, 1.5px);
+    }
+
+    .nav-monogram {
+        pointer-events: auto;
+    }
+
+    .nav-monogram img {
+        max-height: 42px;
+        max-width: 76px;
+    }
+
+    .menu-toggle,
+    .nav-links {
+        display: none !important;
+    }
+}
+
+@media (max-width: 380px) {
+    nav#navbar {
+        padding-right: 10px !important;
+        padding-left: 10px !important;
+    }
+
+    .desktop-nav-left {
+        padding-right: 30px;
+    }
+
+    .desktop-nav-right {
+        padding-left: 30px;
+    }
+
+    .desktop-nav-left,
+    .desktop-nav-right {
+        gap: 4px;
+    }
+
+    .text-link {
+        font-size: 0.48em;
+        letter-spacing: 0;
+    }
+
+    .nav-monogram img {
+        max-width: 58px;
+        max-height: 34px;
+    }
+}
+
 /* =======================================
    MOBILE VIEW (Smartphones)
 ======================================== */
@@ -93,19 +171,7 @@ nav {
         padding: 15px 20px !important; 
     } 
     
-    .desktop-nav-left, .desktop-nav-right { 
-        display: none !important; /* Itinatago ang desktop text links */
-    } 
-    
-    /* ALWAYS VISIBLE HAMBURGER NAKAHANAY SA KANAN */
-    .menu-toggle { 
-        display: flex !important; 
-        margin-left: auto; /* Awtomatikong itinutulak ang hamburger sa kanang bahagi */
-        opacity: 1 !important; 
-        pointer-events: auto !important;
-    } 
-
-    .nav-monogram img { max-height: 35px; }
+    /* Navigation links remain visible on both sides of the centered monogram. */
 
     /* MOBILE: TIMERS */
     .countdown-container { gap: 5px; margin-top: 20px; flex-wrap: nowrap !important; width: 100%; padding: 0 5px; }

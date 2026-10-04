@@ -29,12 +29,12 @@
             <a href="#faq" class="text-link">FAQs</a>
         </div>
 
-        <!-- ALWAYS VISIBLE HAMBURGER MENU (MOBILE) -->
-        <div class="menu-toggle" id="burgerMenu" onclick="toggleMenu()">
+        <!-- Fallback menu control for layouts that use the dropdown -->
+        <button class="menu-toggle" id="burgerMenu" type="button" aria-label="Open navigation menu" aria-controls="navLinks" aria-expanded="false" onclick="toggleMenu()">
             <span></span>
             <span></span>
             <span></span>
-        </div>
+        </button>
 
         <!-- MOBILE DROPDOWN LINKS -->
         <div class="nav-links" id="navLinks">
@@ -326,11 +326,16 @@
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('nav-active');
             document.getElementById('burgerMenu').classList.toggle('toggle-active');
+            const isOpen = document.getElementById('navLinks').classList.contains('nav-active');
+            document.getElementById('burgerMenu').setAttribute('aria-expanded', isOpen);
+            document.getElementById('burgerMenu').setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
         }
 
         function closeMenu() {
             document.getElementById('navLinks').classList.remove('nav-active');
             document.getElementById('burgerMenu').classList.remove('toggle-active');
+            document.getElementById('burgerMenu').setAttribute('aria-expanded', 'false');
+            document.getElementById('burgerMenu').setAttribute('aria-label', 'Open navigation menu');
         }
 
         function openImageModal(imgSrc) {
