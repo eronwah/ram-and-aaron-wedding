@@ -451,3 +451,333 @@ p { font-size: 0.95em; font-weight: 300; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .animate-in { animation: fadeIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+
+/* WEDDING PARTY: responsive layout and blank content placeholders */
+#wedding-party {
+    justify-content: flex-start;
+    padding: 90px 24px;
+    background: #f8fafc;
+}
+
+.wedding-party-intro {
+    max-width: 620px;
+    margin: 0 auto 54px;
+    color: #7f8c8d;
+    text-align: center;
+    line-height: 1.7;
+}
+
+.wedding-party-content {
+    width: 100%;
+    max-width: 1120px;
+}
+
+.party-group {
+    margin: 0 auto 76px;
+    width: 100%;
+}
+
+.party-group:last-child {
+    margin-bottom: 0;
+}
+
+.party-group-title {
+    margin: 0 0 30px;
+    color: #2c3e50;
+    text-align: center;
+    font-size: 1.8em;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.profile-grid {
+    display: grid;
+    gap: 34px;
+    align-items: start;
+    margin: 0 auto;
+}
+
+.couple-grid {
+    grid-template-columns: repeat(2, minmax(0, 300px));
+    justify-content: center;
+    gap: clamp(28px, 8vw, 110px);
+}
+
+.parents-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.honor-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.profile-card {
+    min-width: 0;
+    text-align: center;
+}
+
+.photo-placeholder {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid #d7d9d8;
+    background: linear-gradient(145deg, #ececea, #dedfdd);
+    color: #777b7d;
+    font-size: 0.72em;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.photo-placeholder svg {
+    width: 44px;
+    height: 44px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.party-role {
+    margin: 18px 0 5px;
+    color: #2c3e50;
+    font-size: 0.9em;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.party-name-placeholder {
+    margin: 0;
+    color: #7f8c8d;
+    font-family: 'Playfair Display', serif;
+    font-size: 1em;
+    font-style: italic;
+}
+
+.bridesmen-card {
+    width: min(100%, 280px);
+    margin: 34px auto 0;
+}
+
+.party-table-wrap {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    overflow-x: auto;
+    border: 1px solid #dedfdd;
+    background: #fff;
+}
+
+.party-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    color: #26313a;
+    text-align: center;
+}
+
+.party-table th,
+.party-table td {
+    width: 50%;
+    padding: 15px 18px;
+    border-bottom: 1px solid #e5e6e4;
+    overflow-wrap: anywhere;
+}
+
+.party-table th {
+    background: #ececea;
+    color: #2c3e50;
+    font-size: 0.78em;
+    font-weight: 600;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+}
+
+.party-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.party-table td + td,
+.party-table th + th {
+    border-left: 1px solid #e5e6e4;
+}
+
+.secondary-sponsors-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+}
+
+.secondary-sponsor-card {
+    min-width: 0;
+    padding: 28px 18px;
+    border: 1px solid #dedfdd;
+    background: #fff;
+    text-align: center;
+}
+
+.secondary-emblem {
+    display: block;
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 15px;
+    fill: #fff;
+    stroke: #161616;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.secondary-sponsor-card h4 {
+    margin: 0 0 7px;
+    color: #2c3e50;
+    font-size: 0.85em;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.secondary-sponsor-card p {
+    margin: 0;
+    color: #7f8c8d;
+    font-family: 'Playfair Display', serif;
+    font-size: 1em;
+    font-style: italic;
+}
+
+@media (max-width: 800px) {
+    #wedding-party {
+        padding: 74px 18px;
+    }
+
+    .wedding-party-intro {
+        margin-bottom: 42px;
+    }
+
+    .party-group {
+        margin-bottom: 58px;
+    }
+
+    .parents-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 28px 18px;
+    }
+
+    .honor-grid {
+        gap: 18px;
+    }
+
+    .secondary-sponsors-grid {
+        gap: 14px;
+    }
+
+    .secondary-sponsor-card {
+        padding: 22px 12px;
+    }
+}
+
+@media (max-width: 560px) {
+    #wedding-party {
+        padding: 60px 15px;
+    }
+
+    #wedding-party > h2 {
+        font-size: 2.35em;
+    }
+
+    .wedding-party-intro {
+        max-width: 380px;
+        margin-bottom: 36px;
+        font-size: 0.9em;
+    }
+
+    .party-group {
+        margin-bottom: 48px;
+    }
+
+    .party-group-title {
+        margin-bottom: 22px;
+        font-size: 1.3em;
+        letter-spacing: 1.3px;
+    }
+
+    .couple-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .parents-grid {
+        gap: 22px 12px;
+    }
+
+    .honor-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px 12px;
+    }
+
+    .honor-grid .profile-card:last-child {
+        grid-column: 1 / -1;
+        width: min(100%, 210px);
+        justify-self: center;
+    }
+
+    .bridesmen-card {
+        width: min(100%, 210px);
+        margin-top: 24px;
+    }
+
+    .photo-placeholder {
+        gap: 8px;
+        padding: 8px;
+        font-size: 0.62em;
+    }
+
+    .photo-placeholder svg {
+        width: 34px;
+        height: 34px;
+    }
+
+    .party-role {
+        margin-top: 12px;
+        font-size: 0.75em;
+    }
+
+    .party-name-placeholder {
+        font-size: 0.9em;
+    }
+
+    .party-table th,
+    .party-table td {
+        padding: 13px 8px;
+        font-size: 0.82em;
+    }
+
+    .secondary-sponsors-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .secondary-sponsor-card {
+        padding: 20px 14px;
+    }
+}
+
+@media (max-width: 360px) {
+    .couple-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .party-table th,
+    .party-table td {
+        padding: 12px 5px;
+        font-size: 0.76em;
+    }
+}
