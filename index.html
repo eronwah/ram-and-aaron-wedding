@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    <!-- NAKA-AYOS NA NAVIGATION BAR -->
+    <!-- NAVIGATION BAR -->
     <nav id="navbar">
         <!-- DESKTOP LEFT LINKS -->
         <div class="desktop-nav-left">
@@ -29,7 +29,7 @@
             <a href="#faq" class="text-link">FAQs</a>
         </div>
 
-        <!-- RIGHT HAMBURGER MENU (MOBILE) -->
+        <!-- ALWAYS VISIBLE HAMBURGER MENU (MOBILE) -->
         <div class="menu-toggle" id="burgerMenu" onclick="toggleMenu()">
             <span></span>
             <span></span>
@@ -288,7 +288,7 @@
         <img id="modal-image" class="modal-content-img" src="" alt="Zoomed View">
     </div>
 
-    <!-- RSVP POP-UP MODAL (MANANATILI PARA SA RSVP UPDATE) -->
+    <!-- RSVP POP-UP MODAL (Kailangan para sa pag-update ng RSVP ng guest) -->
     <div id="contact-modal" class="modal-overlay">
         <div class="modal-content">
             <h3 style="margin-top: 0;">Update RSVP</h3>
@@ -303,6 +303,7 @@
 
     <!-- JavaScript Logic -->
     <script>
+        // Auto scroll to top on refresh
         if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual';
         }
