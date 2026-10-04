@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 
@@ -915,19 +915,23 @@
         }
 
         function setupPartyPhotoPlaceholders() {
+            const mobileViewport = window.matchMedia('(max-width: 767px)');
+
             document.querySelectorAll('.photo-placeholder[data-photo]').forEach(container => {
                 const toggleColor = () => {
                     const showColor = container.classList.toggle('is-color');
                     container.setAttribute('aria-pressed', String(showColor));
                 };
 
-                container.addEventListener('click', toggleColor);
-                container.addEventListener('keydown', event => {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        container.click();
-                    }
-                });
+                if (!mobileViewport.matches) {
+                    container.addEventListener('click', toggleColor);
+                    container.addEventListener('keydown', event => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            container.click();
+                        }
+                    });
+                }
 
                 const image = new Image();
                 image.className = 'party-photo';
@@ -957,6 +961,24 @@
                     container.classList.add('has-photo');
                 }
             });
+
+            if (mobileViewport.matches && 'IntersectionObserver' in window) {
+                const centerObserver = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        entry.target.classList.toggle('is-color', entry.isIntersecting);
+                        entry.target.setAttribute('aria-pressed', String(entry.isIntersecting));
+                    });
+                }, {
+                    // Only reveal color while the portrait crosses the middle 10% of the screen.
+                    root: null,
+                    rootMargin: '-45% 0px -45% 0px',
+                    threshold: 0
+                });
+
+                document.querySelectorAll('.photo-placeholder[data-photo]').forEach(container => {
+                    centerObserver.observe(container);
+                });
+            }
         }
 
         setupPartyPhotoPlaceholders();
