@@ -53,6 +53,7 @@ nav {
     display: flex;
     justify-content: flex-start; 
     padding-left: 70px; 
+    padding-right: 60px;
     gap: 30px;
 }
 
@@ -67,7 +68,15 @@ nav {
 .menu-toggle {
     display: flex;
     flex: 0 0 auto;
-    flex-direction: column; gap: 5px; cursor: pointer; z-index: 10001; 
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column; gap: 5px; cursor: pointer; z-index: 10001;
+    transform: translateY(-50%);
     transition: opacity 0.4s ease, transform 0.3s ease;
     padding: 8px;
     border: 0;
@@ -79,14 +88,15 @@ nav {
 .toggle-active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 .nav-links {
-    position: absolute; top: 100%; right: 0; left: auto;
+    position: absolute; top: 100%; right: 0; left: auto; z-index: 10002;
     background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     flex-direction: column; gap: 20px; width: 220px; padding: 30px 20px;
     box-shadow: -5px 10px 20px rgba(0,0,0,0.05); border-bottom-left-radius: 10px; 
-    transform: translateX(100%); opacity: 0; transition: transform 0.4s ease, opacity 0.4s ease;
+    transform: translateX(100%); opacity: 0; pointer-events: none;
+    transition: transform 0.4s ease, opacity 0.4s ease;
     display: flex; align-items: flex-end; text-align: right;
 }
-.nav-links.nav-active { transform: translateX(0); opacity: 1; }
+.nav-links.nav-active { transform: translateX(0); opacity: 1; pointer-events: auto; }
 .nav-links a { color: #2c3e50; text-decoration: none; font-size: 1em; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; }
 
 /* TABLET AND MOBILE: keep navigation links visible beside the centered logo */
@@ -112,6 +122,7 @@ nav {
     .desktop-nav-right {
         justify-content: flex-start;
         padding-left: clamp(34px, 9vw, 68px);
+        padding-right: 54px;
     }
 
     .text-link {
@@ -130,7 +141,8 @@ nav {
 
     .menu-toggle {
         display: flex !important;
-        margin-left: 4px;
+        right: 8px;
+        margin-left: 0;
         opacity: 1 !important;
         pointer-events: auto !important;
     }
@@ -152,6 +164,7 @@ nav {
 
     .desktop-nav-right {
         padding-left: 30px;
+        padding-right: 50px;
     }
 
     .desktop-nav-left,
@@ -160,7 +173,7 @@ nav {
     }
 
     .text-link {
-        font-size: 0.62em;
+        font-size: 0.58em;
         letter-spacing: 0;
     }
 
