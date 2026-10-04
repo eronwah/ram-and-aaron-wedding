@@ -683,39 +683,39 @@ p { font-size: 0.95em; font-weight: 300; }
 }
 
 .secondary-sponsor-names {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
     width: 100%;
     max-width: 100%;
     color: #7f8c8d;
     font-family: 'Playfair Display', serif;
-    font-size: clamp(0.78rem, 4.3cqi, 1rem);
+    font-size: clamp(0.74rem, calc(0.72rem + 0.25cqi), 0.86rem);
     font-style: italic;
     line-height: 1.45;
     text-align: center;
 }
 
-.secondary-sponsor-name {
+.secondary-sponsor-names > * {
+    grid-column: 1;
     display: block;
+    width: 100%;
     max-width: 100%;
     overflow-wrap: anywhere;
     text-wrap: pretty;
+    text-align: center;
 }
 
 .secondary-sponsor-amp {
-    display: block;
-    align-self: center;
     margin: 2px 0;
     color: #2c3e50;
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.82em;
+    font-size: 0.88em;
     font-style: normal;
     line-height: 1.1;
 }
 
 .secondary-sponsor-names [hidden] {
-    display: none;
+    display: none !important;
 }
 
 @media (max-width: 800px) {
