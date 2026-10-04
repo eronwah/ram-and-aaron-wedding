@@ -27,7 +27,10 @@ nav {
 
 .nav-left, .nav-right { width: 30px; display: flex; align-items: center; }
 .nav-right { justify-content: flex-end; }
-.nav-center { display: flex; align-items: center; justify-content: center; gap: 30px; }
+.nav-center { 
+    display: flex; align-items: center; justify-content: center; gap: 30px; 
+    flex-wrap: nowrap; /* Pinipilit na magkakatabi lang palagi sa isang linya */
+}
 .text-link {
     color: #2c3e50; text-decoration: none; font-size: 0.85em;
     text-transform: uppercase; letter-spacing: 2px; font-weight: 500;
@@ -60,6 +63,92 @@ nav {
 }
 .nav-links.nav-active { transform: translateX(0); opacity: 1; }
 .nav-links a { color: #2c3e50; text-decoration: none; font-size: 1em; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; }
+
+/* =======================================
+   MOBILE VIEW (Smartphones) - INAYOS
+======================================== */
+@media (max-width: 768px) {
+    nav { 
+        padding: 15px 10px; 
+        position: relative; 
+        justify-content: center; /* Pinapagitna ang buong content ng nav */
+    } 
+    
+    .nav-left { display: none; } /* Inalis para makapag-focus sa gitna */
+    
+    .nav-right { 
+        position: absolute; /* Nakapako palagi sa kanan */
+        right: 15px; 
+        top: 50%; 
+        transform: translateY(-50%);
+        width: auto;
+    }
+
+    .nav-center { 
+        gap: 10px; /* Mas maluwag at balanse */
+        width: 100%; 
+        justify-content: center;
+    } 
+    
+    .text-link { 
+        font-size: 0.65em; /* Pinalaki para madaling mabasa */
+        letter-spacing: 0.5px; 
+    } 
+    
+    .nav-monogram { padding: 0; }
+    .nav-monogram img { max-height: 28px; max-width: 70px; }
+    
+    .menu-toggle { opacity: 0; pointer-events: none; }
+    nav.nav-scrolled .menu-toggle { opacity: 1; pointer-events: auto; }
+    
+    .monogram-video { max-width: 90%; }
+    
+    .countdown-container { gap: 5px; margin-top: 20px; flex-wrap: nowrap !important; width: 100%; padding: 0 5px; }
+    .countdown-item { padding: 12px 2px; min-width: 0 !important; flex: 1 1 0; border-radius: 6px; }
+    .countdown-number { font-size: 1.5em !important; margin-bottom: 5px; }
+    .countdown-label { font-size: 0.55em !important; letter-spacing: 1px !important; }
+
+    /* MOBILE: FORCED HORIZONTAL CARDS */
+    .details-cards-container {
+        flex-wrap: nowrap !important;
+        gap: 8px !important;
+    }
+    .info-card {
+        min-width: 0 !important;
+        flex: 1 1 0 !important;
+        padding: 15px 5px !important; 
+    }
+    .info-icon { margin-bottom: 10px; }
+    .info-icon svg { width: 28px; height: 28px; }
+    .info-title { font-size: 0.85em; }
+    .info-subtitle { font-size: 0.65em; margin-bottom: 8px; }
+    .info-text { font-size: 0.55em; line-height: 1.4; }
+
+    /* MOBILE: TIMELINE SA KALIWA, IMAGE SA KANAN */
+    .program-container { 
+        flex-direction: row !important; 
+        padding: 20px 10px !important; 
+        gap: 15px !important;
+    }
+    .timeline-wrapper { flex: 1.5; }
+    .timeline-wrapper h3 { font-size: 1.2em; margin-bottom: 15px; }
+    .timeline { padding-left: 15px; margin-top: 10px; }
+    .timeline-item { margin-bottom: 15px; }
+    .timeline-item::before { left: -21px; width: 10px; height: 10px; }
+    .timeline-time { font-size: 0.6em; }
+    .timeline-event { font-size: 0.8em; }
+    .timeline-desc { font-size: 0.6em; }
+    
+    .program-image-placeholder { 
+        flex: 1; 
+        min-height: 0 !important; 
+        height: auto;
+        font-size: 0.55em; 
+        padding: 5px;
+    }
+}
+
+@media (max-width: 1024px) { .monogram-video { max-width: 70%; } }
 
 /* =======================================
    GENERAL LAYOUT
@@ -141,67 +230,6 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
     font-size: 0.9em; letter-spacing: 1px; text-transform: uppercase; min-height: 350px;
     background-size: cover; background-position: center;
 }
-
-/* =======================================
-   MOBILE VIEW (Smartphones)
-======================================== */
-@media (max-width: 768px) {
-    nav { padding: 10px 5px; } 
-    .nav-center { gap: 6px; } 
-    .text-link { font-size: 0.48em; letter-spacing: 0.5px; } 
-    .nav-monogram { padding: 0 5px; }
-    .nav-monogram img { max-height: 28px; max-width: 70px; }
-    .menu-toggle { opacity: 0; pointer-events: none; }
-    nav.nav-scrolled .menu-toggle { opacity: 1; pointer-events: auto; }
-    
-    .monogram-video { max-width: 90%; }
-    
-    .countdown-container { gap: 5px; margin-top: 20px; flex-wrap: nowrap !important; width: 100%; padding: 0 5px; }
-    .countdown-item { padding: 12px 2px; min-width: 0 !important; flex: 1 1 0; border-radius: 6px; }
-    .countdown-number { font-size: 1.5em !important; margin-bottom: 5px; }
-    .countdown-label { font-size: 0.55em !important; letter-spacing: 1px !important; }
-
-    /* MOBILE: FORCED HORIZONTAL CARDS */
-    .details-cards-container {
-        flex-wrap: nowrap !important; /* Pilitin na magkakatabi */
-        gap: 8px !important;
-    }
-    .info-card {
-        min-width: 0 !important;
-        flex: 1 1 0 !important;
-        padding: 15px 5px !important; /* Pinaliit ang box para magkasya */
-    }
-    .info-icon { margin-bottom: 10px; }
-    .info-icon svg { width: 28px; height: 28px; }
-    .info-title { font-size: 0.85em; }
-    .info-subtitle { font-size: 0.65em; margin-bottom: 8px; }
-    .info-text { font-size: 0.55em; line-height: 1.4; }
-
-    /* MOBILE: TIMELINE SA KALIWA, IMAGE SA KANAN */
-    .program-container { 
-        flex-direction: row !important; 
-        padding: 20px 10px !important; 
-        gap: 15px !important;
-    }
-    .timeline-wrapper { flex: 1.5; }
-    .timeline-wrapper h3 { font-size: 1.2em; margin-bottom: 15px; }
-    .timeline { padding-left: 15px; margin-top: 10px; }
-    .timeline-item { margin-bottom: 15px; }
-    .timeline-item::before { left: -21px; width: 10px; height: 10px; }
-    .timeline-time { font-size: 0.6em; }
-    .timeline-event { font-size: 0.8em; }
-    .timeline-desc { font-size: 0.6em; }
-    
-    .program-image-placeholder { 
-        flex: 1; 
-        min-height: 0 !important; 
-        height: auto;
-        font-size: 0.55em; 
-        padding: 5px;
-    }
-}
-
-@media (max-width: 1024px) { .monogram-video { max-width: 70%; } }
 
 /* Layouts & Buttons */
 .hero-buttons { display: flex; gap: 20px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
