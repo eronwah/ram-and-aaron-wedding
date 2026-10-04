@@ -162,7 +162,7 @@
                 <h4 style="color: #2c3e50; font-size: 1.5em; margin-bottom: 10px;">You have already submitted your RSVP.</h4>
                 <p style="color: #7f8c8d; font-style: italic;">Thank you!</p>
                 <p style="margin: 30px 0;">Do you need to change your guest count or cancel your attendance?</p>
-                <!-- NA-UPDATE NA BUTTON: Magbubukas na ito muli ng RSVP Modal -->
+                <!-- NA-UPDATE NA BUTTON: Magbubukas muli ng RSVP Modal -->
                 <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" onclick="openContactModal()">Yes, I need to make changes</button>
                 <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" style="margin-top: 10px; border: none; background: transparent; text-decoration: underline;" onclick="resetRSVPForm()">Search another name</button>
             </div>
@@ -198,7 +198,7 @@
         <img id="modal-image" class="modal-content-img" src="" alt="Zoomed View">
     </div>
 
-    <!-- RSVP POP-UP MODAL (IBINALIK) -->
+    <!-- RSVP POP-UP MODAL -->
     <div id="contact-modal" class="modal-overlay">
         <div class="modal-content">
             <h3 style="margin-top: 0;">Update RSVP</h3>
@@ -243,7 +243,6 @@
             document.getElementById('image-modal').style.display = 'none';
         }
 
-        /* IBINALIK: Functions para sa RSVP Pop-Up Modal */
         function openContactModal() {
             document.getElementById('contact-modal').style.display = 'flex';
         }
@@ -271,6 +270,14 @@
         
         let currentRow = 0;
         let extraCompanionsAllowed = 0;
+
+        // Enter key to search
+        document.getElementById('firstName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') searchGuest();
+        });
+        document.getElementById('lastName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') searchGuest();
+        });
 
         async function searchGuest() {
             const first = document.getElementById('firstName').value.trim();

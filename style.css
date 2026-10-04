@@ -86,7 +86,7 @@ h2 { font-size: 3em; margin-bottom: 20px; position: relative; display: inline-bl
 h2::after { content: ''; display: block; width: 50px; height: 1px; background-color: #2c3e50; margin: 15px auto 0; }
 .date { font-family: 'Playfair Display', serif; font-size: 1.4em; margin-top: 10px; color: #7f8c8d; font-style: italic; letter-spacing: 1px; }
 
-/* BIG MONOGRAM MP4 VIDEO */
+/* BIG MONOGRAM MP4 VIDEO (FIXED WHITE BG ON MOBILE) */
 .monogram-video {
     width: 100%; max-width: 450px; height: auto; margin: 0 auto 15px auto;
     display: block; pointer-events: none; object-fit: contain; 
@@ -157,10 +157,10 @@ p { font-size: 0.95em; font-weight: 300; }
     align-items: center; justify-content: center; padding: 20px; 
 }
 
-/* Balik pop-up content para sa RSVP */
+/* Modal Content na ibinalik para hindi maging transparent */
 .modal-content {
-    background: white; padding: 50px; width: 100%; max-width: 450px; 
-    text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.15); border-radius: 8px;
+    background: #ffffff; padding: 40px; width: 100%; max-width: 450px; 
+    text-align: center; border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
     animation: zoomIn 0.3s ease; position: relative;
 }
 
@@ -169,6 +169,7 @@ p { font-size: 0.95em; font-weight: 300; }
     border-radius: 6px; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
     animation: zoomIn 0.3s ease; object-fit: contain;
 }
+
 .close-modal-btn {
     position: absolute; top: 20px; right: 30px; font-size: 45px; color: #ffffff; cursor: pointer;
     transition: color 0.3s ease; z-index: 1006;
