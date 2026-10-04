@@ -162,13 +162,14 @@
                 <h4 style="color: #2c3e50; font-size: 1.5em; margin-bottom: 10px;">You have already submitted your RSVP.</h4>
                 <p style="color: #7f8c8d; font-style: italic;">Thank you!</p>
                 <p style="margin: 30px 0;">Do you need to change your guest count or cancel your attendance?</p>
-                <a href="#contact" class="rsvp-btn rsvp-btn-secondary form-submit-btn" style="display: block; text-decoration: none;">Yes, I need to make changes</a>
+                <!-- NA-UPDATE NA BUTTON: Magbubukas na ito muli ng RSVP Modal -->
+                <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" onclick="openContactModal()">Yes, I need to make changes</button>
                 <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" style="margin-top: 10px; border: none; background: transparent; text-decoration: underline;" onclick="resetRSVPForm()">Search another name</button>
             </div>
         </div>
     </section>
 
-    <!-- CONTACT US SECTION -->
+    <!-- CONTACT US SECTION (HIWALAY SA IBABA) -->
     <section id="contact" class="scroll-section">
         <div class="contact-overlay"></div>
         <div class="container contact-content">
@@ -195,6 +196,19 @@
     <div id="image-modal" class="modal-overlay" onclick="closeImageModal()">
         <span class="close-modal-btn" onclick="closeImageModal()">&times;</span>
         <img id="modal-image" class="modal-content-img" src="" alt="Zoomed View">
+    </div>
+
+    <!-- RSVP POP-UP MODAL (IBINALIK) -->
+    <div id="contact-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="margin-top: 0;">Update RSVP</h3>
+            <p>Kindly contact Aaron or Ram directly to change your RSVP details:</p>
+            <p style="font-size: 1.2em; color: #1a252f; line-height: 1.8; margin: 30px 0; font-family: 'Playfair Display', serif;">
+                <strong>Aaron:</strong> 09770927233<br>
+                <strong>Ram:</strong> 09171607089
+            </p>
+            <button class="rsvp-btn form-submit-btn" onclick="closeContactModal()">Close</button>
+        </div>
     </div>
 
     <!-- JavaScript Logic -->
@@ -227,6 +241,15 @@
 
         function closeImageModal() {
             document.getElementById('image-modal').style.display = 'none';
+        }
+
+        /* IBINALIK: Functions para sa RSVP Pop-Up Modal */
+        function openContactModal() {
+            document.getElementById('contact-modal').style.display = 'flex';
+        }
+
+        function closeContactModal() {
+            document.getElementById('contact-modal').style.display = 'none';
         }
 
         const weddingDate = new Date("July 28, 2027 15:00:00").getTime();
