@@ -44,9 +44,14 @@
                     HOME SECTION 
     =========================================== -->
     <header id="home" class="scroll-section animate-in" style="min-height: 100vh; justify-content: center;">
+        
+        <!-- BAGONG TEXT SA ITAAS NG MONOGRAM -->
+        <p style="font-family: 'Playfair Display', serif; font-size: 1.5em; color: #1a252f; font-style: italic; margin-bottom: 10px;">We are getting married!</p>
+        
         <video src="monogram.mp4" class="monogram-video" autoplay loop muted playsinline></video>
         
-        <p class="date" style="margin-top: 5px;">Silang, Cavite</p>
+        <!-- IN-UPDATE NA PETSA AT LOKASYON -->
+        <p class="date" style="margin-top: 5px;">July 28, 2027 | Silang, Cavite</p>
         
         <div class="countdown-container">
             <div class="countdown-item"><span id="days" class="countdown-number">00</span><span class="countdown-label">Days</span></div>
@@ -116,7 +121,6 @@
                 <p style="text-align: center; margin-bottom: 30px; font-family: 'Playfair Display', serif; font-size: 1.2em; color: #1a252f;">Please enter your name to find your invitation.</p>
                 <div class="input-group">
                     <label>First Name</label>
-                    <!-- Ibinabalik natin ang required at aalisin ang "(Optional)" -->
                     <input type="text" id="firstName" placeholder="e.g. John" required>
                 </div>
                 <div class="input-group">
@@ -271,7 +275,6 @@
         let currentRow = 0;
         let extraCompanionsAllowed = 0;
 
-        // Enter key to search
         document.getElementById('firstName').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault(); 
@@ -292,7 +295,6 @@
             const msg = document.getElementById('search-msg');
             const btn = document.querySelector('#lookup-section button');
             
-            // Ibinalik natin ang condition: Hihingi ng parehong pangalan bago mag-search
             if(!first && !last) { 
                 msg.innerText = "Please enter both first and last name."; 
                 msg.style.color = "#e74c3c";
