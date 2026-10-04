@@ -379,6 +379,8 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
 .details-followup-section { min-width: 0; }
 .details-followup-section h3 { margin: 0; color: #1a252f; font-family: 'Playfair Display', serif; font-size: 2em; font-weight: 400; letter-spacing: 1px; }
 .details-followup-section h3 { margin-bottom: 24px; }
+.accommodation-status { margin: -10px auto 16px; color: #7f8c8d; font-size: 0.84em; }
+.accommodation-status[hidden] { display: none; }
 .accommodation-table-wrap { width: 100%; max-width: 1000px; margin: 0 auto; overflow-x: auto; border: 1px solid #dedfdd; background: #fff; -webkit-overflow-scrolling: touch; }
 .accommodation-table { width: 100%; min-width: 760px; border-collapse: collapse; table-layout: fixed; color: #26313a; text-align: center; }
 .accommodation-table th,

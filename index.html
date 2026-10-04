@@ -200,6 +200,7 @@
         <div class="details-followup-titles">
             <section class="details-followup-section">
                 <h3>ACCOMMODATIONS</h3>
+                <p id="accommodation-status" class="accommodation-status" role="status" aria-live="polite">Loading accommodation options…</p>
                 <div class="accommodation-table-wrap" role="region" aria-label="Accommodation options" tabindex="0">
                     <table class="accommodation-table">
                         <thead>
@@ -211,9 +212,7 @@
                                 <th scope="col">Google Maps</th>
                             </tr>
                         </thead>
-                        <tbody id="accommodations-body">
-                            <tr><td colspan="5">Accommodation details will appear here.</td></tr>
-                        </tbody>
+                        <tbody id="accommodations-body"></tbody>
                     </table>
                 </div>
             </section>
@@ -939,6 +938,111 @@
             }
         }
 
+        const ACCOMMODATION_API_URL = 'https://script.google.com/macros/s/AKfycbzgB52bOeyIJBDRe3IOO9jjgxRXLOmnNjC20LIsqVvOoa4Kod7bKbnNgXPtrPg8qIEi/exec';
+
+        function setAccommodationMessage(message) {
+            const tbody = document.getElementById('accommodations-body');
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+            cell.colSpan = 5;
+            cell.textContent = message;
+            row.appendChild(cell);
+            tbody.replaceChildren(row);
+        }
+
+        function getGoogleMapsUrl(value) {
+            const rawUrl = String(value || '').trim();
+            if (!rawUrl) return null;
+
+            try {
+                const url = new URL(/^https?:\/\//i.test(rawUrl) ? rawUrl : `https://${rawUrl}`);
+                const host = url.hostname.toLowerCase();
+                const isShortMapsLink = host === 'maps.app.goo.gl' || host === 'goo.gl';
+                const isGoogleDomain = /(^|\.)google\.[a-z.]+$/i.test(host);
+                const isMapsPath = /^\/maps(?:\/|$)/i.test(url.pathname) || host.startsWith('maps.google.');
+
+                if (url.protocol !== 'https:' || !(isShortMapsLink || (isGoogleDomain && isMapsPath))) {
+                    return null;
+                }
+
+                return url.href;
+            } catch (error) {
+                return null;
+            }
+        }
+
+        async function loadAccommodationDetails() {
+            const tbody = document.getElementById('accommodations-body');
+            const status = document.getElementById('accommodation-status');
+            const columns = [
+                ['place_name', 'Place'],
+                ['contact_number', 'Contact Number'],
+                ['eta_to_church', 'ETA to Church'],
+                ['eta_to_venue', 'ETA to Venue'],
+                ['google_maps_link', 'Google Maps']
+            ];
+
+            try {
+                const response = await fetch(`${ACCOMMODATION_API_URL}?action=accommodations`, {
+                    method: 'GET',
+                    cache: 'no-store'
+                });
+
+                if (!response.ok) throw new Error('The Apps Script endpoint returned an error.');
+
+                const result = await response.json();
+                if (!result.success || !Array.isArray(result.data)) {
+                    throw new Error(result.error || 'The Apps Script response has an unexpected format.');
+                }
+
+                if (result.data.length === 0) {
+                    setAccommodationMessage('No accommodation details have been added yet.');
+                    status.hidden = true;
+                    return;
+                }
+
+                const rows = result.data.map(place => {
+                    const row = document.createElement('tr');
+
+                    columns.forEach(([key, label]) => {
+                        const cell = document.createElement('td');
+                        cell.dataset.label = label;
+
+                        if (key === 'google_maps_link') {
+                            const mapUrl = getGoogleMapsUrl(place[key]);
+                            if (mapUrl) {
+                                const button = document.createElement('a');
+                                button.className = 'accommodation-map-button';
+                                button.href = mapUrl;
+                                button.target = '_blank';
+                                button.rel = 'noopener noreferrer';
+                                button.textContent = 'Open Map';
+                                const placeName = String(place.place_name || 'accommodation').trim();
+                                button.setAttribute('aria-label', `Open Google Maps for ${placeName}`);
+                                cell.appendChild(button);
+                            } else {
+                                cell.textContent = 'Map link unavailable';
+                            }
+                        } else {
+                            cell.textContent = String(place[key] || '').trim() || '—';
+                        }
+
+                        row.appendChild(cell);
+                    });
+
+                    return row;
+                });
+
+                tbody.replaceChildren(...rows);
+                status.hidden = true;
+            } catch (error) {
+                console.error('Accommodation lookup failed:', error);
+                status.textContent = 'Accommodation options could not be loaded. Please try again later.';
+                status.hidden = false;
+                setAccommodationMessage('Accommodation information is temporarily unavailable.');
+            }
+        }
+
         function setupPartyPhotoPlaceholders() {
             const mobileViewport = window.matchMedia('(max-width: 767px)');
 
@@ -1008,6 +1112,7 @@
 
         setupPartyPhotoPlaceholders();
         loadWeddingPartyDetails();
+        loadAccommodationDetails();
 
     </script>
 </body>
