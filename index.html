@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=11">
+    <link rel="stylesheet" href="style.css?v=12">
 </head>
 <body>
 
@@ -215,6 +215,13 @@
                         <tbody id="accommodations-body"></tbody>
                     </table>
                 </div>
+                <div id="accommodation-mobile-list" class="accommodation-mobile-list" aria-label="Accommodation options"></div>
+                <dialog id="accommodation-dialog" class="accommodation-dialog" aria-labelledby="accommodation-dialog-title">
+                    <button type="button" class="accommodation-dialog-close" aria-label="Close accommodation details">&times;</button>
+                    <h4 id="accommodation-dialog-title"></h4>
+                    <dl id="accommodation-dialog-details" class="accommodation-dialog-details"></dl>
+                    <a id="accommodation-dialog-map" class="accommodation-map-button" target="_blank" rel="noopener noreferrer" hidden>Open Map</a>
+                </dialog>
             </section>
             <section class="details-followup-section">
                 <h3>DRESS CODE</h3>
@@ -949,6 +956,7 @@
         }
 
         const ACCOMMODATION_API_URL = 'https://script.google.com/macros/s/AKfycbyZVi3vAMNZ75sLXkBoaZ6piPoaIH2peiZeCYAdwiJKYTCA53fErYyu2cZcDuwXoknJ/exec';
+        let accommodationPlaces = [];
 
         function setAccommodationMessage(message) {
             const tbody = document.getElementById('accommodations-body');
@@ -958,6 +966,104 @@
             cell.textContent = message;
             row.appendChild(cell);
             tbody.replaceChildren(row);
+        }
+
+        function renderAccommodationMobileList(places) {
+            const list = document.getElementById('accommodation-mobile-list');
+            list.replaceChildren();
+
+            if (!places.length) {
+                const message = document.createElement('p');
+                message.className = 'accommodation-empty';
+                message.textContent = 'No accommodation details have been added yet.';
+                list.appendChild(message);
+                return;
+            }
+
+            places.forEach((place, index) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'accommodation-place-button';
+                button.dataset.placeIndex = String(index);
+                button.setAttribute('aria-haspopup', 'dialog');
+
+                const name = document.createElement('span');
+                name.textContent = String(place.place_name || '').trim() || 'Accommodation';
+                const chevron = document.createElement('span');
+                chevron.className = 'place-chevron';
+                chevron.setAttribute('aria-hidden', 'true');
+                chevron.textContent = '›';
+
+                button.append(name, chevron);
+                list.appendChild(button);
+            });
+        }
+
+        function showAccommodationDetails(place, trigger) {
+            const dialog = document.getElementById('accommodation-dialog');
+            const title = document.getElementById('accommodation-dialog-title');
+            const details = document.getElementById('accommodation-dialog-details');
+            const mapButton = document.getElementById('accommodation-dialog-map');
+            const fields = [
+                ['Contact Number', 'contact_number'],
+                ['ETA to Church', 'eta_to_church'],
+                ['ETA to Venue', 'eta_to_venue']
+            ];
+
+            title.textContent = String(place.place_name || '').trim() || 'Accommodation';
+            details.replaceChildren();
+
+            fields.forEach(([label, key]) => {
+                const term = document.createElement('dt');
+                term.textContent = label;
+                const value = document.createElement('dd');
+                value.textContent = String(place[key] || '').trim() || '—';
+                details.append(term, value);
+            });
+
+            const mapUrl = getGoogleMapsUrl(place.google_maps_link);
+            mapButton.hidden = !mapUrl;
+            if (mapUrl) mapButton.href = mapUrl;
+
+            dialog.dataset.returnFocus = trigger ? 'true' : 'false';
+            dialog._lastTrigger = trigger;
+            if (typeof dialog.showModal === 'function') {
+                dialog.showModal();
+            } else {
+                dialog.setAttribute('open', '');
+            }
+        }
+
+        function setupAccommodationDialog() {
+            const list = document.getElementById('accommodation-mobile-list');
+            const dialog = document.getElementById('accommodation-dialog');
+            const closeButton = dialog.querySelector('.accommodation-dialog-close');
+
+            list.addEventListener('click', event => {
+                const button = event.target.closest('.accommodation-place-button');
+                if (!button) return;
+
+                const placeIndex = Number(button.dataset.placeIndex);
+                const place = accommodationPlaces[placeIndex];
+                if (place) showAccommodationDetails(place, button);
+            });
+
+            const closeDialog = () => {
+                if (typeof dialog.close === 'function') {
+                    dialog.close();
+                } else {
+                    dialog.removeAttribute('open');
+                }
+            };
+
+            closeButton.addEventListener('click', closeDialog);
+            dialog.addEventListener('click', event => {
+                if (event.target === dialog) closeDialog();
+            });
+            dialog.addEventListener('close', () => {
+                if (dialog._lastTrigger) dialog._lastTrigger.focus();
+                dialog._lastTrigger = null;
+            });
         }
 
         function getGoogleMapsUrl(value) {
@@ -1007,9 +1113,14 @@
 
                 if (result.data.length === 0) {
                     setAccommodationMessage('No accommodation details have been added yet.');
+                    accommodationPlaces = [];
+                    renderAccommodationMobileList(accommodationPlaces);
                     status.hidden = true;
                     return;
                 }
+
+                accommodationPlaces = result.data;
+                renderAccommodationMobileList(accommodationPlaces);
 
                 const rows = result.data.map(place => {
                     const row = document.createElement('tr');
@@ -1053,6 +1164,8 @@
                 status.textContent = `Accommodation options could not be loaded: ${detail}`;
                 status.hidden = false;
                 setAccommodationMessage('Accommodation information is temporarily unavailable.');
+                accommodationPlaces = [];
+                renderAccommodationMobileList([]);
             }
         }
 
@@ -1179,6 +1292,7 @@
 
         setupPartyPhotoPlaceholders();
         loadWeddingPartyDetails();
+        setupAccommodationDialog();
         loadAccommodationDetails();
         setupDressCodeCards();
 
