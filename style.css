@@ -564,6 +564,7 @@ p { font-size: 0.95em; font-weight: 300; }
     letter-spacing: 1px;
     text-transform: uppercase;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .photo-placeholder svg {
@@ -578,6 +579,8 @@ p { font-size: 0.95em; font-weight: 300; }
 
 .party-photo {
     display: none;
+    filter: grayscale(1);
+    transition: filter 0.45s ease;
 }
 
 .photo-placeholder.has-photo {
@@ -602,6 +605,28 @@ p { font-size: 0.95em; font-weight: 300; }
 .photo-placeholder.has-photo svg,
 .photo-placeholder.has-photo span {
     display: none;
+}
+
+.photo-placeholder:focus-visible .party-photo,
+.photo-placeholder.is-color .party-photo {
+    filter: grayscale(0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .photo-placeholder:hover .party-photo {
+        filter: grayscale(0);
+    }
+}
+
+.photo-placeholder:focus-visible {
+    outline: 2px solid #2c3e50;
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .party-photo {
+        transition: none;
+    }
 }
 
 .party-role {
