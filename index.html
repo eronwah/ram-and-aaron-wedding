@@ -363,7 +363,7 @@
             const monogram = nav.querySelector('.nav-monogram');
             const allDesktopLinks = [...leftLinks.children, ...rightLinks.children];
 
-            if (window.innerWidth <= 768) {
+            if (window.innerWidth <= 600) {
                 nav.classList.remove('nav-overflow');
                 allDesktopLinks.forEach(link => link.classList.remove('nav-item-hidden'));
                 return;
@@ -375,18 +375,21 @@
                 const leftVisible = [...leftLinks.children].filter(link => !link.classList.contains('nav-item-hidden'));
                 const rightVisible = [...rightLinks.children].filter(link => !link.classList.contains('nav-item-hidden'));
                 const logoRect = monogram.getBoundingClientRect();
-                const navRect = nav.getBoundingClientRect();
-                const hamburgerLeft = navRect.right - 16 - 44;
-                const requiredGap = 8;
+                const leftGroupRect = leftLinks.getBoundingClientRect();
+                const rightGroupRect = rightLinks.getBoundingClientRect();
+                const rightPadding = parseFloat(getComputedStyle(rightLinks).paddingRight) || 0;
+                const logoGap = 4;
 
                 if (!leftVisible.length || !rightVisible.length) return true;
+                const leftFirst = leftVisible[0].getBoundingClientRect();
                 const leftLast = leftVisible[leftVisible.length - 1].getBoundingClientRect();
                 const rightFirst = rightVisible[0].getBoundingClientRect();
                 const rightLast = rightVisible[rightVisible.length - 1].getBoundingClientRect();
 
-                return leftLast.right <= logoRect.left - requiredGap &&
-                    rightFirst.left >= logoRect.right + requiredGap &&
-                    rightLast.right <= hamburgerLeft - requiredGap;
+                return leftFirst.left >= leftGroupRect.left &&
+                    leftLast.right <= logoRect.left - logoGap &&
+                    rightFirst.left >= logoRect.right + logoGap &&
+                    rightLast.right <= rightGroupRect.right - rightPadding;
             };
 
             // Hide secondary links one at a time as the available width shrinks.

@@ -202,53 +202,6 @@ nav#navbar {
     } 
     
     /* Mobile row: Home | Details | logo | Wedding Party | RSVP | menu */
-    .desktop-nav-left,
-    .desktop-nav-right {
-        display: none !important;
-    }
-
-    .mobile-nav-left,
-    .mobile-nav-right {
-        display: flex;
-        align-items: center;
-        min-width: 0;
-        gap: 0.5em;
-    }
-
-    .mobile-nav-left {
-        grid-column: 1;
-        grid-row: 1;
-        justify-content: flex-end;
-        padding-right: 4px;
-    }
-
-    .mobile-nav-right {
-        grid-column: 3;
-        grid-row: 1;
-        justify-content: flex-start;
-        padding-left: 4px;
-        padding-right: 44px;
-    }
-
-    .mobile-nav-left .text-link,
-    .mobile-nav-right .text-link {
-        font-size: clamp(0.5rem, 2.4vw, 0.72rem);
-        line-height: 1.2;
-        letter-spacing: 0.1px;
-    }
-
-    .nav-monogram img {
-        max-height: 34px;
-        max-width: clamp(32px, 10vw, 54px);
-    }
-
-    .menu-toggle {
-        display: flex !important;
-        right: 6px;
-        opacity: 1 !important;
-        pointer-events: auto !important;
-    }
-
     /* MOBILE: TIMERS */
     .countdown-container { gap: 5px; margin-top: 20px; flex-wrap: nowrap !important; width: 100%; padding: 0 5px; }
     .countdown-item { padding: 12px 2px; min-width: 0 !important; flex: 1 1 0; border-radius: 6px; }
@@ -290,10 +243,78 @@ nav#navbar {
     .back-to-top svg { width: 16px !important; height: 16px !important; }
 }
 
-@media (max-width: 380px) {
+/* On small tablets, keep the desktop links until the overflow script needs the menu. */
+@media (min-width: 601px) and (max-width: 768px) {
+    .desktop-nav-left,
+    .desktop-nav-right {
+        display: flex !important;
+    }
+
     .mobile-nav-left,
-    .mobile-nav-right {
-        gap: 0.3em;
+    .mobile-nav-right,
+    .menu-toggle {
+        display: none !important;
+    }
+
+    #navbar.nav-overflow .menu-toggle {
+        display: flex !important;
+    }
+}
+
+/* Mobile row: Home | Venue | Details | logo | Wedding Party | RSVP | menu */
+@media (max-width: 600px) {
+    #navbar .desktop-nav-left,
+    #navbar .desktop-nav-right {
+        display: none !important;
+    }
+
+    #navbar .mobile-nav-left,
+    #navbar .mobile-nav-right {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        gap: 0.7em;
+    }
+
+    #navbar .mobile-nav-left {
+        grid-column: 1;
+        grid-row: 1;
+        justify-content: flex-end;
+        padding-right: 4px;
+    }
+
+    #navbar .mobile-nav-right {
+        grid-column: 3;
+        grid-row: 1;
+        justify-content: flex-start;
+        padding-left: 4px;
+        padding-right: 44px;
+    }
+
+    #navbar .mobile-nav-left .text-link,
+    #navbar .mobile-nav-right .text-link {
+        font-size: clamp(0.5rem, 2.4vw, 0.72rem);
+        line-height: 1.2;
+        letter-spacing: 0.1px;
+    }
+
+    #navbar .nav-monogram img {
+        max-height: 34px;
+        max-width: clamp(32px, 10vw, 54px);
+    }
+
+    #navbar .menu-toggle {
+        display: flex !important;
+        right: 6px;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+}
+
+@media (max-width: 380px) {
+    #navbar .mobile-nav-left,
+    #navbar .mobile-nav-right {
+        gap: 0.45em;
     }
 }
 
