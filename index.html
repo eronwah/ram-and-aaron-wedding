@@ -920,7 +920,8 @@
                 image.className = 'party-photo';
                 image.alt = '';
                 image.setAttribute('aria-hidden', 'true');
-                image.loading = 'lazy';
+                // Load the couple portraits immediately; defer the rest until needed.
+                image.loading = container.closest('.couple-grid') ? 'eager' : 'lazy';
                 image.decoding = 'async';
 
                 image.addEventListener('load', () => {
@@ -928,11 +929,14 @@
                 }, { once: true });
 
                 image.addEventListener('error', () => {
+                    console.warn('Could not load wedding party image:', container.dataset.photo);
                     image.remove();
                 }, { once: true });
 
-                image.src = container.dataset.photo;
                 container.prepend(image);
+                const imageUrl = new URL(container.dataset.photo, document.baseURI);
+                imageUrl.searchParams.set('v', '2');
+                image.src = imageUrl.href;
 
                 if (image.complete && image.naturalWidth > 0) {
                     container.classList.add('has-photo');
