@@ -62,11 +62,11 @@ nav {
 .nav-links a { color: #2c3e50; text-decoration: none; font-size: 1em; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; }
 
 @media (max-width: 768px) {
-    nav { padding: 10px 10px; }
-    .nav-center { gap: 8px; } 
-    .text-link { font-size: 0.55em; letter-spacing: 0.5px; }
+    nav { padding: 10px 5px; } /* Inadjust ang padding para magkasya ang 6 links */
+    .nav-center { gap: 6px; } 
+    .text-link { font-size: 0.48em; letter-spacing: 0.5px; } /* Pinaliit nang konti ang font */
     .nav-monogram { padding: 0 5px; }
-    .nav-monogram img { max-height: 32px; max-width: 80px; }
+    .nav-monogram img { max-height: 28px; max-width: 70px; }
     .menu-toggle { opacity: 0; pointer-events: none; }
     nav.nav-scrolled .menu-toggle { opacity: 1; pointer-events: auto; }
 }
@@ -80,24 +80,21 @@ nav {
     align-items: center; justify-content: center; padding: 80px 20px;
 }
 
-/* Typography */
 h1, h2, h3, h4 { font-family: 'Playfair Display', serif; color: #1a252f; font-weight: normal; }
 h2 { font-size: 3em; margin-bottom: 20px; position: relative; display: inline-block; }
 h2::after { content: ''; display: block; width: 50px; height: 1px; background-color: #2c3e50; margin: 15px auto 0; }
 .date { font-family: 'Playfair Display', serif; font-size: 1.4em; margin-top: 10px; color: #7f8c8d; font-style: italic; letter-spacing: 1px; }
 
-/* BIG MONOGRAM MP4 VIDEO (FIXED WHITE BG ON MOBILE) */
+/* BIG MONOGRAM MP4 VIDEO */
 .monogram-video {
     width: 100%; max-width: 450px; height: auto; margin: 0 auto 15px auto;
     display: block; pointer-events: none; object-fit: contain; 
-    mix-blend-mode: multiply; 
-    -webkit-mix-blend-mode: multiply;
-    background-color: transparent;
+    mix-blend-mode: multiply; -webkit-mix-blend-mode: multiply; background-color: transparent;
 }
 @media (max-width: 1024px) { .monogram-video { max-width: 70%; } }
 @media (max-width: 600px) { .monogram-video { max-width: 90%; } }
 
-/* ELEGANT COUNTDOWN TIMER STYLES */
+/* COUNTDOWN TIMER */
 .countdown-container { display: flex; gap: 20px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
 .countdown-item {
     background: #ffffff; border: 1px solid #e2e8f0; border-top: 3px solid #2c3e50; 
@@ -116,7 +113,56 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
     .countdown-label { font-size: 0.55em !important; letter-spacing: 1px !important; }
 }
 
-/* Containers */
+/* =======================================
+   DETAILS SECTION: CARDS & TIMELINE
+======================================== */
+.info-card {
+    flex: 1; min-width: 260px; background: #ffffff; padding: 40px 25px;
+    border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    text-align: center; border-top: 3px solid #2c3e50;
+    transition: transform 0.4s ease;
+}
+.info-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.06); }
+.info-icon { margin-bottom: 20px; }
+.info-icon svg { width: 50px; height: 50px; stroke: #2c3e50; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+.info-title { font-family: 'Playfair Display', serif; font-size: 1.4em; color: #1a252f; margin-bottom: 5px; }
+.info-subtitle { font-weight: 600; font-size: 1em; color: #2c3e50; margin-bottom: 15px; letter-spacing: 1px; }
+.info-text { font-size: 0.9em; color: #4a5568; line-height: 1.6; }
+
+/* Timeline Container */
+.program-container {
+    display: flex; gap: 40px; margin-top: 60px; max-width: 1000px; width: 100%; align-items: stretch;
+    background: #ffffff; padding: 50px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+}
+.timeline-wrapper { flex: 1; text-align: left; }
+.timeline-wrapper h3 { font-family: 'Playfair Display', serif; font-size: 2em; margin-top: 0; color: #1a252f; margin-bottom: 30px; }
+
+.timeline { border-left: 2px solid #cbd5e1; padding-left: 30px; margin-top: 20px; }
+.timeline-item { position: relative; margin-bottom: 35px; }
+.timeline-item:last-child { margin-bottom: 0; }
+.timeline-item::before {
+    content: ''; position: absolute; left: -37px; top: 4px;
+    width: 12px; height: 12px; background-color: #2c3e50; border-radius: 50%;
+    border: 2px solid #ffffff; box-shadow: 0 0 0 2px #cbd5e1;
+}
+.timeline-time { font-family: 'Montserrat', sans-serif; font-size: 0.85em; letter-spacing: 2px; text-transform: uppercase; color: #7f8c8d; font-weight: 600; display: block; margin-bottom: 5px; }
+.timeline-event { font-family: 'Playfair Display', serif; font-size: 1.3em; color: #1a252f; }
+
+.program-image-placeholder {
+    flex: 1; border-radius: 8px; background-color: #f1f5f9; border: 2px dashed #cbd5e1;
+    display: flex; align-items: center; justify-content: center; color: #94a3b8;
+    font-size: 0.9em; letter-spacing: 1px; text-transform: uppercase; min-height: 350px;
+    /* object-fit cover is prepared here for when you swap it to an actual img tag later */
+    background-size: cover; background-position: center;
+}
+
+@media (max-width: 768px) {
+    .program-container { flex-direction: column; padding: 30px 20px; }
+    .program-image-placeholder { min-height: 250px; width: 100%; }
+    .info-card { min-width: 100%; }
+}
+
+/* Layouts & Buttons */
 .hero-buttons { display: flex; gap: 20px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
 .container, .rsvp-wrapper { background-color: #ffffff; margin: 30px auto; width: 100%; padding: 50px 40px; border-radius: 4px; box-shadow: 0 15px 35px rgba(0,0,0,0.03); }
 .container { max-width: 700px; }
@@ -124,7 +170,6 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
 h3 { font-size: 1.6em; margin-bottom: 15px; }
 p { font-size: 0.95em; font-weight: 300; }
 
-/* Clickable Images for Zoom */
 .clickable-image { cursor: zoom-in; transition: transform 0.4s ease, box-shadow 0.4s ease; }
 .clickable-image:hover { transform: scale(1.03); box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important; }
 
@@ -134,7 +179,6 @@ p { font-size: 0.95em; font-weight: 300; }
 .input-group input { width: 100%; padding: 12px 0; border: none; border-bottom: 1px solid #cbd5e1; background: transparent; font-family: 'Montserrat', sans-serif; font-size: 1em; color: #2c3e50; transition: border-color 0.3s ease; }
 .input-group input:focus { outline: none; border-bottom: 1px solid #2c3e50; }
 
-/* Buttons */
 .rsvp-btn { display: inline-block; text-decoration: none; text-align: center; background-color: #2c3e50; color: #ffffff; border: 1px solid #2c3e50; padding: 16px 30px; font-size: 0.9em; font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.4s ease; }
 .rsvp-btn:hover { background-color: #ffffff; color: #2c3e50; }
 .rsvp-btn-secondary { background-color: transparent; color: #2c3e50; border: 1px solid #2c3e50; }
@@ -142,9 +186,7 @@ p { font-size: 0.95em; font-weight: 300; }
 .form-submit-btn { width: 100%; margin-top: 20px; }
 
 /* CONTACT US SECTION */
-#contact {
-    position: relative; background-color: #e2e8f0; background-size: cover; background-position: center; 
-}
+#contact { position: relative; background-color: #e2e8f0; background-size: cover; background-position: center; }
 .contact-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26, 37, 47, 0.7); z-index: 1; }
 .contact-content { position: relative; z-index: 2; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
 .error-text { color: #e74c3c; }
@@ -156,20 +198,16 @@ p { font-size: 0.95em; font-weight: 300; }
     background: rgba(26, 37, 47, 0.85); backdrop-filter: blur(8px); z-index: 1005; 
     align-items: center; justify-content: center; padding: 20px; 
 }
-
-/* Modal Content na ibinalik para hindi maging transparent */
 .modal-content {
     background: #ffffff; padding: 40px; width: 100%; max-width: 450px; 
     text-align: center; border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
     animation: zoomIn 0.3s ease; position: relative;
 }
-
 .modal-content-img {
     display: block; margin: auto; max-width: 95%; max-height: 90vh; 
     border-radius: 6px; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
     animation: zoomIn 0.3s ease; object-fit: contain;
 }
-
 .close-modal-btn {
     position: absolute; top: 20px; right: 30px; font-size: 45px; color: #ffffff; cursor: pointer;
     transition: color 0.3s ease; z-index: 1006;

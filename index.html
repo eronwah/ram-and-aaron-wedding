@@ -14,6 +14,7 @@
 
         <div class="nav-center">
             <a href="#home" class="text-link">Home</a>
+            <a href="#venue" class="text-link">Venue</a> <!-- BAGONG LINK -->
             <a href="#details" class="text-link">Details</a>
             
             <a href="#home" class="nav-monogram">
@@ -34,6 +35,7 @@
         
         <div class="nav-links" id="navLinks">
             <a href="#home" onclick="closeMenu()">Home</a>
+            <a href="#venue" onclick="closeMenu()">Venue</a> <!-- BAGONG LINK SA MENU -->
             <a href="#details" onclick="closeMenu()">Details</a>
             <a href="#rsvp" onclick="closeMenu()">RSVP</a>
             <a href="#contact" onclick="closeMenu()">Contact Us</a>
@@ -44,13 +46,10 @@
                     HOME SECTION 
     =========================================== -->
     <header id="home" class="scroll-section animate-in" style="min-height: 100vh; justify-content: center;">
-        
-        <!-- BAGONG TEXT SA ITAAS NG MONOGRAM -->
         <p style="font-family: 'Playfair Display', serif; font-size: 1.5em; color: #1a252f; font-style: italic; margin-bottom: 10px;">We are getting married!</p>
         
         <video src="monogram.mp4" class="monogram-video" autoplay loop muted playsinline></video>
         
-        <!-- IN-UPDATE NA PETSA AT LOKASYON -->
         <p class="date" style="margin-top: 5px;">July 28, 2027 | Silang, Cavite</p>
         
         <div class="countdown-container">
@@ -78,11 +77,11 @@
     </section>
 
     <!-- ==========================================
-                    DETAILS SECTION 
+                    BAGONG VENUE SECTION 
     =========================================== -->
-    <section id="details" class="scroll-section">
-        <h2>When & Where</h2>
-        <p style="color: #7f8c8d; font-style: italic; margin-bottom: 40px;">July 28, 2027 &bull; Silang, Cavite</p>
+    <section id="venue" class="scroll-section">
+        <h2>Venues</h2>
+        <p style="color: #7f8c8d; font-style: italic; margin-bottom: 40px;">Where the magic happens</p>
 
         <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; width: 100%; max-width: 900px; margin: 0 auto;">
             
@@ -108,6 +107,102 @@
                 <a href="https://maps.app.goo.gl/7rUXzCJksbCY1UrXA" target="_blank" rel="noopener noreferrer" class="rsvp-btn rsvp-btn-secondary" style="padding: 12px 20px; font-size: 0.8em; display: inline-block;">
                     View on Google Maps
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+                    BAGONG DETAILS SECTION 
+    =========================================== -->
+    <section id="details" class="scroll-section" style="background-color: #f8fafc; width: 100%;">
+        <h2>Date & Location</h2>
+        
+        <!-- 3 Horizontal Categories -->
+        <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; width: 100%; max-width: 1000px; margin: 0 auto;">
+            
+            <!-- Category 1: DATE -->
+            <div class="info-card">
+                <div class="info-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="info-title">Date</div>
+                <div class="info-subtitle">July 28, 2027</div>
+                <p class="info-text">Mark your calendars! We are so excited to celebrate our special day surrounded by the people we love the most.</p>
+            </div>
+
+            <!-- Category 2: CEREMONY -->
+            <div class="info-card">
+                <div class="info-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2v6"/><path d="M10 5h4"/><path d="M12 8L2 16h20L12 8z"/><path d="M4 16v6h16v-6"/><path d="M10 22v-6h4v6"/>
+                    </svg>
+                </div>
+                <div class="info-title">Ceremony</div>
+                <div class="info-subtitle">3:00 PM</div>
+                <p class="info-text">The ceremony will be held at St. Benedict Parish in Silang, Cavite. Please arrive a little early to find your seats before the processional begins.</p>
+            </div>
+
+            <!-- Category 3: RECEPTION -->
+            <div class="info-card">
+                <div class="info-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14 4h6v6a6 6 0 0 1-6 6v4h-2"/><path d="M4 4h6v6a6 6 0 0 1-6 6v4H2"/><line x1="8" y1="20" x2="16" y2="20"/>
+                    </svg>
+                </div>
+                <div class="info-title">Reception</div>
+                <div class="info-subtitle">5:00 PM</div>
+                <p class="info-text">Join us for a night of dinner, drinks, and dancing! The celebration continues at Alta Veranda De Tibig, located just a short drive from the church.</p>
+            </div>
+
+        </div>
+
+        <!-- PROGRAM OF EVENTS TIMELINE -->
+        <div class="program-container">
+            <div class="timeline-wrapper">
+                <h3>Program of Events</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="timeline-time">2:30 PM</span>
+                        <div class="timeline-event">Guests Arrival</div>
+                        <div class="timeline-desc">Find your seats and settle in.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-time">3:00 PM</span>
+                        <div class="timeline-event">Wedding Ceremony</div>
+                        <div class="timeline-desc">The exchange of vows at St. Benedict Parish.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-time">4:30 PM</span>
+                        <div class="timeline-event">Cocktails & Photos</div>
+                        <div class="timeline-desc">Enjoy light refreshments while the couple takes photos.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-time">5:30 PM</span>
+                        <div class="timeline-event">Grand Entrance & Dinner</div>
+                        <div class="timeline-desc">Welcome the newlyweds and enjoy a hearty meal.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-time">7:00 PM</span>
+                        <div class="timeline-event">Speeches & Toasts</div>
+                        <div class="timeline-desc">Words of love from family and friends.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-time">8:00 PM</span>
+                        <div class="timeline-event">Party Time</div>
+                        <div class="timeline-desc">Hit the dance floor and celebrate the night away!</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IMAGE PLACEHOLDER PARA SA TIMELINE -->
+            <!-- Palitan ang div na ito ng <img src="..."> kapag meron ka ng picture -->
+            <div class="program-image-placeholder">
+                [ Event Photo Placeholder ]
             </div>
         </div>
     </section>
