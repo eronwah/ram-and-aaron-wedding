@@ -300,15 +300,24 @@
                 <div class="secondary-sponsors-grid">
                     <article class="secondary-sponsor-card">
                         <svg class="secondary-emblem" viewBox="0 0 48 48" aria-hidden="true"><path d="M19 6h10v5l3 4v26H16V15l3-4z"></path><path d="M19 11h10M16 19h16M24 2c-3 3-2 5 0 7 2-2 3-4 0-7z"></path></svg>
-                        <h4>Candle Sponsor</h4><p id="candle-sponsor-names">Name 1 &amp; Name 2</p>
+                        <h4>Candle Sponsor</h4>
+                        <div id="candle-sponsor-names" class="secondary-sponsor-names">
+                            <span class="secondary-sponsor-name">Name 1</span><span class="secondary-sponsor-amp" aria-hidden="true">&amp;</span><span class="secondary-sponsor-name">Name 2</span>
+                        </div>
                     </article>
                     <article class="secondary-sponsor-card">
                         <svg class="secondary-emblem" viewBox="0 0 48 48" aria-hidden="true"><path d="M8 10h32l-5 31H13z"></path><path d="M8 10c4 0 4 4 8 4s4-4 8-4 4 4 8 4 4-4 8-4M16 17l3 24m13-24-3 24"></path></svg>
-                        <h4>Veil Sponsor</h4><p id="veil-sponsor-names">Name 1 &amp; Name 2</p>
+                        <h4>Veil Sponsor</h4>
+                        <div id="veil-sponsor-names" class="secondary-sponsor-names">
+                            <span class="secondary-sponsor-name">Name 1</span><span class="secondary-sponsor-amp" aria-hidden="true">&amp;</span><span class="secondary-sponsor-name">Name 2</span>
+                        </div>
                     </article>
                     <article class="secondary-sponsor-card">
                         <svg class="secondary-emblem" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 5v38M12 9l24 30M36 9 12 39"></path><path d="M19 5h10M19 43h10"></path></svg>
-                        <h4>Cord Sponsor</h4><p id="cord-sponsor-names">Name 1 &amp; Name 2</p>
+                        <h4>Cord Sponsor</h4>
+                        <div id="cord-sponsor-names" class="secondary-sponsor-names">
+                            <span class="secondary-sponsor-name">Name 1</span><span class="secondary-sponsor-amp" aria-hidden="true">&amp;</span><span class="secondary-sponsor-name">Name 2</span>
+                        </div>
                     </article>
                 </div>
             </section>
@@ -798,11 +807,21 @@
             }
         }
 
-        function getPartyPairText(person, fallback) {
-            const firstName = String(person && person.name_1 || '').trim();
-            const secondName = String(person && person.name_2 || '').trim();
-            if (firstName && secondName) return `${firstName} & ${secondName}`;
-            return firstName || secondName || fallback;
+        function setPartyPairNames(containerId, person) {
+            const container = document.getElementById(containerId);
+            if (!container || !person) return;
+
+            const firstName = String(person.name_1 || '').trim();
+            const secondName = String(person.name_2 || '').trim();
+            if (!firstName && !secondName) return;
+
+            const nameElements = container.querySelectorAll('.secondary-sponsor-name');
+            const ampersand = container.querySelector('.secondary-sponsor-amp');
+            nameElements[0].textContent = firstName;
+            nameElements[1].textContent = secondName;
+            nameElements[0].hidden = !firstName;
+            nameElements[1].hidden = !secondName;
+            ampersand.hidden = !(firstName && secondName);
         }
 
         function sortPartyRows(rows) {
@@ -870,8 +889,7 @@
                     ['Cord Sponsor', 'cord-sponsor-names']
                 ].forEach(([roleName, elementId]) => {
                     const person = findRole('SECONDARY SPONSORS', [roleName]);
-                    const element = document.getElementById(elementId);
-                    if (element) element.textContent = getPartyPairText(person, 'Name 1 & Name 2');
+                    setPartyPairNames(elementId, person);
                 });
 
                 const attendantRows = sortPartyRows(groupRows('GROOMSMEN AND BRIDESMAIDS'));
