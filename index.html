@@ -22,7 +22,6 @@
             </a>
             
             <a href="#rsvp" class="text-link">RSVP</a>
-            <!-- Pinalitan ang Contact Us ng FAQs -->
             <a href="#faq" class="text-link">FAQs</a> 
         </div>
         
@@ -39,14 +38,11 @@
             <a href="#venue" onclick="closeMenu()">Venue</a>
             <a href="#details" onclick="closeMenu()">Details</a>
             <a href="#rsvp" onclick="closeMenu()">RSVP</a>
-            <!-- Pinalitan ang Contact Us ng FAQs -->
             <a href="#faq" onclick="closeMenu()">FAQs</a>
         </div>
     </nav>
 
-    <!-- ==========================================
-                    HOME SECTION 
-    =========================================== -->
+    <!-- HOME SECTION -->
     <header id="home" class="scroll-section animate-in" style="min-height: 100vh; justify-content: center;">
         <p style="font-family: 'Playfair Display', serif; font-size: 1.5em; color: #1a252f; font-style: italic; margin-bottom: 10px;">We are getting married!</p>
         
@@ -67,9 +63,7 @@
         </div>
     </header>
 
-    <!-- ==========================================
-                    OUR STORY SECTION 
-    =========================================== -->
+    <!-- OUR STORY SECTION -->
     <section id="our-story" class="scroll-section">
         <h2>Our Story</h2>
         <div class="container">
@@ -78,9 +72,7 @@
         </div>
     </section>
 
-    <!-- ==========================================
-                    VENUE SECTION 
-    =========================================== -->
+    <!-- VENUE SECTION -->
     <section id="venue" class="scroll-section">
         <h2>Venues</h2>
         <p style="color: #7f8c8d; font-style: italic; margin-bottom: 40px;">Where the magic happens</p>
@@ -113,46 +105,32 @@
         </div>
     </section>
 
-    <!-- ==========================================
-                    DETAILS SECTION 
-    =========================================== -->
+    <!-- DETAILS SECTION -->
     <section id="details" class="scroll-section" style="background-color: #f8fafc; width: 100%;">
         <h2>Date & Location</h2>
         
         <div class="details-cards-container">
-            <!-- DATE -->
             <div class="info-card">
                 <div class="info-icon">
-                    <svg viewBox="0 0 24 24">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                    </svg>
+                    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                 </div>
                 <div class="info-title">Date</div>
                 <div class="info-subtitle">July 28, 2027</div>
                 <p class="info-text">Mark your calendars! We are so excited to celebrate our special day surrounded by the people we love the most.</p>
             </div>
 
-            <!-- CEREMONY -->
             <div class="info-card">
                 <div class="info-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M12 2v6"/><path d="M10 5h4"/><path d="M12 8L2 16h20L12 8z"/><path d="M4 16v6h16v-6"/><path d="M10 22v-6h4v6"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24"><path d="M12 2v6"/><path d="M10 5h4"/><path d="M12 8L2 16h20L12 8z"/><path d="M4 16v6h16v-6"/><path d="M10 22v-6h4v6"/></svg>
                 </div>
                 <div class="info-title">Ceremony</div>
                 <div class="info-subtitle">3:00 PM</div>
                 <p class="info-text">The ceremony will be held at St. Benedict Parish in Silang, Cavite. Please arrive a little early to find your seats before the processional begins.</p>
             </div>
 
-            <!-- RECEPTION -->
             <div class="info-card">
                 <div class="info-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M14 4h6v6a6 6 0 0 1-6 6v4h-2"/><path d="M4 4h6v6a6 6 0 0 1-6 6v4H2"/><line x1="8" y1="20" x2="16" y2="20"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24"><path d="M14 4h6v6a6 6 0 0 1-6 6v4h-2"/><path d="M4 4h6v6a6 6 0 0 1-6 6v4H2"/><line x1="8" y1="20" x2="16" y2="20"/></svg>
                 </div>
                 <div class="info-title">Reception</div>
                 <div class="info-subtitle">5:00 PM</div>
@@ -160,7 +138,6 @@
             </div>
         </div>
 
-        <!-- PROGRAM OF EVENTS -->
         <div class="program-container">
             <div class="timeline-wrapper">
                 <h3>Program of Events</h3>
@@ -265,10 +242,8 @@
         </div>
     </section>
 
-    <!-- ==========================================
-                    FAQ SECTION (BAGONG DAGDAG)
-    =========================================== -->
-    <section id="faq" class="scroll-section" style="background-color: #f8fafc; width: 100%;">
+    <!-- FAQ SECTION (Pumalit sa Contact Us) -->
+    <section id="faq" class="scroll-section" style="background-color: #f8fafc; width: 100%; padding-bottom: 40px;">
         <h2>Frequently Asked Questions</h2>
         <p style="color: #7f8c8d; font-style: italic; margin-bottom: 40px;">Some details to help you prepare for our big day.</p>
         
@@ -293,6 +268,15 @@
                 <p>Yes! There is free and ample parking available at both the church and the reception venue for all our guests.</p>
             </details>
         </div>
+        
+        <!-- BAGONG DAGDAG: BACK TO TOP BUTTON (Nasa ibaba at gitna, walang container) -->
+        <a href="#home" class="back-to-top">
+            <svg viewBox="0 0 24 24">
+                <line x1="12" y1="19" x2="12" y2="5"></line>
+                <polyline points="5 12 12 5 19 12"></polyline>
+            </svg>
+            <span>Top</span>
+        </a>
     </section>
 
     <!-- IMAGE MODAL -->
@@ -316,6 +300,17 @@
 
     <!-- JavaScript Logic -->
     <script>
+        // Awtomatikong babalik sa Home (top) kapag nag-refresh ang webpage
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.addEventListener('beforeunload', function() {
+            window.scrollTo(0, 0);
+        });
+        window.onload = function() {
+            window.scrollTo(0, 0);
+        };
+
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('navbar');
             if (window.scrollY > (window.innerHeight * 0.8)) {

@@ -234,7 +234,7 @@ p { font-size: 0.95em; font-weight: 300; }
 .message { text-align: center; margin-top: 20px; font-style: italic; font-size: 0.9em; }
 
 /* =======================================
-   FAQ SECTION (BAGONG DAGDAG)
+   FAQ SECTION
 ======================================== */
 .faq-container { max-width: 800px; width: 100%; margin: 0 auto; text-align: left; }
 .faq-item { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 15px; padding: 0 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
@@ -244,6 +244,19 @@ p { font-size: 0.95em; font-weight: 300; }
 .faq-item summary::after { content: '+'; position: absolute; right: 0; font-size: 1.5em; color: #2c3e50; line-height: 1; top: 50%; transform: translateY(-50%); transition: transform 0.3s ease; }
 .faq-item[open] summary::after { content: '−'; }
 .faq-item p { margin-top: 0; padding-bottom: 20px; color: #4a5568; font-size: 0.95em; line-height: 1.6; }
+
+/* =======================================
+   BACK TO TOP BUTTON (BAGONG DAGDAG)
+======================================== */
+.back-to-top {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+    text-decoration: none; color: #7f8c8d; transition: all 0.4s ease; cursor: pointer;
+    margin: 60px auto 30px auto; width: fit-content;
+}
+.back-to-top svg { width: 30px; height: 30px; stroke: #2c3e50; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.4s ease; }
+.back-to-top span { font-size: 0.7em; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; color: #2c3e50; }
+.back-to-top:hover svg { transform: translateY(-5px); stroke: #4a5568; }
+.back-to-top:hover span { color: #4a5568; }
 
 /* MODALS */
 .modal-overlay { 
