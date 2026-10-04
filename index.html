@@ -25,8 +25,19 @@
         
         <!-- DESKTOP RIGHT LINKS -->
         <div class="desktop-nav-right">
+            <a href="#wedding-party" class="text-link">Wedding Party</a>
             <a href="#rsvp" class="text-link">RSVP</a>
             <a href="#faq" class="text-link">FAQs</a>
+        </div>
+
+        <!-- Mobile quick links shown beside the centered monogram -->
+        <div class="mobile-nav-left">
+            <a href="#home" class="text-link">Home</a>
+            <a href="#details" class="text-link">Details</a>
+        </div>
+        <div class="mobile-nav-right">
+            <a href="#wedding-party" class="text-link">Wedding Party</a>
+            <a href="#rsvp" class="text-link">RSVP</a>
         </div>
 
         <!-- Hamburger opens the full navigation menu on desktop and mobile -->
@@ -36,11 +47,12 @@
             <span></span>
         </button>
 
-        <!-- MOBILE DROPDOWN LINKS -->
+        <!-- Full navigation menu, used when desktop links do not fit and on mobile -->
         <div class="nav-links" id="navLinks">
             <a href="#home" onclick="closeMenu()">Home</a>
             <a href="#venue" onclick="closeMenu()">Venue</a>
             <a href="#details" onclick="closeMenu()">Details</a>
+            <a href="#wedding-party" onclick="closeMenu()">Wedding Party</a>
             <a href="#rsvp" onclick="closeMenu()">RSVP</a>
             <a href="#faq" onclick="closeMenu()">FAQs</a>
         </div>
@@ -183,6 +195,11 @@
                 [ Event Photo Placeholder ]
             </div>
         </div>
+    </section>
+
+    <!-- WEDDING PARTY SECTION (CONTENT TO BE ADDED LATER) -->
+    <section id="wedding-party" class="scroll-section">
+        <h2>Wedding Party</h2>
     </section>
 
     <!-- RSVP SECTION -->
@@ -336,6 +353,38 @@
             document.getElementById('burgerMenu').classList.remove('toggle-active');
             document.getElementById('burgerMenu').setAttribute('aria-expanded', 'false');
             document.getElementById('burgerMenu').setAttribute('aria-label', 'Open navigation menu');
+        }
+
+        function updateNavigationLayout() {
+            const nav = document.getElementById('navbar');
+            const leftLinks = nav.querySelector('.desktop-nav-left');
+            const rightLinks = nav.querySelector('.desktop-nav-right');
+            const monogram = nav.querySelector('.nav-monogram');
+
+            if (window.innerWidth <= 768) {
+                nav.classList.remove('nav-compact');
+                return;
+            }
+
+            nav.classList.remove('nav-compact');
+            const leftLast = leftLinks.lastElementChild.getBoundingClientRect();
+            const rightFirst = rightLinks.firstElementChild.getBoundingClientRect();
+            const rightLast = rightLinks.lastElementChild.getBoundingClientRect();
+            const logoRect = monogram.getBoundingClientRect();
+            const navRect = nav.getBoundingClientRect();
+            const hamburgerLeft = navRect.right - 16 - 44;
+            const requiredGap = 8;
+            const linksDoNotFit = leftLast.right > logoRect.left - requiredGap ||
+                rightFirst.left < logoRect.right + requiredGap ||
+                rightLast.right > hamburgerLeft - requiredGap;
+
+            nav.classList.toggle('nav-compact', linksDoNotFit);
+        }
+
+        window.addEventListener('load', updateNavigationLayout);
+        window.addEventListener('resize', updateNavigationLayout);
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(updateNavigationLayout);
         }
 
         function openImageModal(imgSrc) {
