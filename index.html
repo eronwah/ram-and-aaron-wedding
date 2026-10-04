@@ -33,6 +33,7 @@
         <!-- Mobile quick links shown beside the centered monogram -->
         <div class="mobile-nav-left">
             <a href="#home" class="text-link">Home</a>
+            <a href="#venue" class="text-link">Venue</a>
             <a href="#details" class="text-link">Details</a>
         </div>
         <div class="mobile-nav-right">
@@ -360,25 +361,51 @@
             const leftLinks = nav.querySelector('.desktop-nav-left');
             const rightLinks = nav.querySelector('.desktop-nav-right');
             const monogram = nav.querySelector('.nav-monogram');
+            const allDesktopLinks = [...leftLinks.children, ...rightLinks.children];
 
             if (window.innerWidth <= 768) {
-                nav.classList.remove('nav-compact');
+                nav.classList.remove('nav-overflow');
+                allDesktopLinks.forEach(link => link.classList.remove('nav-item-hidden'));
                 return;
             }
 
-            nav.classList.remove('nav-compact');
-            const leftLast = leftLinks.lastElementChild.getBoundingClientRect();
-            const rightFirst = rightLinks.firstElementChild.getBoundingClientRect();
-            const rightLast = rightLinks.lastElementChild.getBoundingClientRect();
-            const logoRect = monogram.getBoundingClientRect();
-            const navRect = nav.getBoundingClientRect();
-            const hamburgerLeft = navRect.right - 16 - 44;
-            const requiredGap = 8;
-            const linksDoNotFit = leftLast.right > logoRect.left - requiredGap ||
-                rightFirst.left < logoRect.right + requiredGap ||
-                rightLast.right > hamburgerLeft - requiredGap;
+            allDesktopLinks.forEach(link => link.classList.remove('nav-item-hidden'));
 
-            nav.classList.toggle('nav-compact', linksDoNotFit);
+            const linksFit = () => {
+                const leftVisible = [...leftLinks.children].filter(link => !link.classList.contains('nav-item-hidden'));
+                const rightVisible = [...rightLinks.children].filter(link => !link.classList.contains('nav-item-hidden'));
+                const logoRect = monogram.getBoundingClientRect();
+                const navRect = nav.getBoundingClientRect();
+                const hamburgerLeft = navRect.right - 16 - 44;
+                const requiredGap = 8;
+
+                if (!leftVisible.length || !rightVisible.length) return true;
+                const leftLast = leftVisible[leftVisible.length - 1].getBoundingClientRect();
+                const rightFirst = rightVisible[0].getBoundingClientRect();
+                const rightLast = rightVisible[rightVisible.length - 1].getBoundingClientRect();
+
+                return leftLast.right <= logoRect.left - requiredGap &&
+                    rightFirst.left >= logoRect.right + requiredGap &&
+                    rightLast.right <= hamburgerLeft - requiredGap;
+            };
+
+            // Hide secondary links one at a time as the available width shrinks.
+            const hideOrder = [
+                leftLinks.children[1], // Venue
+                rightLinks.children[1], // RSVP
+                rightLinks.children[2], // FAQs
+                leftLinks.children[2], // Details
+                rightLinks.children[0], // Wedding Party
+                leftLinks.children[0] // Home
+            ];
+
+            for (const link of hideOrder) {
+                if (linksFit()) break;
+                link.classList.add('nav-item-hidden');
+            }
+
+            const hasHiddenLinks = allDesktopLinks.some(link => link.classList.contains('nav-item-hidden'));
+            nav.classList.toggle('nav-overflow', hasHiddenLinks);
         }
 
         window.addEventListener('load', updateNavigationLayout);
