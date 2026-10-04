@@ -55,8 +55,8 @@ nav#navbar {
     min-width: 0;
     display: flex;
     justify-content: flex-end; 
-    padding-right: 24px;
-    gap: 30px;
+    padding-right: 12px;
+    gap: 18px;
 }
 
 .desktop-nav-right {
@@ -65,9 +65,9 @@ nav#navbar {
     min-width: 0;
     display: flex;
     justify-content: flex-start; 
-    padding-left: 24px;
+    padding-left: 12px;
     padding-right: 58px;
-    gap: 30px;
+    gap: 18px;
 }
 
 .text-link {
@@ -122,17 +122,17 @@ nav#navbar {
     .desktop-nav-right {
         display: flex !important;
         min-width: 0;
-        gap: clamp(8px, 1.5vw, 14px);
+        gap: clamp(4px, 0.8vw, 8px);
     }
 
     .desktop-nav-left {
         justify-content: flex-end;
-        padding-right: 18px;
+        padding-right: 4px;
     }
 
     .desktop-nav-right {
         justify-content: flex-start;
-        padding-left: 18px;
+        padding-left: 4px;
         padding-right: 58px;
     }
 
@@ -166,11 +166,11 @@ nav#navbar {
     }
 
     .desktop-nav-left {
-        padding-right: 12px;
+        padding-right: 4px;
     }
 
     .desktop-nav-right {
-        padding-left: 12px;
+        padding-left: 4px;
         padding-right: 52px;
     }
 
@@ -210,11 +210,11 @@ nav#navbar {
     }
 
     .desktop-nav-left {
-        padding-right: 12px;
+        padding-right: 4px;
     }
 
     .desktop-nav-right {
-        padding-left: 12px;
+        padding-left: 4px;
         padding-right: 58px;
     }
 
