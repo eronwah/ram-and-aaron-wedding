@@ -504,7 +504,20 @@ p { font-size: 0.95em; font-weight: 300; }
 }
 
 .parents-grid {
+    position: relative;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.parents-grid::after {
+    content: '';
+    position: absolute;
+    top: 2%;
+    bottom: 2%;
+    left: 50%;
+    width: 1px;
+    background: #b9bcb9;
+    transform: translateX(-50%);
+    pointer-events: none;
 }
 
 .honor-grid {
@@ -561,9 +574,17 @@ p { font-size: 0.95em; font-weight: 300; }
     font-style: italic;
 }
 
-.bridesmen-card {
-    width: min(100%, 280px);
+.bridesmen-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 34px;
     margin: 34px auto 0;
+}
+
+.bridesmen-card {
+    grid-column: 2;
+    width: auto;
+    margin: 0;
 }
 
 .party-table-wrap {
@@ -670,7 +691,21 @@ p { font-size: 0.95em; font-weight: 300; }
         gap: 28px 18px;
     }
 
+    .parents-grid::after {
+        top: 50%;
+        right: 0;
+        bottom: auto;
+        left: 0;
+        width: auto;
+        height: 1px;
+        transform: translateY(-50%);
+    }
+
     .honor-grid {
+        gap: 18px;
+    }
+
+    .bridesmen-grid {
         gap: 18px;
     }
 
@@ -722,6 +757,12 @@ p { font-size: 0.95em; font-weight: 300; }
         gap: 20px 12px;
     }
 
+    .bridesmen-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px 12px;
+        margin-top: 24px;
+    }
+
     .honor-grid .profile-card:last-child {
         grid-column: 1 / -1;
         width: min(100%, 210px);
@@ -729,8 +770,9 @@ p { font-size: 0.95em; font-weight: 300; }
     }
 
     .bridesmen-card {
+        grid-column: 1 / -1;
         width: min(100%, 210px);
-        margin-top: 24px;
+        justify-self: center;
     }
 
     .photo-placeholder {
