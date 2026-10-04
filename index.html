@@ -933,8 +933,9 @@
                 image.className = 'party-photo';
                 image.alt = '';
                 image.setAttribute('aria-hidden', 'true');
-                // Load the couple portraits immediately; defer the rest until needed.
-                image.loading = container.closest('.couple-grid') ? 'eager' : 'lazy';
+                // This page has a small, fixed set of portraits. Eager loading avoids
+                // mobile browsers leaving dynamically-created lazy images on placeholders.
+                image.loading = 'eager';
                 image.decoding = 'async';
 
                 image.addEventListener('load', () => {
@@ -948,7 +949,8 @@
 
                 container.prepend(image);
                 const imageUrl = new URL(container.dataset.photo, document.baseURI);
-                imageUrl.searchParams.set('v', '2');
+                // Bump this when image-loading behavior changes so browsers refresh it.
+                imageUrl.searchParams.set('v', '3');
                 image.src = imageUrl.href;
 
                 if (image.complete && image.naturalWidth > 0) {
