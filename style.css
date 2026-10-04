@@ -546,8 +546,11 @@ p { font-size: 0.95em; font-weight: 300; }
 }
 
 .photo-placeholder {
+    position: relative;
     width: 100%;
     aspect-ratio: 1 / 1;
+    height: auto;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -560,6 +563,7 @@ p { font-size: 0.95em; font-weight: 300; }
     font-size: 0.72em;
     letter-spacing: 1px;
     text-transform: uppercase;
+    overflow: hidden;
 }
 
 .photo-placeholder svg {
@@ -585,8 +589,12 @@ p { font-size: 0.95em; font-weight: 300; }
 
 .photo-placeholder.has-photo .party-photo {
     display: block;
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: cover;
     object-position: center;
 }
