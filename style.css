@@ -1080,3 +1080,47 @@ p { font-size: 0.95em; font-weight: 300; }
     .dress-code-art-frame { height: 106px; }
     .dress-code-palette-frame { height: 34px; }
 }
+
+/* Mobile-only: keep Date, Ceremony, and Reception in one readable row. */
+@media (max-width: 768px) {
+    #details .details-cards-container {
+        display: flex;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: stretch;
+        gap: clamp(7px, 2.5vw, 12px) !important;
+    }
+
+    #details .info-card {
+        flex: 1 1 0 !important;
+        min-width: 0 !important;
+        padding: 0 4px !important;
+    }
+
+    #details .info-icon { margin-bottom: 6px !important; }
+    #details .info-icon svg {
+        width: clamp(27px, 8vw, 32px) !important;
+        height: clamp(27px, 8vw, 32px) !important;
+    }
+
+    #details .info-title {
+        margin-bottom: 4px !important;
+        font-size: clamp(1rem, 4.3vw, 1.1rem) !important;
+        line-height: 1.2 !important;
+    }
+
+    #details .info-subtitle {
+        margin-bottom: 7px !important;
+        font-size: clamp(0.82rem, 3.5vw, 0.95rem) !important;
+        letter-spacing: 0.02em !important;
+        line-height: 1.25 !important;
+    }
+
+    #details .info-text {
+        display: block !important;
+        margin: 0 !important;
+        font-size: clamp(0.7rem, 2.9vw, 0.78rem) !important;
+        letter-spacing: 0 !important;
+        line-height: 1.4 !important;
+    }
+}
