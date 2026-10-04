@@ -579,7 +579,7 @@ p { font-size: 0.95em; font-weight: 300; }
 
 .party-photo {
     display: none;
-    filter: grayscale(1);
+    filter: grayscale(100%) !important;
     transition: filter 0.45s ease;
 }
 
@@ -609,12 +609,12 @@ p { font-size: 0.95em; font-weight: 300; }
 
 .photo-placeholder:focus-visible .party-photo,
 .photo-placeholder.is-color .party-photo {
-    filter: grayscale(0);
+    filter: grayscale(0%) !important;
 }
 
 @media (hover: hover) and (pointer: fine) {
     .photo-placeholder:hover .party-photo {
-        filter: grayscale(0);
+        filter: grayscale(0%) !important;
     }
 }
 
