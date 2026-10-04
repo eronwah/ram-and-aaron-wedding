@@ -938,7 +938,7 @@
             }
         }
 
-        const ACCOMMODATION_API_URL = 'https://script.google.com/macros/s/AKfycbzgB52bOeyIJBDRe3IOO9jjgxRXLOmnNjC20LIsqVvOoa4Kod7bKbnNgXPtrPg8qIEi/exec';
+        const ACCOMMODATION_API_URL = 'https://script.google.com/macros/s/AKfycbxoJlu7Gsp6xSeNjiazkuh4ea7WxlxZiSnnt0usHBn-copXKSx2lacrADBsCaCq1XO5/exec';
 
         function setAccommodationMessage(message) {
             const tbody = document.getElementById('accommodations-body');
@@ -1037,7 +1037,10 @@
                 status.hidden = true;
             } catch (error) {
                 console.error('Accommodation lookup failed:', error);
-                status.textContent = 'Accommodation options could not be loaded. Please try again later.';
+                const detail = error && error.message
+                    ? String(error.message)
+                    : 'Unknown error';
+                status.textContent = `Accommodation options could not be loaded: ${detail}`;
                 status.hidden = false;
                 setAccommodationMessage('Accommodation information is temporarily unavailable.');
             }
