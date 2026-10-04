@@ -65,10 +65,9 @@ nav {
 .nav-links a { color: #2c3e50; text-decoration: none; font-size: 1em; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; }
 
 /* =======================================
-   MOBILE VIEW (Smartphones)
+   MOBILE VIEW (Smartphones) - INAYOS BATAY SA IDEYA MO
 ======================================== */
 @media (max-width: 768px) {
-    /* STRICT FREEZE PARA SA NAVBAR */
     nav { 
         position: fixed !important;
         top: 0 !important; left: 0 !important; width: 100% !important;
@@ -92,46 +91,65 @@ nav {
     .countdown-number { font-size: 1.5em !important; margin-bottom: 5px; }
     .countdown-label { font-size: 0.55em !important; letter-spacing: 1px !important; }
 
-    /* MOBILE: TINAGO ANG TEXT PARA UMIKSI ANG HORIZONTAL CARDS */
+    /* MOBILE: TRANSPARENT AT WALANG BOX PARA SA DATE & LOCATION */
     .details-cards-container {
         flex-direction: row !important;
         flex-wrap: nowrap !important;
         gap: 8px !important;
+        align-items: flex-start !important; /* Para hindi banat ang cards */
     }
     .info-card {
         min-width: 0 !important;
         flex: 1 1 0 !important;
-        padding: 15px 5px !important; 
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: 5px !important; 
+        background: transparent !important; /* Inalis ang puting kahon */
+        box-shadow: none !important; /* Inalis ang shadow */
+        border-top: none !important; /* Inalis ang top border */
+        display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
     }
     .info-icon { margin-bottom: 8px; }
-    .info-icon svg { width: 26px; height: 26px; } 
-    .info-title { font-size: 0.75em; margin-bottom: 3px; }
-    .info-subtitle { font-size: 0.6em; margin-bottom: 0; }
-    .info-text { display: none !important; } /* Ito ang solusyon para hindi humaba ang cards! */
+    .info-icon svg { width: 24px; height: 24px; } 
+    .info-title { font-size: 0.75em; margin-bottom: 2px; }
+    .info-subtitle { font-size: 0.6em; margin-bottom: 4px; }
+    
+    /* IBINALIK ANG TEXT AT PINALIIT PARA MAGKASYA */
+    .info-text { 
+        display: block !important; 
+        font-size: 0.48em !important; 
+        line-height: 1.4 !important; 
+    }
 
-    /* MOBILE: COMPACT TIMELINE (KALIWA) & IMAGE (KANAN) */
+    /* MOBILE: COMPACT TIMELINE (KALIWA) & IMAGE (KANAN) WALANG BOX */
     .program-container { 
         flex-direction: row !important; 
-        padding: 20px 15px !important; 
-        gap: 15px !important;
+        padding: 15px 5px !important; 
+        gap: 10px !important;
         align-items: stretch !important;
+        background: transparent !important; /* Inalis ang puting kahon para bumagay */
+        box-shadow: none !important;
     }
-    .timeline-wrapper { flex: 1.2; width: 55%; }
+    .timeline-wrapper { flex: 1.2; width: 55%; text-align: left; }
     .timeline-wrapper h3 { font-size: 1.1em; margin-bottom: 12px; }
     .timeline { padding-left: 12px; margin-top: 5px; border-left-width: 1.5px; }
-    .timeline-item { margin-bottom: 12px; }
+    .timeline-item { margin-bottom: 15px; }
     .timeline-item::before { left: -16px; width: 8px; height: 8px; top: 2px; border-width: 1.5px; }
     .timeline-time { font-size: 0.55em; margin-bottom: 2px; letter-spacing: 1px; }
-    .timeline-event { font-size: 0.65em; line-height: 1.2; margin-bottom: 0; }
-    .timeline-desc { display: none !important; } /* Tinago rin para umiksi at pumantay sa image */
+    .timeline-event { font-size: 0.65em; line-height: 1.2; margin-bottom: 2px; }
+    
+    /* IBINALIK ANG TIMELINE TEXT AT PINALIIT */
+    .timeline-desc { 
+        display: block !important; 
+        font-size: 0.5em !important; 
+        line-height: 1.3 !important; 
+    } 
     
     .program-image-placeholder { 
         flex: 1; 
         width: 45%;
-        min-height: auto !important; 
+        min-height: 100% !important; 
         font-size: 0.5em; 
         padding: 5px;
+        border-radius: 6px;
     }
 }
 
