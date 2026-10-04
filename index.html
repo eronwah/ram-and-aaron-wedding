@@ -9,29 +9,34 @@
 </head>
 <body>
 
+    <!-- NAKA-AYOS NA NAVIGATION BAR -->
     <nav id="navbar">
-        <div class="nav-left-links">
+        <!-- DESKTOP LEFT LINKS -->
+        <div class="desktop-nav-left">
             <a href="#home" class="text-link">Home</a>
             <a href="#venue" class="text-link">Venue</a>
             <a href="#details" class="text-link">Details</a>
         </div>
         
+        <!-- MATHEMATICALLY CENTERED MONOGRAM -->
         <a href="#home" class="nav-monogram">
             <img src="monogram.png" alt="Aaron & Ram Monogram">
         </a>
         
-        <div class="nav-right-section">
-            <div class="nav-right-links">
-                <a href="#rsvp" class="text-link">RSVP</a>
-                <a href="#faq" class="text-link">FAQs</a>
-            </div>
-            <div class="menu-toggle" id="burgerMenu" onclick="toggleMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+        <!-- DESKTOP RIGHT LINKS -->
+        <div class="desktop-nav-right">
+            <a href="#rsvp" class="text-link">RSVP</a>
+            <a href="#faq" class="text-link">FAQs</a>
         </div>
 
+        <!-- RIGHT HAMBURGER MENU (MOBILE) -->
+        <div class="menu-toggle" id="burgerMenu" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <!-- MOBILE DROPDOWN LINKS -->
         <div class="nav-links" id="navLinks">
             <a href="#home" onclick="closeMenu()">Home</a>
             <a href="#venue" onclick="closeMenu()">Venue</a>
@@ -283,7 +288,7 @@
         <img id="modal-image" class="modal-content-img" src="" alt="Zoomed View">
     </div>
 
-    <!-- RSVP POP-UP MODAL -->
+    <!-- RSVP POP-UP MODAL (MANANATILI PARA SA RSVP UPDATE) -->
     <div id="contact-modal" class="modal-overlay">
         <div class="modal-content">
             <h3 style="margin-top: 0;">Update RSVP</h3>
