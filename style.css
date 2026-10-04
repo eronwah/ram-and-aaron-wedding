@@ -375,7 +375,8 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
 .program-container { display: flex; gap: 40px; margin-top: 60px; max-width: 1000px; width: 100%; align-items: stretch; background: #ffffff; padding: 50px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
 .timeline-wrapper { flex: 1; text-align: left; }
 .timeline-wrapper h3 { font-family: 'Playfair Display', serif; font-size: 2em; margin-top: 0; color: #1a252f; margin-bottom: 30px; }
-.details-followup-titles { display: grid; gap: 54px; max-width: 1000px; margin: 64px auto 0; }
+.details-followup-titles { display: grid; gap: 54px; max-width: 1000px; min-width: 0; margin: 64px auto 0; }
+.details-followup-section { min-width: 0; }
 .details-followup-section h3 { margin: 0; color: #1a252f; font-family: 'Playfair Display', serif; font-size: 2em; font-weight: 400; letter-spacing: 1px; }
 .details-followup-section h3 { margin-bottom: 24px; }
 .accommodation-table-wrap { width: 100%; max-width: 1000px; margin: 0 auto; overflow-x: auto; border: 1px solid #dedfdd; background: #fff; -webkit-overflow-scrolling: touch; }
@@ -987,4 +988,50 @@ p { font-size: 0.95em; font-weight: 300; }
     .accommodation-table th,
     .accommodation-table td { padding: 12px 9px; }
     .accommodation-table th { font-size: 0.7em; }
+
+    /* Turn the five-column accommodation table into readable cards on phones. */
+    .details-followup-section { width: 100%; }
+    .details-followup-section h3 { text-align: center; overflow-wrap: anywhere; }
+    .accommodation-table-wrap { overflow: visible; border: 0; background: transparent; }
+    .accommodation-table { display: block; width: 100%; min-width: 0; }
+    .accommodation-table thead { display: none; }
+    .accommodation-table tbody { display: grid; gap: 12px; }
+    .accommodation-table tbody tr {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        overflow: hidden;
+        border: 1px solid #dedfdd;
+        background: #fff;
+    }
+    .accommodation-table tbody td {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        padding: 12px 8px;
+        border-right: 1px solid #e5e6e4;
+        border-bottom: 1px solid #e5e6e4;
+        font-size: 0.82em;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+    .accommodation-table tbody td::before {
+        content: attr(data-label);
+        color: #2c3e50;
+        font-size: 0.78em;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+    .accommodation-table tbody td:nth-child(5) { grid-column: 1 / -1; border-right: 0; }
+    .accommodation-table tbody tr td:last-child { border-bottom: 0; }
+    .accommodation-table tbody tr td[colspan] {
+        display: block;
+        grid-column: 1 / -1;
+        padding: 20px 12px;
+        border: 0;
+        text-align: center;
+    }
+    .accommodation-table tbody td[colspan]::before { content: none; }
 }
