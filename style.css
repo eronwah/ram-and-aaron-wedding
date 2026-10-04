@@ -29,7 +29,7 @@ nav {
 .nav-right { justify-content: flex-end; }
 .nav-center { 
     display: flex; align-items: center; justify-content: center; gap: 30px; 
-    flex-wrap: nowrap; /* Pinipilit na magkakatabi lang palagi sa isang linya */
+    flex-wrap: nowrap;
 }
 .text-link {
     color: #2c3e50; text-decoration: none; font-size: 0.85em;
@@ -70,14 +70,14 @@ nav {
 @media (max-width: 768px) {
     nav { 
         padding: 15px 10px; 
-        position: relative; 
-        justify-content: center; /* Pinapagitna ang buong content ng nav */
+        /* Inalis ang position: relative dito upang manatiling FIXED at hindi mawala sa pag-scroll */
+        justify-content: center; 
     } 
     
-    .nav-left { display: none; } /* Inalis para makapag-focus sa gitna */
+    .nav-left { display: none; } 
     
     .nav-right { 
-        position: absolute; /* Nakapako palagi sa kanan */
+        position: absolute; 
         right: 15px; 
         top: 50%; 
         transform: translateY(-50%);
@@ -85,13 +85,13 @@ nav {
     }
 
     .nav-center { 
-        gap: 10px; /* Mas maluwag at balanse */
+        gap: 10px; 
         width: 100%; 
         justify-content: center;
     } 
     
     .text-link { 
-        font-size: 0.65em; /* Pinalaki para madaling mabasa */
+        font-size: 0.65em; 
         letter-spacing: 0.5px; 
     } 
     
