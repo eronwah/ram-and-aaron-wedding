@@ -302,19 +302,7 @@
                 <div class="party-table-wrap">
                     <table class="party-table sponsors-table">
                         <thead><tr><th scope="col">Name</th><th scope="col">Name</th></tr></thead>
-                        <tbody id="principal-sponsors-body">
-                            <tr><td>Name to be added</td><td>Name to be added</td></tr>
-                            <tr><td>Name to be added</td><td>Name to be added</td></tr>
-                            <tr><td>Name to be added</td><td>Name to be added</td></tr>
-                            <tr><td>Name to be added</td><td>Name to be added</td></tr>
-                            <tr><td>Name to be added</td><td>Name to be added</td></tr>
-                            <tr><td>Name to be added</td><td>Name to be added</td></tr>
-                            <tr><td>Name to be added</td><td>Name to be added</td></tr>
-                            <tr><td>Name to be added</td><td>Name to be added</td></tr>
-                            <tr><td>Name to be added</td><td>Name to be added</td></tr>
-                            <tr><td>Name to be added</td><td>Name to be added</td></tr>
-                            <tr><td>Name to be added</td><td>Name to be added</td></tr>
-                        </tbody>
+                        <tbody id="principal-sponsors-body"></tbody>
                     </table>
                 </div>
             </section>
@@ -357,13 +345,7 @@
                 <div class="party-table-wrap">
                     <table class="party-table attendants-table">
                         <thead><tr><th scope="col">Groomsman</th><th scope="col">Bridesmaid</th></tr></thead>
-                        <tbody id="attendants-body">
-                            <tr><td>Name to be added</td><td>Name to be added</td></tr>
-                            <tr><td>Name to be added</td><td>Name to be added</td></tr>
-                            <tr><td>Name to be added</td><td>Name to be added</td></tr>
-                            <tr><td>Name to be added</td><td>Name to be added</td></tr>
-                            <tr><td>Name to be added</td><td>Name to be added</td></tr>
-                        </tbody>
+                        <tbody id="attendants-body"></tbody>
                     </table>
                 </div>
             </section>
@@ -862,6 +844,35 @@
             });
         }
 
+        function renderNamePairTable(tbodyId, entries, emptyMessage) {
+            const tbody = document.getElementById(tbodyId);
+            const populatedEntries = entries.filter(person =>
+                String(person.name_1 || '').trim() || String(person.name_2 || '').trim()
+            );
+
+            if (populatedEntries.length === 0) {
+                const row = document.createElement('tr');
+                const cell = document.createElement('td');
+                cell.colSpan = 2;
+                cell.textContent = emptyMessage;
+                row.appendChild(cell);
+                tbody.replaceChildren(row);
+                return;
+            }
+
+            const rows = populatedEntries.map(person => {
+                const row = document.createElement('tr');
+                [person.name_1, person.name_2].forEach(name => {
+                    const cell = document.createElement('td');
+                    cell.textContent = String(name || '').trim() || '—';
+                    row.appendChild(cell);
+                });
+                return row;
+            });
+
+            tbody.replaceChildren(...rows);
+        }
+
         async function loadWeddingPartyDetails() {
             const status = document.getElementById('wedding-party-status');
 
@@ -906,12 +917,11 @@
                 setPartyName('bridesmen-name', findRole(honorGroup, ['Bridesman', 'Bridesmen'])?.name_1);
 
                 const principalRows = sortPartyRows(groupRows('PRINCIPAL SPONSORS'));
-                document.querySelectorAll('#principal-sponsors-body tr').forEach((row, index) => {
-                    const person = principalRows[index];
-                    const cells = row.querySelectorAll('td');
-                    cells[0].textContent = person ? (person.name_1 || 'Name to be added') : 'Name to be added';
-                    cells[1].textContent = person ? (person.name_2 || 'Name to be added') : 'Name to be added';
-                });
+                renderNamePairTable(
+                    'principal-sponsors-body',
+                    principalRows,
+                    'No principal sponsor names have been added yet.'
+                );
 
                 [
                     ['Candle Sponsor', 'candle-sponsor-names'],
@@ -923,12 +933,11 @@
                 });
 
                 const attendantRows = sortPartyRows(groupRows('GROOMSMEN AND BRIDESMAIDS'));
-                document.querySelectorAll('#attendants-body tr').forEach((row, index) => {
-                    const person = attendantRows[index];
-                    const cells = row.querySelectorAll('td');
-                    cells[0].textContent = person ? (person.name_1 || 'Name to be added') : 'Name to be added';
-                    cells[1].textContent = person ? (person.name_2 || 'Name to be added') : 'Name to be added';
-                });
+                renderNamePairTable(
+                    'attendants-body',
+                    attendantRows,
+                    'No groomsman or bridesmaid names have been added yet.'
+                );
 
                 status.hidden = true;
             } catch (error) {
