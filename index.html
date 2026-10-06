@@ -722,6 +722,7 @@
             if (!panel || !toggle || !playButton || !list || !playlist.length) return;
 
             let currentTrack = 0;
+            let pageIsActive = document.visibilityState !== 'hidden';
             audio.preload = 'metadata';
             audio.autoplay = true;
             audio.volume = 0.38;
@@ -744,18 +745,30 @@
             };
 
             const playAudio = () => {
+                if (!pageIsActive) {
+                    status.textContent = 'Paused while you are away. Tap Play to resume.';
+                    return;
+                }
                 const attempt = audio.play();
                 if (attempt && typeof attempt.then === 'function') {
                     attempt.then(() => {
                         status.textContent = 'Now playing';
                         updatePlaybackDisplay();
                     }).catch(() => {
-                        status.textContent = audio.error
-                            ? 'Could not load the music file.'
-                            : 'Autoplay was blocked. Tap Play to listen.';
+                        status.textContent = !pageIsActive
+                            ? 'Paused while you are away. Tap Play to resume.'
+                            : audio.error
+                                ? 'Could not load the music file.'
+                                : 'Autoplay was blocked. Tap Play to listen.';
                         updatePlaybackDisplay();
                     });
                 }
+            };
+
+            const pauseWhenInactive = () => {
+                pageIsActive = false;
+                if (!audio.paused) audio.pause();
+                status.textContent = 'Paused while you are away. Tap Play to resume.';
             };
 
             const loadTrack = (index, startPlaying) => {
@@ -812,6 +825,17 @@
                 status.textContent = 'Could not load the music file.';
                 updatePlaybackDisplay();
             });
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'hidden') {
+                    pauseWhenInactive();
+                } else {
+                    // Resume permission only; do not restart playback automatically.
+                    pageIsActive = true;
+                }
+            });
+            window.addEventListener('blur', pauseWhenInactive);
+            window.addEventListener('focus', () => { pageIsActive = true; });
+            window.addEventListener('pagehide', pauseWhenInactive);
 
             updateTrackDisplay();
             loadTrack(0, false);
