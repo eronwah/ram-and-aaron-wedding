@@ -713,6 +713,14 @@
                         document.getElementById('lookup-section').style.display = 'none';
                         document.getElementById('already-responded-section').style.display = 'block';
                     } else {
+                        // Each matched guest starts with a fresh, enabled RSVP form.
+                        const submitButton = document.querySelector('#response-section button.form-submit-btn');
+                        submitButton.disabled = false;
+                        document.querySelectorAll('input[name="attending"]').forEach(radio => radio.checked = false);
+                        document.getElementById('guest-count-section').style.display = 'none';
+                        document.getElementById('confirmedGuests').innerHTML = '';
+                        document.getElementById('guest-names-container').innerHTML = '';
+                        document.getElementById('submit-msg').innerText = '';
                         document.getElementById('lookup-section').style.display = 'none';
                         document.getElementById('response-section').style.display = 'block';
                         document.getElementById('welcome-msg').innerText = `Hello, ${data.firstName} ${data.lastName}!`;
@@ -854,11 +862,13 @@
             document.getElementById('lastName').value = '';
             document.getElementById('search-msg').innerText = '';
             document.getElementById('submit-msg').innerText = '';
+            document.querySelector('#response-section button.form-submit-btn').disabled = false;
             
             const radios = document.querySelectorAll('input[name="attending"]');
             radios.forEach(radio => radio.checked = false);
             
             document.getElementById('guest-count-section').style.display = 'none';
+            document.getElementById('confirmedGuests').innerHTML = '';
             document.getElementById('guest-names-container').innerHTML = '';
         }
 
