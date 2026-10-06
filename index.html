@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=19">
+    <link rel="stylesheet" href="style.css?v=20">
 </head>
 <body>
 
@@ -51,6 +51,7 @@
         <!-- Full navigation menu, used when desktop links do not fit and on mobile -->
         <div class="nav-links" id="navLinks">
             <a href="#home" onclick="closeMenu()">Home</a>
+            <a href="#our-story" onclick="closeMenu()">Our Story</a>
             <a href="#venue" onclick="closeMenu()">Venue</a>
             <a href="#details" onclick="closeMenu()">Details</a>
             <a href="#wedding-party" onclick="closeMenu()">Wedding Party</a>
@@ -461,6 +462,17 @@
         </a>
     </section>
 
+    <footer id="site-footer" class="site-footer">
+        <div class="footer-signature" aria-label="Aaron and Ram">
+            <span class="footer-name">Aaron</span>
+            <span class="footer-divider" aria-hidden="true">|</span>
+            <img src="monogram.png" alt="Aaron and Ram monogram">
+            <span class="footer-divider" aria-hidden="true">|</span>
+            <span class="footer-name">Ram</span>
+        </div>
+        <p class="footer-date">July 28, 2027</p>
+    </footer>
+
     <!-- IMAGE MODAL -->
     <div id="image-modal" class="modal-overlay" onclick="closeImageModal()">
         <span class="close-modal-btn" onclick="closeImageModal()">&times;</span>
@@ -527,6 +539,44 @@
                 nav.classList.remove('nav-scrolled');
             }
         });
+
+        function setupActiveNavigation() {
+            const nav = document.getElementById('navbar');
+            const sectionIds = ['home', 'our-story', 'venue', 'details', 'wedding-party', 'rsvp', 'faq'];
+            let scheduled = false;
+
+            const updateActiveLink = () => {
+                if (scheduled) return;
+                scheduled = true;
+                window.requestAnimationFrame(() => {
+                    const marker = nav.getBoundingClientRect().height + 22;
+                    let activeId = 'home';
+                    for (const id of sectionIds) {
+                        const section = document.getElementById(id);
+                        if (section && section.getBoundingClientRect().top <= marker) activeId = id;
+                    }
+
+                    nav.querySelectorAll('a[href^="#"]').forEach(link => {
+                        if (link.getAttribute('href') === `#${activeId}`) {
+                            link.setAttribute('aria-current', 'location');
+                        } else {
+                            link.removeAttribute('aria-current');
+                        }
+                    });
+
+                    const quickLinks = window.innerWidth <= 600
+                        ? nav.querySelectorAll('.mobile-nav-left a, .mobile-nav-right a')
+                        : nav.querySelectorAll('.desktop-nav-left a:not(.nav-item-hidden), .desktop-nav-right a:not(.nav-item-hidden)');
+                    const activeIsVisible = [...quickLinks].some(link => link.getAttribute('href') === `#${activeId}`);
+                    nav.classList.toggle('nav-current-in-menu', !activeIsVisible);
+                    scheduled = false;
+                });
+            };
+
+            window.addEventListener('scroll', updateActiveLink, { passive: true });
+            window.addEventListener('resize', updateActiveLink);
+            updateActiveLink();
+        }
 
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('nav-active');
@@ -626,7 +676,8 @@
         function setupBackToTopVisibility() {
             const backToTop = document.querySelector('.back-to-top');
             const details = document.getElementById('details');
-            if (!backToTop || !details) return;
+            const footer = document.getElementById('site-footer');
+            if (!backToTop || !details || !footer) return;
 
             let scheduled = false;
             const updateVisibility = () => {
@@ -635,7 +686,9 @@
 
                 window.requestAnimationFrame(() => {
                     const detailsTop = details.getBoundingClientRect().top + window.scrollY;
-                    const shouldShow = window.scrollY >= detailsTop - 90;
+                    const footerRect = footer.getBoundingClientRect();
+                    const footerIsInView = footerRect.top < window.innerHeight - 82 && footerRect.bottom > 0;
+                    const shouldShow = window.scrollY >= detailsTop - 90 && !footerIsInView;
                     backToTop.classList.toggle('is-visible', shouldShow);
                     backToTop.setAttribute('aria-hidden', String(!shouldShow));
                     backToTop.tabIndex = shouldShow ? 0 : -1;
@@ -1360,6 +1413,7 @@
         setupAccommodationDialog();
         loadAccommodationDetails();
         setupDressCodeCards();
+        setupActiveNavigation();
         setupBackToTopVisibility();
 
     </script>
