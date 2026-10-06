@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=14">
+    <link rel="stylesheet" href="style.css?v=15">
 </head>
 <body>
 
@@ -452,7 +452,7 @@
             </details>
         </div>
         
-        <a href="#home" class="back-to-top">
+        <a href="#home" class="back-to-top" aria-hidden="true" tabindex="-1">
             <svg viewBox="0 0 24 24">
                 <line x1="12" y1="19" x2="12" y2="5"></line>
                 <polyline points="5 12 12 5 19 12"></polyline>
@@ -595,6 +595,31 @@
 
         function closeContactModal() {
             document.getElementById('contact-modal').style.display = 'none';
+        }
+
+        function setupBackToTopVisibility() {
+            const backToTop = document.querySelector('.back-to-top');
+            const details = document.getElementById('details');
+            if (!backToTop || !details) return;
+
+            let scheduled = false;
+            const updateVisibility = () => {
+                if (scheduled) return;
+                scheduled = true;
+
+                window.requestAnimationFrame(() => {
+                    const detailsTop = details.getBoundingClientRect().top + window.scrollY;
+                    const shouldShow = window.scrollY >= detailsTop - 90;
+                    backToTop.classList.toggle('is-visible', shouldShow);
+                    backToTop.setAttribute('aria-hidden', String(!shouldShow));
+                    backToTop.tabIndex = shouldShow ? 0 : -1;
+                    scheduled = false;
+                });
+            };
+
+            window.addEventListener('scroll', updateVisibility, { passive: true });
+            window.addEventListener('resize', updateVisibility);
+            updateVisibility();
         }
 
         const weddingDate = new Date("July 28, 2027 15:00:00").getTime();
@@ -1299,6 +1324,7 @@
         setupAccommodationDialog();
         loadAccommodationDetails();
         setupDressCodeCards();
+        setupBackToTopVisibility();
 
     </script>
 </body>
