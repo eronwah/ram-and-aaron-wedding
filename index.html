@@ -705,10 +705,7 @@
             document.getElementById('contact-modal').style.display = 'none';
         }
 
-        function setupMusicPlayer() {
-            const playlist = [
-                { title: 'Dive', artist: 'Olivia Dean', src: 'assets/music/Dive - Olivia Dean.mp3' }
-            ];
+        async function setupMusicPlayer() {
             const audio = new Audio();
             const panel = document.getElementById('music-panel');
             const toggle = document.getElementById('music-toggle');
@@ -719,13 +716,16 @@
             const status = document.getElementById('music-status');
             const list = document.getElementById('music-track-list');
             const widget = document.getElementById('music-widget');
-            if (!panel || !toggle || !playButton || !list || !playlist.length) return;
+            const closeButton = document.getElementById('music-close');
+            if (!panel || !toggle || !playButton || !list || !widget || !closeButton) return;
 
+            let playlist = [];
             let currentTrack = 0;
             let pageIsActive = document.visibilityState !== 'hidden';
             audio.preload = 'metadata';
             audio.autoplay = true;
             audio.volume = 0.38;
+            playButton.disabled = true;
 
             const updateTrackDisplay = () => {
                 const track = playlist[currentTrack];
@@ -771,9 +771,58 @@
                 status.textContent = 'Paused while you are away. Tap Play to resume.';
             };
 
+            const setPanelOpen = (open) => {
+                panel.classList.toggle('is-open', open);
+                panel.setAttribute('aria-hidden', String(!open));
+                panel.inert = !open;
+                toggle.setAttribute('aria-expanded', String(open));
+                toggle.setAttribute('aria-label', open ? 'Close music player' : 'Open music player');
+            };
+
+            toggle.addEventListener('click', () => setPanelOpen(!panel.classList.contains('is-open')));
+            closeButton.addEventListener('click', () => setPanelOpen(false));
+            playButton.addEventListener('click', () => {
+                if (audio.paused) {
+                    status.textContent = 'Starting music…';
+                    playAudio();
+                } else {
+                    audio.pause();
+                    status.textContent = 'Paused';
+                }
+            });
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'hidden') {
+                    pauseWhenInactive();
+                } else {
+                    // Becoming visible allows playback on a new user tap; it never resumes by itself.
+                    pageIsActive = true;
+                }
+            });
+            window.addEventListener('blur', pauseWhenInactive);
+            window.addEventListener('focus', () => { pageIsActive = true; });
+            window.addEventListener('pagehide', pauseWhenInactive);
+
+            try {
+                const response = await fetch(new URL('assets/music/playlist.json', document.baseURI), { cache: 'no-store' });
+                if (!response.ok) throw new Error(`Playlist request failed (${response.status}).`);
+                const tracks = await response.json();
+                if (!Array.isArray(tracks)) throw new Error('Playlist data must be a list.');
+                playlist = tracks.filter(track => track && typeof track.title === 'string' && typeof track.src === 'string');
+            } catch (error) {
+                status.textContent = 'The playlist could not be loaded. Please try again later.';
+                playButton.disabled = previousButton.disabled = nextButton.disabled = true;
+                return;
+            }
+
+            if (!playlist.length) {
+                status.textContent = 'No music files found in the playlist yet.';
+                playButton.disabled = previousButton.disabled = nextButton.disabled = true;
+                return;
+            }
+
             const loadTrack = (index, startPlaying) => {
                 currentTrack = (index + playlist.length) % playlist.length;
-                audio.src = playlist[currentTrack].src;
+                audio.src = new URL(playlist[currentTrack].src, document.baseURI).href;
                 audio.load();
                 updateTrackDisplay();
                 if (startPlaying) {
@@ -784,37 +833,19 @@
                 }
             };
 
-            const setPanelOpen = (open) => {
-                panel.classList.toggle('is-open', open);
-                panel.setAttribute('aria-hidden', String(!open));
-                panel.inert = !open;
-                toggle.setAttribute('aria-expanded', String(open));
-                toggle.setAttribute('aria-label', open ? 'Close music player' : 'Open music player');
-            };
-
             playlist.forEach((track, index) => {
                 const item = document.createElement('li');
                 const songButton = document.createElement('button');
                 songButton.type = 'button';
                 songButton.innerHTML = `<span class="music-list-play" aria-hidden="true">♪</span><span class="music-list-copy"><strong></strong><small></small></span>`;
                 songButton.querySelector('strong').textContent = track.title;
-                songButton.querySelector('small').textContent = track.artist;
+                songButton.querySelector('small').textContent = track.artist || 'Wedding playlist';
                 songButton.addEventListener('click', () => loadTrack(index, true));
                 item.appendChild(songButton);
                 list.appendChild(item);
             });
 
-            toggle.addEventListener('click', () => setPanelOpen(!panel.classList.contains('is-open')));
-            document.getElementById('music-close').addEventListener('click', () => setPanelOpen(false));
-            playButton.addEventListener('click', () => {
-                if (audio.paused) {
-                    status.textContent = 'Starting music…';
-                    playAudio();
-                } else {
-                    audio.pause();
-                    status.textContent = 'Paused';
-                }
-            });
+            playButton.disabled = false;
             previousButton.addEventListener('click', () => loadTrack(currentTrack - 1, true));
             nextButton.addEventListener('click', () => loadTrack(currentTrack + 1, true));
             previousButton.disabled = nextButton.disabled = playlist.length < 2;
@@ -825,17 +856,6 @@
                 status.textContent = 'Could not load the music file.';
                 updatePlaybackDisplay();
             });
-            document.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'hidden') {
-                    pauseWhenInactive();
-                } else {
-                    // Resume permission only; do not restart playback automatically.
-                    pageIsActive = true;
-                }
-            });
-            window.addEventListener('blur', pauseWhenInactive);
-            window.addEventListener('focus', () => { pageIsActive = true; });
-            window.addEventListener('pagehide', pauseWhenInactive);
 
             updateTrackDisplay();
             loadTrack(0, false);
