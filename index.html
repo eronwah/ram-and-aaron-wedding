@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=16">
+    <link rel="stylesheet" href="style.css?v=18">
 </head>
 <body>
 
@@ -107,7 +107,7 @@
                 <p style="color: #4a5568; margin: 15px 0 25px 0; font-size: 0.95em; line-height: 1.6;">
                     Ayala Westgrove Heights, South Blvd,<br>Silang, 4118 Cavite
                 </p>
-                <a href="https://maps.app.goo.gl/S6TyCWT5BRZ5Q8U66" target="_blank" rel="noopener noreferrer" class="rsvp-btn rsvp-btn-secondary" style="padding: 12px 20px; font-size: 0.8em; display: inline-block;">
+                <a href="https://maps.app.goo.gl/S6TyCWT5BRZ5Q8U66" target="_blank" rel="noopener noreferrer" class="rsvp-btn rsvp-btn-secondary venue-map-button">
                     View on Google Maps
                 </a>
             </div>
@@ -119,7 +119,7 @@
                 <p style="color: #4a5568; margin: 15px 0 25px 0; font-size: 0.95em; line-height: 1.6;">
                     Silang, Cavite
                 </p>
-                <a href="https://maps.app.goo.gl/7rUXzCJksbCY1UrXA" target="_blank" rel="noopener noreferrer" class="rsvp-btn rsvp-btn-secondary" style="padding: 12px 20px; font-size: 0.8em; display: inline-block;">
+                <a href="https://maps.app.goo.gl/7rUXzCJksbCY1UrXA" target="_blank" rel="noopener noreferrer" class="rsvp-btn rsvp-btn-secondary venue-map-button">
                     View on Google Maps
                 </a>
             </div>
@@ -224,7 +224,7 @@
                     <button type="button" class="accommodation-dialog-close" aria-label="Close accommodation details">&times;</button>
                     <h4 id="accommodation-dialog-title"></h4>
                     <dl id="accommodation-dialog-details" class="accommodation-dialog-details"></dl>
-                    <a id="accommodation-dialog-map" class="accommodation-map-button" target="_blank" rel="noopener noreferrer" hidden>Open Map</a>
+                    <a id="accommodation-dialog-map" class="rsvp-btn rsvp-btn-secondary accommodation-map-button" target="_blank" rel="noopener noreferrer" hidden>Open Map</a>
                 </dialog>
             </section>
             <section class="details-followup-section">
@@ -1162,7 +1162,7 @@
                             const mapUrl = getGoogleMapsUrl(place[key]);
                             if (mapUrl) {
                                 const button = document.createElement('a');
-                                button.className = 'accommodation-map-button';
+                                button.className = 'rsvp-btn rsvp-btn-secondary accommodation-map-button';
                                 button.href = mapUrl;
                                 button.target = '_blank';
                                 button.rel = 'noopener noreferrer';

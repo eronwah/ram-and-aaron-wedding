@@ -263,40 +263,41 @@ nav#navbar {
 
 /* Home calls to action: RSVP gets the visual emphasis. */
 #home .hero-buttons { gap: 14px; }
-#home .hero-buttons .rsvp-btn {
+.rsvp-btn {
     min-width: 138px;
     padding: 13px 23px;
     border-radius: 999px;
     font-size: 0.82em;
     font-weight: 500;
     letter-spacing: 0.1em;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, background-color 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 }
-#home .hero-buttons .rsvp-btn:not(.rsvp-btn-secondary) {
+.rsvp-btn:not(.rsvp-btn-secondary) {
     border: 1px solid transparent;
     background: linear-gradient(135deg, #526a7e 0%, #263b4c 100%);
     color: #fff;
     box-shadow: 0 7px 18px rgba(38, 59, 76, 0.2);
 }
-#home .hero-buttons .rsvp-btn.rsvp-btn-secondary {
+.rsvp-btn.rsvp-btn-secondary {
     border: 1px solid #cbd5e1;
     background: #fff;
     color: #2c3e50;
     box-shadow: 0 3px 10px rgba(38, 59, 76, 0.06);
 }
-#home .hero-buttons .rsvp-btn:not(.rsvp-btn-secondary):hover {
+.rsvp-btn:not(.rsvp-btn-secondary):hover {
     background: linear-gradient(135deg, #60788c 0%, #30495d 100%);
     color: #fff;
     box-shadow: 0 10px 22px rgba(38, 59, 76, 0.24);
     transform: translateY(-2px);
 }
-#home .hero-buttons .rsvp-btn.rsvp-btn-secondary:hover {
+.rsvp-btn.rsvp-btn-secondary:hover {
     background: #f8fafc;
     color: #2c3e50;
     box-shadow: 0 5px 14px rgba(38, 59, 76, 0.1);
     transform: translateY(-2px);
 }
-#home .hero-buttons .rsvp-btn:focus-visible { outline: 2px solid #7b94a9; outline-offset: 3px; }
+.rsvp-btn:focus-visible { outline: 2px solid #7b94a9; outline-offset: 3px; }
+#home .hero-buttons .rsvp-btn { min-width: 138px; }
 
 /* Floating back-to-top appears after the visitor reaches Details. */
 #faq .back-to-top {
@@ -576,9 +577,7 @@ h2::after { content: ''; display: block; width: 50px; height: 1px; background-co
 .accommodation-table th:nth-child(3),
 .accommodation-table th:nth-child(4) { width: 17%; }
 .accommodation-table th:nth-child(5) { width: 20%; }
-.accommodation-map-button { display: inline-block; padding: 8px 12px; border: 1px solid #2c3e50; color: #2c3e50; font-size: 0.78em; letter-spacing: 0.04em; text-decoration: none; text-transform: uppercase; transition: background-color 0.2s ease, color 0.2s ease; }
-.accommodation-map-button:hover,
-.accommodation-map-button:focus-visible { background: #2c3e50; color: #fff; }
+.accommodation-map-button { display: inline-block; min-width: 0; padding: 10px 18px; font-size: 0.76em; }
 .accommodation-map-button[hidden] { display: none; }
 .accommodation-mobile-list { display: none; }
 .accommodation-place-button { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-width: 0; padding: 15px 16px; border: 1px solid #dedfdd; background: #fff; color: #2c3e50; font: inherit; font-size: 0.9em; text-align: left; cursor: pointer; }
@@ -627,10 +626,8 @@ p { font-size: 0.95em; font-weight: 300; }
 .input-group input { width: 100%; padding: 12px 0; border: none; border-bottom: 1px solid #cbd5e1; background: transparent; font-family: 'Montserrat', sans-serif; font-size: 1em; color: #2c3e50; transition: border-color 0.3s ease; }
 .input-group input:focus { outline: none; border-bottom: 1px solid #2c3e50; }
 
-.rsvp-btn { display: inline-block; text-decoration: none; text-align: center; background-color: #2c3e50; color: #ffffff; border: 1px solid #2c3e50; padding: 16px 30px; font-size: 0.9em; font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.4s ease; }
-.rsvp-btn:hover { background-color: #ffffff; color: #2c3e50; }
-.rsvp-btn-secondary { background-color: transparent; color: #2c3e50; border: 1px solid #2c3e50; }
-.rsvp-btn-secondary:hover { background-color: #f8f9fa; }
+.rsvp-btn { display: inline-block; text-decoration: none; text-align: center; font-family: 'Montserrat', sans-serif; text-transform: uppercase; cursor: pointer; }
+.rsvp-btn:disabled { opacity: 0.65; cursor: wait; transform: none; }
 .form-submit-btn { width: 100%; margin-top: 20px; }
 .error-text { color: #e74c3c; }
 .message { text-align: center; margin-top: 20px; font-style: italic; font-size: 0.9em; }
@@ -1304,4 +1301,47 @@ p { font-size: 0.95em; font-weight: 300; }
         letter-spacing: 0 !important;
         line-height: 1.4 !important;
     }
+}
+
+/* Consistent pill buttons matching the Home page RSVP and Details actions. */
+.rsvp-btn {
+    min-width: 138px;
+    padding: 13px 23px;
+    border-radius: 999px;
+    font-size: 0.82em;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+.rsvp-btn:not(.rsvp-btn-secondary) {
+    border: 1px solid transparent;
+    background: linear-gradient(135deg, #526a7e 0%, #263b4c 100%);
+    color: #fff;
+    box-shadow: 0 7px 18px rgba(38, 59, 76, 0.2);
+}
+.rsvp-btn.rsvp-btn-secondary {
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    color: #2c3e50;
+    box-shadow: 0 3px 10px rgba(38, 59, 76, 0.06);
+}
+.rsvp-btn:not(.rsvp-btn-secondary):hover {
+    background: linear-gradient(135deg, #60788c 0%, #30495d 100%);
+    color: #fff;
+    box-shadow: 0 10px 22px rgba(38, 59, 76, 0.24);
+    transform: translateY(-2px);
+}
+.rsvp-btn.rsvp-btn-secondary:hover {
+    background: #f8fafc;
+    color: #2c3e50;
+    box-shadow: 0 5px 14px rgba(38, 59, 76, 0.1);
+    transform: translateY(-2px);
+}
+.rsvp-btn:focus-visible { outline: 2px solid #7b94a9; outline-offset: 3px; }
+.rsvp-btn:disabled { opacity: 0.65; cursor: wait; transform: none; }
+.venue-map-button,
+.accommodation-map-button { min-width: 0; padding: 10px 18px; font-size: 0.76em; }
+.accommodation-map-button[hidden] { display: none; }
+@media (max-width: 600px) {
+    #home .hero-buttons .rsvp-btn { min-width: 124px; padding: 12px 18px; font-size: 0.76em; }
 }
