@@ -795,7 +795,7 @@
             let lastScrollY = window.scrollY;
             let scrollTravel = 0;
             let lastScrollAt = 0;
-            let scrollCloseTimer;
+            let scrollResetTimer;
             window.addEventListener('scroll', () => {
                 const currentScrollY = window.scrollY;
                 const now = performance.now();
@@ -804,16 +804,17 @@
                 lastScrollY = currentScrollY;
                 lastScrollAt = now;
 
-                window.clearTimeout(scrollCloseTimer);
+                window.clearTimeout(scrollResetTimer);
                 if (!panel.classList.contains('is-open')) {
                     scrollTravel = 0;
                     return;
                 }
 
                 if (scrollTravel >= 220) {
-                    scrollCloseTimer = window.setTimeout(() => setPanelOpen(false), 450);
+                    setPanelOpen(false);
+                    scrollTravel = 0;
                 } else {
-                    scrollCloseTimer = window.setTimeout(() => { scrollTravel = 0; }, 700);
+                    scrollResetTimer = window.setTimeout(() => { scrollTravel = 0; }, 700);
                 }
             }, { passive: true });
 
