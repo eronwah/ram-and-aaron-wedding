@@ -791,6 +791,47 @@
                 toggle.setAttribute('aria-label', open ? 'Close music player' : 'Open music player');
             };
 
+            // Minimize after a meaningful scroll, while ignoring short accidental scrolls.
+            let lastScrollY = window.scrollY;
+            let scrollTravel = 0;
+            let lastScrollAt = 0;
+            let scrollCloseTimer;
+            window.addEventListener('scroll', () => {
+                const currentScrollY = window.scrollY;
+                const now = performance.now();
+                if (now - lastScrollAt > 700) scrollTravel = 0;
+                scrollTravel += Math.abs(currentScrollY - lastScrollY);
+                lastScrollY = currentScrollY;
+                lastScrollAt = now;
+
+                window.clearTimeout(scrollCloseTimer);
+                if (!panel.classList.contains('is-open')) {
+                    scrollTravel = 0;
+                    return;
+                }
+
+                if (scrollTravel >= 220) {
+                    scrollCloseTimer = window.setTimeout(() => setPanelOpen(false), 450);
+                } else {
+                    scrollCloseTimer = window.setTimeout(() => { scrollTravel = 0; }, 700);
+                }
+            }, { passive: true });
+
+            // Close for site navigation and actions, but leave the player's own controls alone.
+            document.addEventListener('click', event => {
+                if (!panel.classList.contains('is-open') || !(event.target instanceof Element)) return;
+                const control = event.target.closest('button, a[href], input[type="button"], input[type="submit"]');
+                if (control && !widget.contains(control)) setPanelOpen(false);
+            }, true);
+
+            const minimizeForRsvpEntry = event => {
+                if (event.target instanceof Element && event.target.closest('#rsvp input, #rsvp textarea, #rsvp select')) {
+                    setPanelOpen(false);
+                }
+            };
+            document.addEventListener('focusin', minimizeForRsvpEntry);
+            document.addEventListener('input', minimizeForRsvpEntry);
+
             toggle.addEventListener('click', () => setPanelOpen(!panel.classList.contains('is-open')));
             closeButton.addEventListener('click', () => setPanelOpen(false));
             playButton.addEventListener('click', () => {
