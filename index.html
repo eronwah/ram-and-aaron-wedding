@@ -799,7 +799,7 @@
             window.addEventListener('scroll', () => {
                 const currentScrollY = window.scrollY;
                 const now = performance.now();
-                if (now - lastScrollAt > 700) scrollTravel = 0;
+                if (now - lastScrollAt > 280) scrollTravel = 0;
                 scrollTravel += Math.abs(currentScrollY - lastScrollY);
                 lastScrollY = currentScrollY;
                 lastScrollAt = now;
@@ -810,11 +810,11 @@
                     return;
                 }
 
-                if (scrollTravel >= 220) {
+                if (scrollTravel >= 120) {
                     setPanelOpen(false);
                     scrollTravel = 0;
                 } else {
-                    scrollResetTimer = window.setTimeout(() => { scrollTravel = 0; }, 700);
+                    scrollResetTimer = window.setTimeout(() => { scrollTravel = 0; }, 280);
                 }
             }, { passive: true });
 
