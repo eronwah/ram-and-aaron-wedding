@@ -705,7 +705,7 @@
             document.getElementById('contact-modal').style.display = 'none';
         }
 
-        async function setupMusicPlayer() {
+        function setupMusicPlayer() {
             const audio = new Audio();
             const panel = document.getElementById('music-panel');
             const toggle = document.getElementById('music-toggle');
@@ -719,13 +719,23 @@
             const closeButton = document.getElementById('music-close');
             if (!panel || !toggle || !playButton || !list || !widget || !closeButton) return;
 
-            let playlist = [];
+            const playlist = [
+                {
+                    title: 'Dive',
+                    artist: 'Olivia Dean',
+                    src: 'assets/music/Dive - Olivia Dean.mp3'
+                },
+                {
+                    title: 'Pag Ibig ng Ikaw at Ako',
+                    artist: 'Earl Agustin',
+                    src: 'assets/music/Pag Ibig ng Ikaw at Ako - Earl Agustin.mp3'
+                }
+            ];
             let currentTrack = 0;
             let pageIsActive = document.visibilityState !== 'hidden';
             audio.preload = 'metadata';
             audio.autoplay = true;
             audio.volume = 0.38;
-            playButton.disabled = true;
 
             const updateTrackDisplay = () => {
                 const track = playlist[currentTrack];
@@ -801,24 +811,6 @@
             window.addEventListener('blur', pauseWhenInactive);
             window.addEventListener('focus', () => { pageIsActive = true; });
             window.addEventListener('pagehide', pauseWhenInactive);
-
-            try {
-                const response = await fetch(new URL('assets/music/playlist.json', document.baseURI), { cache: 'no-store' });
-                if (!response.ok) throw new Error(`Playlist request failed (${response.status}).`);
-                const tracks = await response.json();
-                if (!Array.isArray(tracks)) throw new Error('Playlist data must be a list.');
-                playlist = tracks.filter(track => track && typeof track.title === 'string' && typeof track.src === 'string');
-            } catch (error) {
-                status.textContent = 'The playlist could not be loaded. Please try again later.';
-                playButton.disabled = previousButton.disabled = nextButton.disabled = true;
-                return;
-            }
-
-            if (!playlist.length) {
-                status.textContent = 'No music files found in the playlist yet.';
-                playButton.disabled = previousButton.disabled = nextButton.disabled = true;
-                return;
-            }
 
             const loadTrack = (index, startPlaying) => {
                 currentTrack = (index + playlist.length) % playlist.length;
