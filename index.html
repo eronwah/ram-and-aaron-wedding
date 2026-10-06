@@ -707,6 +707,67 @@
             document.getElementById('contact-modal').style.display = 'none';
         }
 
+        function setupRsvpKeyboardVisibility() {
+            const mobileViewport = window.matchMedia('(max-width: 768px)');
+            const visualViewport = window.visualViewport;
+            let activeField = null;
+            let focusTimer;
+
+            const keepFieldAboveKeyboard = () => {
+                if (!mobileViewport.matches || !activeField || !activeField.isConnected) return;
+                const viewportTop = visualViewport ? visualViewport.offsetTop : 0;
+                const viewportBottom = viewportTop + (visualViewport ? visualViewport.height : window.innerHeight);
+                const rect = activeField.getBoundingClientRect();
+                const bottomPadding = 24;
+                let scrollAmount = 0;
+
+                if (rect.bottom > viewportBottom - bottomPadding) {
+                    scrollAmount = rect.bottom - (viewportBottom - bottomPadding);
+                } else if (rect.top < viewportTop + 12) {
+                    scrollAmount = rect.top - (viewportTop + 12);
+                }
+
+                if (Math.abs(scrollAmount) > 3) {
+                    window.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+                }
+            };
+
+            const scheduleFieldPosition = (delay = 120) => {
+                window.clearTimeout(focusTimer);
+                focusTimer = window.setTimeout(() => window.requestAnimationFrame(keepFieldAboveKeyboard), delay);
+            };
+
+            document.addEventListener('focusin', event => {
+                if (!(event.target instanceof Element)) return;
+                const field = event.target.closest('#lookup-section input, #guest-count-section select, .companion-name-input');
+                if (!field) return;
+                activeField = field;
+                scheduleFieldPosition();
+            });
+
+            document.addEventListener('focusout', event => {
+                if (event.target === activeField) {
+                    window.setTimeout(() => {
+                        if (document.activeElement !== activeField) activeField = null;
+                    }, 150);
+                }
+            });
+
+            if (visualViewport) {
+                visualViewport.addEventListener('resize', () => scheduleFieldPosition(60));
+            }
+
+            const guestCount = document.getElementById('confirmedGuests');
+            guestCount?.addEventListener('change', () => {
+                if (!mobileViewport.matches) return;
+                const firstCompanionField = document.querySelector('.companion-name-input');
+                if (!firstCompanionField) return;
+                firstCompanionField.focus({ preventScroll: true });
+                activeField = firstCompanionField;
+                scheduleFieldPosition(180);
+            });
+        }
+
         function setupMusicPlayer() {
             const audio = new Audio();
             const panel = document.getElementById('music-panel');
@@ -1641,6 +1702,7 @@
         setupDressCodeCards();
         setupActiveNavigation();
         setupMusicPlayer();
+        setupRsvpKeyboardVisibility();
         setupBackToTopVisibility();
 
     </script>
