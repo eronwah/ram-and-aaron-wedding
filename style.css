@@ -667,6 +667,16 @@ p { font-size: 0.95em; font-weight: 300; }
 /* MODALS */
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26, 37, 47, 0.85); backdrop-filter: blur(8px); z-index: 10005; align-items: center; justify-content: center; padding: 20px; }
 .modal-content { background: #ffffff; padding: 40px; width: 100%; max-width: 450px; text-align: center; border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); animation: zoomIn 0.3s ease; position: relative; }
+.rsvp-contact-list { display: grid; gap: 10px; margin: 24px 0; text-align: left; }
+.rsvp-contact-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 16px; border: 1px solid #e2e8f0; border-radius: 12px; background: #fbfcfd; }
+.rsvp-contact-person { display: grid; gap: 4px; min-width: 0; color: #1a252f; font-family: 'Montserrat', sans-serif; }
+.rsvp-contact-person strong { font-size: 0.75em; letter-spacing: 0.08em; text-transform: uppercase; }
+.rsvp-contact-number { color: #2c3e50; font-family: 'Playfair Display', serif; font-size: 1.08em; text-decoration: none; white-space: nowrap; }
+.rsvp-contact-number:hover { text-decoration: underline; }
+.rsvp-contact-actions { display: flex; flex: 0 0 auto; gap: 8px; }
+.rsvp-contact-actions a { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #cbd5e1; border-radius: 50%; background: #fff; color: #2c3e50; transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease; }
+.rsvp-contact-actions a:hover, .rsvp-contact-actions a:focus-visible { background: #2c3e50; color: #fff; transform: translateY(-1px); }
+.rsvp-contact-actions svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .modal-content-img { display: block; margin: auto; max-width: 95%; max-height: 90vh; border-radius: 6px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); animation: zoomIn 0.3s ease; object-fit: contain; }
 .close-modal-btn { position: absolute; top: 20px; right: 30px; font-size: 45px; color: #ffffff; cursor: pointer; transition: color 0.3s ease; z-index: 10006; }
 .close-modal-btn:hover { color: #cbd5e1; }
@@ -1342,6 +1352,13 @@ p { font-size: 0.95em; font-weight: 300; }
 .venue-map-button,
 .accommodation-map-button { min-width: 0; padding: 10px 18px; font-size: 0.76em; }
 .accommodation-map-button[hidden] { display: none; }
+@media (max-width: 480px) {
+    #contact-modal .modal-content { padding: 30px 20px; }
+    .rsvp-contact-row { gap: 8px; padding: 12px 10px; }
+    .rsvp-contact-number { font-size: 0.96em; }
+    .rsvp-contact-actions { gap: 5px; }
+    .rsvp-contact-actions a { width: 36px; height: 36px; }
+}
 @media (max-width: 600px) {
     #home .hero-buttons .rsvp-btn { min-width: 124px; padding: 12px 18px; font-size: 0.76em; }
 }
