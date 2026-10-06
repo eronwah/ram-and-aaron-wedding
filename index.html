@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=20">
+    <link rel="stylesheet" href="style.css?v=21">
 </head>
 <body>
 
@@ -518,6 +518,38 @@
         </div>
     </div>
 
+    <!-- FLOATING WEDDING MUSIC PLAYER -->
+    <div class="music-widget" id="music-widget">
+        <section class="music-panel" id="music-panel" aria-label="Wedding music player" aria-hidden="true" inert>
+            <div class="music-panel-heading">
+                <div>
+                    <p class="music-eyebrow">A little music</p>
+                    <h3>Our Playlist</h3>
+                </div>
+                <button class="music-close" id="music-close" type="button" aria-label="Close music player">&times;</button>
+            </div>
+            <p class="music-track-title" id="music-track-title">Wedding Song</p>
+            <p class="music-status" id="music-status" aria-live="polite">Trying to start the music…</p>
+            <div class="music-controls">
+                <button type="button" id="music-previous" aria-label="Play previous song" title="Previous">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 20 9 12l10-8v16ZM5 19V5"/></svg>
+                </button>
+                <button type="button" id="music-play" class="music-play-btn" aria-label="Play music" title="Play/Pause">
+                    <svg class="music-icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 12 7-12 7V5Z"/></svg>
+                    <svg class="music-icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5h3v14H8zM15 5h3v14h-3z"/></svg>
+                </button>
+                <button type="button" id="music-next" aria-label="Play next song" title="Next">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 4 10 8-10 8V4ZM19 5v14"/></svg>
+                </button>
+            </div>
+            <ol class="music-track-list" id="music-track-list" aria-label="Playlist"></ol>
+        </section>
+        <button class="music-fab" id="music-toggle" type="button" aria-label="Open music player" aria-controls="music-panel" aria-expanded="false" title="Wedding music">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13M9 18c0 1.1-1.6 2-3.5 2S2 19.1 2 18s1.6-2 3.5-2S9 16.9 9 18Zm12-2c0 1.1-1.6 2-3.5 2S14 17.1 14 16s1.6-2 3.5-2 3.5.9 3.5 2Z"/></svg>
+            <span class="music-fab-pulse" aria-hidden="true"></span>
+        </button>
+    </div>
+
     <!-- JavaScript Logic -->
     <script>
         // Auto scroll to top on refresh
@@ -671,6 +703,120 @@
 
         function closeContactModal() {
             document.getElementById('contact-modal').style.display = 'none';
+        }
+
+        function setupMusicPlayer() {
+            const playlist = [
+                { title: 'Dive', artist: 'Olivia Dean', src: 'assets/music/Dive - Olivia Dean.mp3' }
+            ];
+            const audio = new Audio();
+            const panel = document.getElementById('music-panel');
+            const toggle = document.getElementById('music-toggle');
+            const playButton = document.getElementById('music-play');
+            const previousButton = document.getElementById('music-previous');
+            const nextButton = document.getElementById('music-next');
+            const trackTitle = document.getElementById('music-track-title');
+            const status = document.getElementById('music-status');
+            const list = document.getElementById('music-track-list');
+            const widget = document.getElementById('music-widget');
+            if (!panel || !toggle || !playButton || !list || !playlist.length) return;
+
+            let currentTrack = 0;
+            audio.preload = 'metadata';
+            audio.autoplay = true;
+            audio.volume = 0.38;
+
+            const updateTrackDisplay = () => {
+                const track = playlist[currentTrack];
+                trackTitle.textContent = track.title;
+                list.querySelectorAll('button').forEach((button, index) => {
+                    const isCurrent = index === currentTrack;
+                    button.classList.toggle('is-current', isCurrent);
+                    button.setAttribute('aria-current', isCurrent ? 'true' : 'false');
+                });
+            };
+
+            const updatePlaybackDisplay = () => {
+                const playing = !audio.paused;
+                widget.classList.toggle('is-playing', playing);
+                playButton.setAttribute('aria-label', playing ? 'Pause music' : 'Play music');
+                playButton.title = playing ? 'Pause' : 'Play';
+            };
+
+            const playAudio = () => {
+                const attempt = audio.play();
+                if (attempt && typeof attempt.then === 'function') {
+                    attempt.then(() => {
+                        status.textContent = 'Now playing';
+                        updatePlaybackDisplay();
+                    }).catch(() => {
+                        status.textContent = audio.error
+                            ? 'Could not load the music file.'
+                            : 'Autoplay was blocked. Tap Play to listen.';
+                        updatePlaybackDisplay();
+                    });
+                }
+            };
+
+            const loadTrack = (index, startPlaying) => {
+                currentTrack = (index + playlist.length) % playlist.length;
+                audio.src = playlist[currentTrack].src;
+                audio.load();
+                updateTrackDisplay();
+                if (startPlaying) {
+                    status.textContent = 'Starting music…';
+                    playAudio();
+                } else {
+                    status.textContent = 'Ready to play';
+                }
+            };
+
+            const setPanelOpen = (open) => {
+                panel.classList.toggle('is-open', open);
+                panel.setAttribute('aria-hidden', String(!open));
+                panel.inert = !open;
+                toggle.setAttribute('aria-expanded', String(open));
+                toggle.setAttribute('aria-label', open ? 'Close music player' : 'Open music player');
+            };
+
+            playlist.forEach((track, index) => {
+                const item = document.createElement('li');
+                const songButton = document.createElement('button');
+                songButton.type = 'button';
+                songButton.innerHTML = `<span class="music-list-play" aria-hidden="true">♪</span><span class="music-list-copy"><strong></strong><small></small></span>`;
+                songButton.querySelector('strong').textContent = track.title;
+                songButton.querySelector('small').textContent = track.artist;
+                songButton.addEventListener('click', () => loadTrack(index, true));
+                item.appendChild(songButton);
+                list.appendChild(item);
+            });
+
+            toggle.addEventListener('click', () => setPanelOpen(!panel.classList.contains('is-open')));
+            document.getElementById('music-close').addEventListener('click', () => setPanelOpen(false));
+            playButton.addEventListener('click', () => {
+                if (audio.paused) {
+                    status.textContent = 'Starting music…';
+                    playAudio();
+                } else {
+                    audio.pause();
+                    status.textContent = 'Paused';
+                }
+            });
+            previousButton.addEventListener('click', () => loadTrack(currentTrack - 1, true));
+            nextButton.addEventListener('click', () => loadTrack(currentTrack + 1, true));
+            previousButton.disabled = nextButton.disabled = playlist.length < 2;
+            audio.addEventListener('play', updatePlaybackDisplay);
+            audio.addEventListener('pause', updatePlaybackDisplay);
+            audio.addEventListener('ended', () => loadTrack(currentTrack + 1, true));
+            audio.addEventListener('error', () => {
+                status.textContent = 'Could not load the music file.';
+                updatePlaybackDisplay();
+            });
+
+            updateTrackDisplay();
+            loadTrack(0, false);
+            status.textContent = 'Trying to start the music…';
+            playAudio();
         }
 
         function setupBackToTopVisibility() {
@@ -1414,6 +1560,7 @@
         loadAccommodationDetails();
         setupDressCodeCards();
         setupActiveNavigation();
+        setupMusicPlayer();
         setupBackToTopVisibility();
 
     </script>
