@@ -373,12 +373,20 @@
             <div id="lookup-section">
                 <p style="text-align: center; margin-bottom: 30px; font-family: 'Playfair Display', serif; font-size: 1.2em; color: #1a252f;">Please enter your name to find your invitation.</p>
                 <div class="input-group">
-                    <label>First Name</label>
-                    <input type="text" id="firstName" placeholder="e.g. John" required>
+                    <label for="firstName">First Name</label>
+                    <div class="rsvp-input-shell">
+                        <input type="text" id="firstName" class="rsvp-text-input" placeholder="e.g. John" required>
+                        <span class="rsvp-input-highlight" aria-hidden="true"></span>
+                        <span class="rsvp-input-bar" aria-hidden="true"></span>
+                    </div>
                 </div>
                 <div class="input-group">
-                    <label>Last Name</label>
-                    <input type="text" id="lastName" placeholder="e.g. Smith" required>
+                    <label for="lastName">Last Name</label>
+                    <div class="rsvp-input-shell">
+                        <input type="text" id="lastName" class="rsvp-text-input" placeholder="e.g. Smith" required>
+                        <span class="rsvp-input-highlight" aria-hidden="true"></span>
+                        <span class="rsvp-input-bar" aria-hidden="true"></span>
+                    </div>
                 </div>
                 <button class="rsvp-btn form-submit-btn" onclick="searchGuest()">Find Invitation</button>
                 <p id="search-msg" class="message error-text"></p>
@@ -1117,10 +1125,14 @@
             const count = parseInt(document.getElementById('confirmedGuests').value) || 0;
             
             for(let i = 0; i < count; i++) {
+                const fieldShell = document.createElement('div');
+                fieldShell.className = 'rsvp-companion-input-shell';
+
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.className = 'companion-name-input';
                 input.placeholder = `Name of Additional Guest ${i + 1} *`;
+                input.setAttribute('aria-label', input.placeholder);
                 input.style.width = '100%';
                 input.style.padding = '12px';
                 input.style.border = 'none';
@@ -1134,7 +1146,15 @@
                 input.addEventListener('focus', function() { this.style.borderBottom = '1px solid #2c3e50'; });
                 input.addEventListener('blur', function() { this.style.borderBottom = '1px solid #cbd5e1'; });
                 
-                container.appendChild(input);
+                const highlight = document.createElement('span');
+                highlight.className = 'rsvp-input-highlight';
+                highlight.setAttribute('aria-hidden', 'true');
+                const animatedBar = document.createElement('span');
+                animatedBar.className = 'rsvp-input-bar';
+                animatedBar.setAttribute('aria-hidden', 'true');
+
+                fieldShell.append(input, highlight, animatedBar);
+                container.appendChild(fieldShell);
             }
         }
 

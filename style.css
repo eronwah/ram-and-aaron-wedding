@@ -643,6 +643,97 @@ p { font-size: 0.95em; font-weight: 300; }
 .input-group input { width: 100%; padding: 12px 0; border: none; border-bottom: 1px solid #cbd5e1; background: transparent; font-family: 'Montserrat', sans-serif; font-size: 1em; color: #2c3e50; transition: border-color 0.3s ease; }
 .input-group input:focus { outline: none; border-bottom: 1px solid #2c3e50; }
 
+/* RSVP lookup input focus treatment: animated underline and subtle highlight. */
+#lookup-section .input-group > label {
+    transform-origin: left center;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+#lookup-section .input-group:focus-within > label {
+    color: #526a7e;
+    transform: translateY(-2px);
+}
+#lookup-section .rsvp-input-shell {
+    position: relative;
+    width: 100%;
+}
+#lookup-section .rsvp-input-shell .rsvp-text-input {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px 0;
+    border-bottom-color: #cbd5e1;
+    transition: border-color 0.2s ease;
+}
+#lookup-section .rsvp-input-shell .rsvp-text-input:focus {
+    border-bottom-color: transparent;
+}
+#guest-names-container .rsvp-companion-input-shell {
+    position: relative;
+    width: 100%;
+}
+#guest-names-container .companion-name-input:focus {
+    border-bottom-color: transparent !important;
+}
+#lookup-section .rsvp-input-bar,
+#guest-names-container .rsvp-input-bar {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    pointer-events: none;
+}
+#lookup-section .rsvp-input-bar::before,
+#lookup-section .rsvp-input-bar::after,
+#guest-names-container .rsvp-input-bar::before,
+#guest-names-container .rsvp-input-bar::after {
+    position: absolute;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: #526a7e;
+    content: "";
+    transition: width 0.22s ease;
+}
+#lookup-section .rsvp-input-bar::before,
+#guest-names-container .rsvp-input-bar::before { left: 50%; }
+#lookup-section .rsvp-input-bar::after,
+#guest-names-container .rsvp-input-bar::after { right: 50%; }
+#lookup-section .rsvp-text-input:focus ~ .rsvp-input-bar::before,
+#lookup-section .rsvp-text-input:focus ~ .rsvp-input-bar::after,
+#guest-names-container .companion-name-input:focus ~ .rsvp-input-bar::before,
+#guest-names-container .companion-name-input:focus ~ .rsvp-input-bar::after {
+    width: 50%;
+}
+#lookup-section .rsvp-input-highlight {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    width: 88px;
+    height: 58%;
+    pointer-events: none;
+    opacity: 0;
+}
+#guest-names-container .rsvp-input-highlight {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    width: 88px;
+    height: 58%;
+    pointer-events: none;
+    opacity: 0;
+}
+#lookup-section .rsvp-text-input:focus ~ .rsvp-input-highlight {
+    animation: rsvpInputHighlight 0.32s ease forwards;
+}
+#guest-names-container .companion-name-input:focus ~ .rsvp-input-highlight {
+    animation: rsvpInputHighlight 0.32s ease forwards;
+}
+@keyframes rsvpInputHighlight {
+    0% { background: rgba(82, 106, 126, 0.2); opacity: 0.5; }
+    100% { background: transparent; opacity: 0; }
+}
+
 .rsvp-btn { display: inline-block; text-decoration: none; text-align: center; font-family: 'Montserrat', sans-serif; text-transform: uppercase; cursor: pointer; }
 .rsvp-btn:disabled { opacity: 0.65; cursor: wait; transform: none; }
 .form-submit-btn { width: 100%; margin-top: 20px; }
