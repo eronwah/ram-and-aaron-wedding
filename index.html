@@ -1003,7 +1003,7 @@
             document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
         }, 1000);
 
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTjQCYlKwZ8li32nrH_GvKIXmULVGZtl39KG9Pz43MSIQN0SP3NCnLeDqJ2fIJXQaR/exec'; 
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZVi3vAMNZ75sLXkBoaZ6piPoaIH2peiZeCYAdwiJKYTCA53fErYyu2cZcDuwXoknJ/exec';
         
         let currentRow = 0;
         let extraCompanionsAllowed = 0;
@@ -1049,7 +1049,9 @@
                 const data = await response.json();
                 
                 if(data.result === 'success') {
-                    if(data.rsvpStatus) {
+                    const hasResponded = data.hasResponded === true ||
+                        (data.hasResponded === undefined && Boolean(data.rsvpStatus));
+                    if(hasResponded) {
                         document.getElementById('lookup-section').style.display = 'none';
                         document.getElementById('already-responded-section').style.display = 'block';
                     } else {
@@ -1063,7 +1065,8 @@
                         document.getElementById('submit-msg').innerText = '';
                         document.getElementById('lookup-section').style.display = 'none';
                         document.getElementById('response-section').style.display = 'block';
-                        document.getElementById('welcome-msg').innerText = `Hello, ${data.firstName} ${data.lastName}!`;
+                        const greetingName = String(data.nickname || '').trim() || String(data.firstName || '').trim();
+                        document.getElementById('welcome-msg').innerText = `Hello, ${greetingName}!`;
                         
                         currentRow = data.row; 
                         extraCompanionsAllowed = parseInt(data.guestCount) || 0; 
