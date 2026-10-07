@@ -1065,7 +1065,9 @@
                         document.getElementById('submit-msg').innerText = '';
                         document.getElementById('lookup-section').style.display = 'none';
                         document.getElementById('response-section').style.display = 'block';
-                        const greetingName = String(data.nickname || '').trim() || String(data.firstName || '').trim();
+                        const nickname = String(data.nickname ?? '').trim();
+                        const usableNickname = /^(undefined|null)$/i.test(nickname) ? '' : nickname;
+                        const greetingName = usableNickname || String(data.firstName || first).trim();
                         document.getElementById('welcome-msg').innerText = `Hello, ${greetingName}!`;
                         
                         currentRow = data.row; 
