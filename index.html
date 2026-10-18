@@ -318,7 +318,7 @@
             <section class="party-group">
                 <h3 class="party-group-title">Secondary Sponsors</h3>
                 <div class="secondary-sponsors-grid">
-                    <article class="secondary-sponsor-card">
+                    <article class="secondary-sponsor-card" data-secondary-sponsor="candle" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Candle Sponsor couple">
                         <svg class="secondary-emblem" viewBox="0 0 48 48" aria-hidden="true"><path d="M19 6h10v5l3 4v26H16V15l3-4z"></path><path d="M19 11h10M16 19h16M24 2c-3 3-2 5 0 7 2-2 3-4 0-7z"></path></svg>
                         <h4>Candle Sponsor</h4>
                         <div id="candle-sponsor-names" class="secondary-sponsor-names">
@@ -327,7 +327,7 @@
                             <div class="secondary-sponsor-name">Name 2</div>
                         </div>
                     </article>
-                    <article class="secondary-sponsor-card">
+                    <article class="secondary-sponsor-card" data-secondary-sponsor="veil" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Veil Sponsor couple">
                         <svg class="secondary-emblem" viewBox="0 0 48 48" aria-hidden="true"><path d="M8 10h32l-5 31H13z"></path><path d="M8 10c4 0 4 4 8 4s4-4 8-4 4 4 8 4 4-4 8-4M16 17l3 24m13-24-3 24"></path></svg>
                         <h4>Veil Sponsor</h4>
                         <div id="veil-sponsor-names" class="secondary-sponsor-names">
@@ -336,7 +336,7 @@
                             <div class="secondary-sponsor-name">Name 2</div>
                         </div>
                     </article>
-                    <article class="secondary-sponsor-card">
+                    <article class="secondary-sponsor-card" data-secondary-sponsor="cord" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Cord Sponsor couple">
                         <svg class="secondary-emblem" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 5v38M12 9l24 30M36 9 12 39"></path><path d="M19 5h10M19 43h10"></path></svg>
                         <h4>Cord Sponsor</h4>
                         <div id="cord-sponsor-names" class="secondary-sponsor-names">
@@ -359,6 +359,27 @@
             </section>
         </div>
     </section>
+
+    <dialog id="secondary-sponsor-dialog" class="secondary-sponsor-dialog" aria-labelledby="secondary-sponsor-dialog-title">
+        <button type="button" class="secondary-sponsor-dialog-close" aria-label="Close sponsor photos">&times;</button>
+        <h3 id="secondary-sponsor-dialog-title" class="secondary-sponsor-dialog-title"></h3>
+        <div class="secondary-sponsor-couple">
+            <figure class="secondary-sponsor-person">
+                <div class="secondary-sponsor-photo-frame">
+                    <img id="secondary-sponsor-man-photo" alt="" hidden>
+                    <span class="secondary-sponsor-photo-placeholder">Photo coming soon</span>
+                </div>
+                <figcaption id="secondary-sponsor-man-name"></figcaption>
+            </figure>
+            <figure class="secondary-sponsor-person">
+                <div class="secondary-sponsor-photo-frame">
+                    <img id="secondary-sponsor-woman-photo" alt="" hidden>
+                    <span class="secondary-sponsor-photo-placeholder">Photo coming soon</span>
+                </div>
+                <figcaption id="secondary-sponsor-woman-name"></figcaption>
+            </figure>
+        </div>
+    </dialog>
 
     <!-- RSVP SECTION -->
     <section id="rsvp" class="scroll-section">
@@ -1345,6 +1366,100 @@
             ampersand.hidden = !(firstName && secondName);
         }
 
+        const secondarySponsorPhotos = {
+            candle: {
+                title: 'Candle Sponsor',
+                namesId: 'candle-sponsor-names',
+                manPhoto: 'candle-sponsor-man.jpg',
+                womanPhoto: 'candle-sponsor-woman.jpg'
+            },
+            veil: {
+                title: 'Veil Sponsor',
+                namesId: 'veil-sponsor-names',
+                manPhoto: 'veil-sponsor-man.jpg',
+                womanPhoto: 'veil-sponsor-woman.jpg'
+            },
+            cord: {
+                title: 'Cord Sponsor',
+                namesId: 'cord-sponsor-names',
+                manPhoto: 'cord-sponsor-man.jpg',
+                womanPhoto: 'cord-sponsor-woman.jpg'
+            }
+        };
+
+        function setSecondarySponsorPhoto(image, filename, personName) {
+            const frame = image.closest('.secondary-sponsor-photo-frame');
+            const placeholder = frame.querySelector('.secondary-sponsor-photo-placeholder');
+            image.hidden = true;
+            placeholder.hidden = false;
+            image.alt = personName ? `${personName}, secondary sponsor` : 'Secondary sponsor';
+            image.onload = () => {
+                image.hidden = false;
+                placeholder.hidden = true;
+            };
+            image.onerror = () => {
+                image.hidden = true;
+                placeholder.hidden = false;
+            };
+            image.src = `assets/entourage/${filename}?v=${Date.now()}`;
+        }
+
+        function setupSecondarySponsorCards() {
+            const dialog = document.getElementById('secondary-sponsor-dialog');
+            const title = document.getElementById('secondary-sponsor-dialog-title');
+            const manImage = document.getElementById('secondary-sponsor-man-photo');
+            const womanImage = document.getElementById('secondary-sponsor-woman-photo');
+            const closeButton = dialog.querySelector('.secondary-sponsor-dialog-close');
+            let lastTrigger = null;
+
+            document.querySelectorAll('.secondary-sponsor-card').forEach(card => {
+                const openPair = () => {
+                    const sponsor = secondarySponsorPhotos[card.dataset.secondarySponsor];
+                    if (!sponsor) return;
+
+                    const names = document.querySelectorAll(`#${sponsor.namesId} .secondary-sponsor-name`);
+                    const manName = names[0] ? names[0].textContent.trim() : '';
+                    const womanName = names[1] ? names[1].textContent.trim() : '';
+
+                    lastTrigger = card;
+                    title.textContent = sponsor.title;
+                    document.getElementById('secondary-sponsor-man-name').textContent = manName || 'Name to be added';
+                    document.getElementById('secondary-sponsor-woman-name').textContent = womanName || 'Name to be added';
+                    setSecondarySponsorPhoto(manImage, sponsor.manPhoto, manName);
+                    setSecondarySponsorPhoto(womanImage, sponsor.womanPhoto, womanName);
+
+                    if (typeof dialog.showModal === 'function') {
+                        dialog.showModal();
+                    } else {
+                        dialog.setAttribute('open', '');
+                    }
+                };
+
+                card.addEventListener('click', openPair);
+                card.addEventListener('keydown', event => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        openPair();
+                    }
+                });
+            });
+
+            closeButton.addEventListener('click', () => {
+                if (typeof dialog.close === 'function') dialog.close();
+                else dialog.removeAttribute('open');
+            });
+            dialog.addEventListener('click', event => {
+                if (event.target === dialog) {
+                    if (typeof dialog.close === 'function') dialog.close();
+                    else dialog.removeAttribute('open');
+                }
+            });
+            dialog.addEventListener('close', () => {
+                if (lastTrigger) lastTrigger.focus();
+                lastTrigger = null;
+            });
+        }
+
         function sortPartyRows(rows) {
             return [...rows].sort((a, b) => {
                 const orderA = Number(a.display_order) || Number(a.pair_no) || 0;
@@ -1793,6 +1908,7 @@
 
         loadOurStory();
         setupPartyPhotoPlaceholders();
+        setupSecondarySponsorCards();
         loadWeddingPartyDetails();
         setupAccommodationDialog();
         loadAccommodationDetails();
