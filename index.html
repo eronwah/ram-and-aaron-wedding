@@ -1224,6 +1224,11 @@
 
             const playlist = [
                 {
+                    title: 'Soft',
+                    artist: 'Lany',
+                    src: 'assets/music/Soft - Lany.mp3'
+                },
+                {
                     title: 'Dive',
                     artist: 'Olivia Dean',
                     src: 'assets/music/Dive - Olivia Dean.mp3'
@@ -1349,14 +1354,18 @@
                 if (document.visibilityState === 'hidden') {
                     pauseWhenInactive();
                 } else {
-                    // Becoming visible allows playback on a new user tap; it never resumes by itself.
+                    // Mark the page active again without automatically resuming playback.
                     pageIsActive = true;
                 }
             });
-            // Blur also fires for normal focus changes inside some mobile browsers.
-            // visibilitychange/pagehide are the reliable signals for leaving the app.
+            // Pause when the browser window loses focus (for example, switching desktop apps).
+            // Returning only re-enables manual controls; it does not resume playback.
+            window.addEventListener('blur', () => {
+                if (!document.hidden) pauseWhenInactive();
+            });
             window.addEventListener('focus', () => { pageIsActive = true; });
             window.addEventListener('pagehide', pauseWhenInactive);
+            window.addEventListener('pageshow', () => { pageIsActive = true; });
 
             const loadTrack = (index, startPlaying) => {
                 currentTrack = (index + playlist.length) % playlist.length;
