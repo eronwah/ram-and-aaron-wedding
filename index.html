@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=39">
+    <link rel="stylesheet" href="style.css?v=41">
 </head>
 <body>
 
@@ -1069,14 +1069,16 @@
                 if (!pointerStart || pointerStart.id !== event.pointerId) return;
                 const dx = event.clientX - pointerStart.x;
                 const dy = event.clientY - pointerStart.y;
-                const startedOnPhoto = pointerStart.target === image;
+                const startedOnReactable = pointerStart.target === image ||
+                    (pointerStart.target instanceof Element &&
+                     pointerStart.target.closest('.story-image-dialog-caption > p'));
                 pointerStart = null;
                 const swipeThreshold = Math.max(16, frame.clientWidth * 0.04);
                 const isSwipe = Math.abs(dx) >= swipeThreshold && Math.abs(dx) > Math.abs(dy) * 0.85;
                 const direction = dx > 0 ? 1 : -1;
                 const canMove = direction > 0 || dialog._storyPhotoIndex > 0;
 
-                if (!isSwipe && startedOnPhoto && Math.abs(dx) < 18 && Math.abs(dy) < 18) {
+                if (!isSwipe && startedOnReactable && Math.abs(dx) < 18 && Math.abs(dy) < 18) {
                     const now = performance.now();
                     const isDoubleTap = lastImageTap && now - lastImageTap.time < 380 &&
                         Math.hypot(event.clientX - lastImageTap.x, event.clientY - lastImageTap.y) < 36;
@@ -1088,7 +1090,7 @@
                     } else {
                         lastImageTap = { x: event.clientX, y: event.clientY, time: now };
                     }
-                } else if (isSwipe || !startedOnPhoto) {
+                } else if (isSwipe || !startedOnReactable) {
                     lastImageTap = null;
                 }
 
