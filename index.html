@@ -88,10 +88,9 @@
     <!-- OUR STORY SECTION -->
     <section id="our-story" class="scroll-section">
         <h2>OUR STORY</h2>
-        <div class="container story-card">
-            <p class="story-lead">Every love story is beautiful, but ours is our favorite.</p>
-            <p>[A brief storyline of the couple will be placed here...]</p>
-        </div>
+        <p class="story-subtitle">An unexpected meeting, a love discovered in God’s time</p>
+        <p id="our-story-status" class="story-status" role="status" aria-live="polite">Our story is being prepared.</p>
+        <div id="our-story-entries" class="story-entries"></div>
     </section>
 
     <!-- VENUE SECTION -->
@@ -1233,6 +1232,82 @@
             document.getElementById('guest-names-container').innerHTML = '';
         }
 
+        // Our Story rows are managed in Google Sheets; image files live in assets/ourstory/.
+        const OUR_STORY_API_URL = 'https://script.google.com/macros/s/AKfycbxkh1GZ23eDT2EslmfewaD02vD6UxcLkxZewi00-DQLmHN2Slb7zRVDjgk-OkkTFrca/exec';
+
+        async function loadOurStory() {
+            const status = document.getElementById('our-story-status');
+            const entriesContainer = document.getElementById('our-story-entries');
+            const apiIsConfigured = OUR_STORY_API_URL.startsWith('https://script.google.com/');
+
+            if (!apiIsConfigured) {
+                status.textContent = 'Our story is being prepared.';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${OUR_STORY_API_URL}?action=ourStory`, {
+                    method: 'GET',
+                    cache: 'no-store'
+                });
+                if (!response.ok) throw new Error('The Our Story endpoint returned an error.');
+
+                const result = await response.json();
+                if (!result.success || !Array.isArray(result.data)) {
+                    throw new Error(result.message || 'The Our Story response is invalid.');
+                }
+
+                const storyRows = result.data
+                    .filter(row => String(row.sentence || '').trim())
+                    .slice(0, 7);
+                const fragment = document.createDocumentFragment();
+
+                storyRows.forEach((row, index) => {
+                    const order = Number(row.display_order) || index + 1;
+                    const entry = document.createElement('article');
+                    entry.className = `story-entry${index % 2 === 1 ? ' story-entry-reversed' : ''}`;
+
+                    const text = document.createElement('div');
+                    text.className = 'story-entry-text';
+                    const paragraph = document.createElement('p');
+                    paragraph.textContent = String(row.sentence).trim();
+                    text.appendChild(paragraph);
+                    entry.appendChild(text);
+
+                    const imageFile = String(row.image_file || '').trim();
+                    if (imageFile) {
+                        entry.classList.add('has-image');
+                        const imageFrame = document.createElement('figure');
+                        imageFrame.className = 'story-image-frame';
+                        const image = document.createElement('img');
+                        image.alt = `Aaron and Ram, story photograph ${order}`;
+                        image.loading = 'lazy';
+                        image.addEventListener('error', () => {
+                            entry.classList.remove('has-image');
+                            imageFrame.remove();
+                        }, { once: true });
+                        image.src = `assets/ourstory/${encodeURIComponent(imageFile)}?v=${Date.now()}`;
+                        imageFrame.appendChild(image);
+                        entry.appendChild(imageFrame);
+                    }
+
+                    fragment.appendChild(entry);
+                });
+
+                entriesContainer.replaceChildren(fragment);
+                if (storyRows.length) {
+                    status.hidden = true;
+                } else {
+                    status.textContent = 'Our story is being prepared.';
+                    status.hidden = false;
+                }
+            } catch (error) {
+                console.error('Could not load the Our Story section:', error);
+                status.textContent = 'Our story could not be loaded right now. Please try again later.';
+                status.hidden = false;
+            }
+        }
+
         // Read Wedding Party details from the separate, read-only Apps Script web app.
         const WEDDING_PARTY_API_URL = 'https://script.google.com/macros/s/AKfycbzRUfMT8GStC5u6MJidVLGqb7gS2KDr2hUXxOD7OCoIQNnb_ic-Fgn9MAYKziusChFn/exec';
 
@@ -1716,6 +1791,7 @@
             }
         }
 
+        loadOurStory();
         setupPartyPhotoPlaceholders();
         loadWeddingPartyDetails();
         setupAccommodationDialog();
