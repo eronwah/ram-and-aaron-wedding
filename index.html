@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=36">
+    <link rel="stylesheet" href="style.css?v=38">
 </head>
 <body>
 
@@ -559,6 +559,9 @@
                     <button type="button" class="story-reaction-button" data-reaction="like" aria-label="Send a like reaction">
                         <span aria-hidden="true">👍</span>
                     </button>
+                    <button type="button" class="story-reaction-button" data-reaction="heart-eyes" aria-label="Send a heart-eyes reaction">
+                        <span aria-hidden="true">😍</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -885,7 +888,7 @@
             const buttonRect = button.getBoundingClientRect();
             const reaction = document.createElement('span');
             reaction.className = 'story-reaction-float';
-            reaction.textContent = type === 'love' ? '❤️' : '👍';
+            reaction.textContent = type === 'love' ? '❤️' : type === 'heart-eyes' ? '😍' : '👍';
             reaction.style.left = `${buttonRect.left + buttonRect.width / 2 - frameRect.left}px`;
             reaction.style.top = `${buttonRect.top - frameRect.top}px`;
             reaction.style.setProperty('--reaction-drift', `${Math.round(Math.random() * 56 - 28)}px`);
@@ -894,21 +897,22 @@
             reaction.addEventListener('animationend', () => reaction.remove(), { once: true });
         }
 
-        function moveOurStoryPhoto(direction) {
+        function moveOurStoryPhoto(direction, fromSwipe = false) {
             const dialog = document.getElementById('story-image-dialog');
             const nextIndex = dialog._storyPhotoIndex + direction;
             if (!dialog.open || dialog._storyAnimating || nextIndex < 0 || nextIndex >= dialog._storyPhotos.length) return false;
 
             const image = document.getElementById('story-image-dialog-photo');
             const preview = document.getElementById('story-image-dialog-preview');
-            const photo = dialog._storyPhotos[nextIndex];
             dialog._storyAnimating = true;
-            setStoryPhotoPreview(dialog, direction, 0);
+            const nextPhoto = dialog._storyPhotos[nextIndex];
+            const previewAlreadyShowing = preview.src === nextPhoto.src && Number(preview.style.opacity) > 0;
+            if (!fromSwipe || !previewAlreadyShowing) setStoryPhotoPreview(dialog, direction, 0);
             preview.style.transition = 'none';
             image.style.transition = 'none';
             image.offsetWidth;
-            image.style.transition = 'transform 230ms cubic-bezier(.2,.85,.25,1), opacity 200ms ease';
-            preview.style.transition = 'transform 230ms cubic-bezier(.2,.85,.25,1), opacity 200ms ease';
+            image.style.transition = 'transform 220ms cubic-bezier(.2,.85,.25,1), opacity 190ms ease';
+            preview.style.transition = 'transform 220ms cubic-bezier(.2,.85,.25,1), opacity 190ms ease';
 
             requestAnimationFrame(() => {
                 image.style.transform = `translateX(${direction * 115}%) rotate(${direction * 5}deg)`;
@@ -917,34 +921,80 @@
                 preview.style.opacity = '1';
             });
 
-            let finished = false;
-            const finish = () => {
-                if (finished) return;
-                finished = true;
+            let entering = false;
+            let completed = false;
+            const completeTransition = () => {
+                if (completed) return;
+                completed = true;
+                image.removeEventListener('transitionend', onTransitionEnd);
+                image.style.transition = '';
+                image.style.transform = '';
+                image.style.opacity = '';
+                preview.style.transition = '';
+                preview.style.transform = 'scale(.96)';
+                preview.style.opacity = '0';
+                preview.removeAttribute('src');
+                dialog._storyAnimating = false;
+            };
+            const beginIncomingCard = () => {
+                if (entering || completed) return;
+                entering = true;
                 image.removeEventListener('transitionend', onTransitionEnd);
                 dialog._storyPhotoIndex = nextIndex;
                 image.style.transition = 'none';
-                image.src = photo.src;
+                image.src = nextPhoto.src;
                 image.alt = `Our Story photograph ${nextIndex + 1} of ${dialog._storyPhotos.length}`;
-                image.style.transform = '';
-                image.style.opacity = '';
+                image.style.transform = `translateX(${-direction * 22}px) scale(.97)`;
+                image.style.opacity = '0';
                 preview.style.transition = 'none';
-                preview.style.opacity = '0';
-                preview.style.transform = 'scale(.96)';
-                preview.removeAttribute('src');
-                dialog._storyAnimating = false;
+                preview.style.transform = 'translateX(0) scale(1)';
+                preview.style.opacity = '1';
+                updateOurStoryPhotoDetails(dialog);
+                image.offsetWidth;
+                image.style.transition = 'transform 170ms cubic-bezier(.2,.85,.25,1), opacity 170ms ease';
+                preview.style.transition = 'opacity 170ms ease';
                 requestAnimationFrame(() => {
-                    image.style.transition = '';
-                    preview.style.transition = '';
+                    image.style.transform = 'translateX(0) scale(1)';
+                    image.style.opacity = '1';
+                    preview.style.opacity = '0';
                 });
-                showOurStoryPhoto(dialog);
+                image.addEventListener('transitionend', onTransitionEnd);
+                window.setTimeout(completeTransition, 220);
             };
             const onTransitionEnd = event => {
-                if (event.target === image && event.propertyName === 'transform') finish();
+                if (event.target !== image || event.propertyName !== 'transform') return;
+                if (entering) completeTransition();
+                else beginIncomingCard();
             };
             image.addEventListener('transitionend', onTransitionEnd);
-            window.setTimeout(finish, 300);
+            window.setTimeout(() => {
+                if (!entering) beginIncomingCard();
+            }, 250);
             return true;
+        }
+
+        function updateOurStoryPhotoDetails(dialog) {
+            const photo = dialog._storyPhotos[dialog._storyPhotoIndex];
+            if (!photo) return;
+            const caption = document.getElementById('story-image-dialog-caption-text');
+            const guide = document.getElementById('story-image-dialog-guide');
+            caption.textContent = photo.sentence;
+
+            const current = dialog._storyPhotoIndex + 1;
+            const total = dialog._storyPhotos.length;
+            if (total <= 1) guide.textContent = 'Our Story photo';
+            else if (dialog._storyPhotoIndex === 0) guide.textContent = `${current} / ${total} · Swipe right for next`;
+            else if (dialog._storyPhotoIndex === total - 1) guide.textContent = `${current} / ${total} · Swipe left to go back`;
+            else guide.textContent = `${current} / ${total} · ← Previous · Next →`;
+
+            [dialog._storyPhotos[dialog._storyPhotoIndex - 1], dialog._storyPhotos[dialog._storyPhotoIndex + 1]]
+                .filter(Boolean)
+                .forEach(adjacent => {
+                    if (!adjacent.preloaded) {
+                        adjacent.preloaded = new Image();
+                        adjacent.preloaded.src = adjacent.src;
+                    }
+                });
         }
 
         function setupOurStoryPhotoDialog() {
@@ -973,12 +1023,12 @@
                 if (!pointerStart || pointerStart.id !== event.pointerId) return;
                 const dx = event.clientX - pointerStart.x;
                 const dy = event.clientY - pointerStart.y;
-                if (Math.abs(dx) < Math.abs(dy) * 1.15) return;
+                if (Math.abs(dx) < Math.abs(dy) * 0.8) return;
 
                 const direction = dx > 0 ? 1 : -1;
                 image.style.transition = 'none';
                 preview.style.transition = 'none';
-                const canMove = setStoryPhotoPreview(dialog, direction, Math.min(1, Math.abs(dx) / 100));
+                const canMove = setStoryPhotoPreview(dialog, direction, Math.min(1, Math.abs(dx) / 80));
                 const atEdge = !canMove;
                 const resistedDx = atEdge ? dx * 0.18 : dx;
                 image.style.transform = `translateX(${resistedDx}px) rotate(${Math.max(-2.5, Math.min(2.5, resistedDx / 55))}deg)`;
@@ -989,14 +1039,14 @@
                 const dx = event.clientX - pointerStart.x;
                 const dy = event.clientY - pointerStart.y;
                 pointerStart = null;
-                const swipeThreshold = Math.max(22, frame.clientWidth * 0.06);
-                const isSwipe = Math.abs(dx) >= swipeThreshold && Math.abs(dx) > Math.abs(dy) * 1.05;
+                const swipeThreshold = Math.max(16, frame.clientWidth * 0.04);
+                const isSwipe = Math.abs(dx) >= swipeThreshold && Math.abs(dx) > Math.abs(dy) * 0.85;
                 const direction = dx > 0 ? 1 : -1;
                 const hasNextPhoto = dialog._storyPhotoIndex + direction >= 0 &&
                     dialog._storyPhotoIndex + direction < dialog._storyPhotos.length;
 
                 if (isSwipe && hasNextPhoto) {
-                    moveOurStoryPhoto(direction);
+                    moveOurStoryPhoto(direction, true);
                 } else {
                     image.style.transition = 'transform 180ms ease-out, opacity 180ms ease-out';
                     preview.style.transition = 'transform 180ms ease-out, opacity 180ms ease-out';

@@ -1267,7 +1267,7 @@ body.page-scroll-locked {
     max-height: 90dvh;
     margin: auto;
     padding: 0;
-    overflow: hidden;
+    overflow: visible;
     border: 1px solid rgba(255, 255, 255, 0.32);
     background: #111820;
     color: #1a252f;
@@ -1404,10 +1404,10 @@ body.page-scroll-locked {
 .story-reaction-button > span:first-child { font-size: 1rem; }
 
 .story-image-dialog-close {
-    position: absolute;
-    z-index: 2;
-    top: 12px;
-    right: 12px;
+    position: fixed;
+    z-index: 10002;
+    top: max(12px, env(safe-area-inset-top));
+    right: max(12px, env(safe-area-inset-right));
     display: grid;
     width: 42px;
     height: 42px;
