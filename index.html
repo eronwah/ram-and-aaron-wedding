@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=23">
+    <link rel="stylesheet" href="style.css?v=24">
 </head>
 <body>
 
@@ -651,8 +651,6 @@
             const isOpen = document.getElementById('navLinks').classList.contains('nav-active');
             document.getElementById('burgerMenu').setAttribute('aria-expanded', isOpen);
             document.getElementById('burgerMenu').setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
-            if (isOpen) lockPageScroll();
-            else unlockPageScrollIfNoPopup();
         }
 
         function closeMenu() {
@@ -660,7 +658,6 @@
             document.getElementById('burgerMenu').classList.remove('toggle-active');
             document.getElementById('burgerMenu').setAttribute('aria-expanded', 'false');
             document.getElementById('burgerMenu').setAttribute('aria-label', 'Open navigation menu');
-            unlockPageScrollIfNoPopup();
         }
 
         function updateNavigationLayout() {
@@ -725,11 +722,17 @@
         }
 
         let pageScrollLockPosition = null;
+        let pageScrollLockStyles = null;
 
         function lockPageScroll() {
             if (pageScrollLockPosition !== null) return;
             pageScrollLockPosition = window.scrollY;
             const scrollbarWidth = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
+            pageScrollLockStyles = {
+                bodyTop: document.body.style.top,
+                bodyPaddingRight: document.body.style.paddingRight,
+                scrollBehavior: document.documentElement.style.scrollBehavior
+            };
             document.body.style.top = `-${pageScrollLockPosition}px`;
             document.body.style.paddingRight = `${scrollbarWidth}px`;
             document.documentElement.classList.add('page-scroll-locked');
@@ -741,24 +744,29 @@
                 .some(overlay => getComputedStyle(overlay).display !== 'none');
             const openDialogs = [...document.querySelectorAll('dialog')]
                 .some(dialog => dialog.open);
-            const navigationMenuOpen = document.getElementById('navLinks')?.classList.contains('nav-active');
-            if (visibleOverlays || openDialogs || navigationMenuOpen || pageScrollLockPosition === null) return;
+            if (visibleOverlays || openDialogs || pageScrollLockPosition === null) return;
 
             const restorePosition = pageScrollLockPosition;
+            const originalScrollBehavior = pageScrollLockStyles ? pageScrollLockStyles.scrollBehavior : '';
             pageScrollLockPosition = null;
+            document.documentElement.style.scrollBehavior = 'auto';
             document.documentElement.classList.remove('page-scroll-locked');
             document.body.classList.remove('page-scroll-locked');
-            document.body.style.removeProperty('top');
-            document.body.style.removeProperty('padding-right');
+            document.body.style.top = pageScrollLockStyles ? pageScrollLockStyles.bodyTop : '';
+            document.body.style.paddingRight = pageScrollLockStyles ? pageScrollLockStyles.bodyPaddingRight : '';
+            pageScrollLockStyles = null;
             window.scrollTo(0, restorePosition);
+            requestAnimationFrame(() => {
+                document.documentElement.style.scrollBehavior = originalScrollBehavior;
+            });
         }
 
         function openImageModal(imgSrc) {
             const modal = document.getElementById('image-modal');
             const modalImg = document.getElementById('modal-image');
             modalImg.src = imgSrc;
-            modal.style.display = 'flex';
             lockPageScroll();
+            modal.style.display = 'flex';
         }
 
         function closeImageModal() {
@@ -767,8 +775,8 @@
         }
 
         function openContactModal() {
-            document.getElementById('contact-modal').style.display = 'flex';
             lockPageScroll();
+            document.getElementById('contact-modal').style.display = 'flex';
         }
 
         function closeContactModal() {
@@ -776,15 +784,16 @@
             unlockPageScrollIfNoPopup();
         }
 
-        function openOurStoryPhoto(imgSrc, sentence) {
+        function openOurStoryPhoto(imgSrc, sentence, trigger) {
             const dialog = document.getElementById('story-image-dialog');
             const image = document.getElementById('story-image-dialog-photo');
             document.getElementById('story-image-dialog-caption').textContent = sentence;
             image.src = imgSrc;
             image.alt = 'Our Story photograph';
+            dialog._lastTrigger = trigger || document.activeElement;
+            lockPageScroll();
             if (typeof dialog.showModal === 'function') dialog.showModal();
             else dialog.setAttribute('open', '');
-            lockPageScroll();
         }
 
         function setupOurStoryPhotoDialog() {
@@ -802,7 +811,13 @@
             dialog.addEventListener('click', event => {
                 if (event.target === dialog) closeDialog();
             });
-            dialog.addEventListener('close', unlockPageScrollIfNoPopup);
+            dialog.addEventListener('close', () => {
+                if (dialog._lastTrigger && typeof dialog._lastTrigger.focus === 'function') {
+                    dialog._lastTrigger.focus({ preventScroll: true });
+                }
+                dialog._lastTrigger = null;
+                unlockPageScrollIfNoPopup();
+            });
         }
 
         function setupRsvpKeyboardVisibility() {
@@ -1390,7 +1405,7 @@
                         image.loading = 'lazy';
                         image.addEventListener('load', () => image.classList.add('is-loaded'), { once: true });
                         imageFrame.addEventListener('click', () => {
-                            openOurStoryPhoto(image.currentSrc || image.src, paragraph.textContent);
+                            openOurStoryPhoto(image.currentSrc || image.src, paragraph.textContent, imageFrame);
                         });
                         image.addEventListener('error', () => {
                             entry.classList.remove('has-image');
@@ -1557,12 +1572,12 @@
                     setSecondarySponsorPhoto(manImage, sponsor.manPhoto, manName);
                     setSecondarySponsorPhoto(womanImage, sponsor.womanPhoto, womanName);
 
+                    lockPageScroll();
                     if (typeof dialog.showModal === 'function') {
                         dialog.showModal();
                     } else {
                         dialog.setAttribute('open', '');
                     }
-                    lockPageScroll();
                 };
 
                 card.addEventListener('click', openPair);
@@ -1591,7 +1606,7 @@
                 }
             });
             dialog.addEventListener('close', () => {
-                if (lastTrigger) lastTrigger.focus();
+                if (lastTrigger) lastTrigger.focus({ preventScroll: true });
                 lastTrigger = null;
                 unlockPageScrollIfNoPopup();
             });
@@ -1780,12 +1795,12 @@
 
             dialog.dataset.returnFocus = trigger ? 'true' : 'false';
             dialog._lastTrigger = trigger;
+            lockPageScroll();
             if (typeof dialog.showModal === 'function') {
                 dialog.showModal();
             } else {
                 dialog.setAttribute('open', '');
             }
-            lockPageScroll();
         }
 
         function setupAccommodationDialog() {
@@ -1816,7 +1831,7 @@
                 if (event.target === dialog) closeDialog();
             });
             dialog.addEventListener('close', () => {
-                if (dialog._lastTrigger) dialog._lastTrigger.focus();
+                if (dialog._lastTrigger) dialog._lastTrigger.focus({ preventScroll: true });
                 dialog._lastTrigger = null;
                 unlockPageScrollIfNoPopup();
             });
