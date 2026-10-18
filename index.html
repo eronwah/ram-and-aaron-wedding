@@ -882,15 +882,15 @@
             return true;
         }
 
-        function sendStoryReaction(type, button) {
+        function sendStoryReaction(type, button, point) {
             const frame = document.querySelector('.story-image-dialog-frame');
             const frameRect = frame.getBoundingClientRect();
-            const buttonRect = button.getBoundingClientRect();
+            const buttonRect = button ? button.getBoundingClientRect() : null;
             const reaction = document.createElement('span');
             reaction.className = 'story-reaction-float';
             reaction.textContent = type === 'love' ? '❤️' : type === 'heart-eyes' ? '😍' : '👍';
-            reaction.style.left = `${buttonRect.left + buttonRect.width / 2 - frameRect.left}px`;
-            reaction.style.top = `${buttonRect.top - frameRect.top}px`;
+            reaction.style.left = `${point ? point.x - frameRect.left : buttonRect.left + buttonRect.width / 2 - frameRect.left}px`;
+            reaction.style.top = `${point ? point.y - frameRect.top : buttonRect.top - frameRect.top}px`;
             reaction.style.setProperty('--reaction-drift', `${Math.round(Math.random() * 56 - 28)}px`);
             reaction.style.setProperty('--reaction-rise', `${-Math.round(frameRect.height * 0.5)}px`);
             frame.querySelector('.story-reaction-floats').appendChild(reaction);
@@ -1034,6 +1034,7 @@
             const preview = document.getElementById('story-image-dialog-preview');
             const frame = dialog.querySelector('.story-image-dialog-frame');
             let pointerStart = null;
+            let lastImageTap = null;
 
             // Clean up old count markup if a cached page version still contains it.
             dialog.querySelectorAll('.story-reaction-count').forEach(count => count.remove());
@@ -1046,7 +1047,7 @@
                 if (!event.isPrimary || event.button !== 0) return;
                 if (event.target.closest('.story-reaction-button')) return;
                 if (dialog._storyAnimating) return;
-                pointerStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
+                pointerStart = { x: event.clientX, y: event.clientY, id: event.pointerId, target: event.target };
                 frame.setPointerCapture(event.pointerId);
             });
             frame.addEventListener('pointermove', event => {
@@ -1068,11 +1069,26 @@
                 if (!pointerStart || pointerStart.id !== event.pointerId) return;
                 const dx = event.clientX - pointerStart.x;
                 const dy = event.clientY - pointerStart.y;
+                const startedOnPhoto = pointerStart.target === image;
                 pointerStart = null;
                 const swipeThreshold = Math.max(16, frame.clientWidth * 0.04);
                 const isSwipe = Math.abs(dx) >= swipeThreshold && Math.abs(dx) > Math.abs(dy) * 0.85;
                 const direction = dx > 0 ? 1 : -1;
                 const canMove = direction > 0 || dialog._storyPhotoIndex > 0;
+
+                if (!isSwipe && startedOnPhoto && Math.abs(dx) < 18 && Math.abs(dy) < 18) {
+                    const now = performance.now();
+                    const isDoubleTap = lastImageTap && now - lastImageTap.time < 380 &&
+                        Math.hypot(event.clientX - lastImageTap.x, event.clientY - lastImageTap.y) < 36;
+                    if (isDoubleTap) {
+                        sendStoryReaction('love', null, { x: event.clientX, y: event.clientY });
+                        lastImageTap = null;
+                    } else {
+                        lastImageTap = { x: event.clientX, y: event.clientY, time: now };
+                    }
+                } else if (isSwipe || !startedOnPhoto) {
+                    lastImageTap = null;
+                }
 
                 if (isSwipe && canMove) {
                     moveOurStoryPhoto(direction, true);
