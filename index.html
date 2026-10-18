@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=38">
+    <link rel="stylesheet" href="style.css?v=39">
 </head>
 <body>
 
@@ -852,7 +852,7 @@
             const total = dialog._storyPhotos.length;
             if (total <= 1) guide.textContent = 'Our Story photo';
             else if (dialog._storyPhotoIndex === 0) guide.textContent = `${current} / ${total} · Swipe right for next`;
-            else if (dialog._storyPhotoIndex === total - 1) guide.textContent = `${current} / ${total} · Swipe left to go back`;
+            else if (dialog._storyPhotoIndex === total - 1) guide.textContent = `${current} / ${total} · Swipe left to go back · right to finish`;
             else guide.textContent = `${current} / ${total} · ← Previous · Next →`;
 
             [dialog._storyPhotos[dialog._storyPhotoIndex - 1], dialog._storyPhotos[dialog._storyPhotoIndex + 1]]
@@ -900,7 +900,37 @@
         function moveOurStoryPhoto(direction, fromSwipe = false) {
             const dialog = document.getElementById('story-image-dialog');
             const nextIndex = dialog._storyPhotoIndex + direction;
-            if (!dialog.open || dialog._storyAnimating || nextIndex < 0 || nextIndex >= dialog._storyPhotos.length) return false;
+            if (!dialog.open || dialog._storyAnimating || nextIndex < 0) return false;
+
+            if (nextIndex >= dialog._storyPhotos.length) {
+                if (direction < 0) return false;
+                const image = document.getElementById('story-image-dialog-photo');
+                const preview = document.getElementById('story-image-dialog-preview');
+                dialog._storyAnimating = true;
+                image.style.transition = 'transform 220ms cubic-bezier(.2,.85,.25,1), opacity 190ms ease';
+                preview.style.transition = 'opacity 160ms ease';
+                requestAnimationFrame(() => {
+                    image.style.transform = 'translateX(115%) rotate(5deg)';
+                    image.style.opacity = '0';
+                    preview.style.opacity = '0';
+                });
+                window.setTimeout(() => {
+                    dialog._storyAnimating = false;
+                    if (typeof dialog.close === 'function') dialog.close();
+                    else {
+                        dialog.removeAttribute('open');
+                        unlockPageScrollIfNoPopup();
+                    }
+                    image.style.transition = '';
+                    image.style.transform = '';
+                    image.style.opacity = '';
+                    preview.style.transition = '';
+                    preview.style.transform = 'scale(.96)';
+                    preview.style.opacity = '0';
+                    preview.removeAttribute('src');
+                }, 230);
+                return true;
+            }
 
             const image = document.getElementById('story-image-dialog-photo');
             const preview = document.getElementById('story-image-dialog-preview');
@@ -984,7 +1014,7 @@
             const total = dialog._storyPhotos.length;
             if (total <= 1) guide.textContent = 'Our Story photo';
             else if (dialog._storyPhotoIndex === 0) guide.textContent = `${current} / ${total} · Swipe right for next`;
-            else if (dialog._storyPhotoIndex === total - 1) guide.textContent = `${current} / ${total} · Swipe left to go back`;
+            else if (dialog._storyPhotoIndex === total - 1) guide.textContent = `${current} / ${total} · Swipe left to go back · right to finish`;
             else guide.textContent = `${current} / ${total} · ← Previous · Next →`;
 
             [dialog._storyPhotos[dialog._storyPhotoIndex - 1], dialog._storyPhotos[dialog._storyPhotoIndex + 1]]
@@ -1042,10 +1072,9 @@
                 const swipeThreshold = Math.max(16, frame.clientWidth * 0.04);
                 const isSwipe = Math.abs(dx) >= swipeThreshold && Math.abs(dx) > Math.abs(dy) * 0.85;
                 const direction = dx > 0 ? 1 : -1;
-                const hasNextPhoto = dialog._storyPhotoIndex + direction >= 0 &&
-                    dialog._storyPhotoIndex + direction < dialog._storyPhotos.length;
+                const canMove = direction > 0 || dialog._storyPhotoIndex > 0;
 
-                if (isSwipe && hasNextPhoto) {
+                if (isSwipe && canMove) {
                     moveOurStoryPhoto(direction, true);
                 } else {
                     image.style.transition = 'transform 180ms ease-out, opacity 180ms ease-out';
@@ -1800,7 +1829,11 @@
                             imageFrame.remove();
                         }, { once: true });
                         image.src = `assets/ourstory/${encodeURIComponent(imageFile)}?v=${Date.now()}`;
-                        imageFrame.appendChild(image);
+                        const hint = document.createElement('span');
+                        hint.className = 'story-image-open-hint';
+                        hint.setAttribute('aria-hidden', 'true');
+                        hint.innerHTML = '<span class="story-image-open-hint-icon">↗</span><span>Open story</span>';
+                        imageFrame.append(image, hint);
                         entry.appendChild(imageFrame);
                     }
 
