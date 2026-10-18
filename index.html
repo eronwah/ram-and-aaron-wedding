@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=33">
+    <link rel="stylesheet" href="style.css?v=35">
 </head>
 <body>
 
@@ -547,15 +547,17 @@
         <button type="button" class="story-image-dialog-close" aria-label="Close story photo">&times;</button>
         <div class="story-image-dialog-frame">
             <img id="story-image-dialog-photo" src="" alt="">
+            <img id="story-image-dialog-preview" class="story-image-dialog-preview" src="" alt="" aria-hidden="true">
+            <div id="story-reaction-floats" class="story-reaction-floats" aria-hidden="true"></div>
             <p id="story-image-dialog-guide" class="story-image-dialog-guide" aria-live="polite"></p>
             <div class="story-image-dialog-caption">
                 <p id="story-image-dialog-caption-text"></p>
                 <div class="story-image-reactions" aria-label="React to this story photo">
-                    <button type="button" class="story-reaction-button" data-reaction="love" aria-label="Love this photo">
-                        <span aria-hidden="true">❤️</span><span class="story-reaction-count" data-count="love">0</span>
+                    <button type="button" class="story-reaction-button" data-reaction="love" aria-label="Send a heart reaction">
+                        <span aria-hidden="true">❤️</span>
                     </button>
-                    <button type="button" class="story-reaction-button" data-reaction="like" aria-label="Like this photo">
-                        <span aria-hidden="true">👍</span><span class="story-reaction-count" data-count="like">0</span>
+                    <button type="button" class="story-reaction-button" data-reaction="like" aria-label="Send a like reaction">
+                        <span aria-hidden="true">👍</span>
                     </button>
                 </div>
             </div>
@@ -803,7 +805,6 @@
 
         function openOurStoryPhoto(imgSrc, sentence, trigger) {
             const dialog = document.getElementById('story-image-dialog');
-            const image = document.getElementById('story-image-dialog-photo');
             const entries = Array.from(document.querySelectorAll('#our-story-entries .story-entry.has-image'));
             dialog._storyPhotos = entries.map(entry => {
                 const photo = entry.querySelector('.story-image-frame img');
@@ -815,30 +816,34 @@
             }).filter(photo => photo.src);
             const requestedIndex = dialog._storyPhotos.findIndex(photo => photo.trigger === trigger);
             dialog._storyPhotoIndex = requestedIndex >= 0 ? requestedIndex : 0;
+            dialog._storyAnimating = false;
             if (!dialog._storyPhotos.length) {
                 dialog._storyPhotos = [{ src: imgSrc, sentence, trigger }];
                 dialog._storyPhotoIndex = 0;
             }
-            showOurStoryPhoto(dialog, false);
+            showOurStoryPhoto(dialog);
             dialog._lastTrigger = trigger || document.activeElement;
             lockPageScroll();
             if (typeof dialog.showModal === 'function') dialog.showModal();
             else dialog.setAttribute('open', '');
         }
 
-        function showOurStoryPhoto(dialog, animate = false, direction = 0) {
+        function showOurStoryPhoto(dialog) {
             const photo = dialog._storyPhotos?.[dialog._storyPhotoIndex];
             if (!photo) return;
 
             const image = document.getElementById('story-image-dialog-photo');
+            const preview = document.getElementById('story-image-dialog-preview');
             const caption = document.getElementById('story-image-dialog-caption-text');
             const guide = document.getElementById('story-image-dialog-guide');
-            image.classList.remove('story-photo-enter-next', 'story-photo-enter-previous');
             image.style.transform = '';
             image.style.opacity = '';
             image.src = photo.src;
             image.alt = `Our Story photograph ${dialog._storyPhotoIndex + 1} of ${dialog._storyPhotos.length}`;
             caption.textContent = photo.sentence;
+            preview.style.opacity = '0';
+            preview.style.transform = 'scale(.96)';
+            preview.removeAttribute('src');
 
             const current = dialog._storyPhotoIndex + 1;
             const total = dialog._storyPhotos.length;
@@ -846,75 +851,98 @@
             else if (dialog._storyPhotoIndex === 0) guide.textContent = `${current} / ${total} · Swipe right for next`;
             else if (dialog._storyPhotoIndex === total - 1) guide.textContent = `${current} / ${total} · Swipe left to go back`;
             else guide.textContent = `${current} / ${total} · ← Previous · Next →`;
-            updateOurStoryReactionButtons(dialog);
 
-            if (animate && direction) {
-                image.classList.add(direction > 0 ? 'story-photo-enter-next' : 'story-photo-enter-previous');
-            }
+            [dialog._storyPhotos[dialog._storyPhotoIndex - 1], dialog._storyPhotos[dialog._storyPhotoIndex + 1]]
+                .filter(Boolean)
+                .forEach(adjacent => {
+                    if (!adjacent.preloaded) {
+                        adjacent.preloaded = new Image();
+                        adjacent.preloaded.src = adjacent.src;
+                    }
+                });
         }
 
-        const OUR_STORY_REACTIONS_KEY = 'our-story-photo-reactions-v1';
-        let ourStoryReactionMemory = {};
-
-        function readOurStoryReactions() {
-            try {
-                const stored = JSON.parse(localStorage.getItem(OUR_STORY_REACTIONS_KEY) || '{}');
-                ourStoryReactionMemory = stored && typeof stored === 'object' ? stored : {};
-                return ourStoryReactionMemory;
-            } catch (error) {
-                return ourStoryReactionMemory;
+        function setStoryPhotoPreview(dialog, direction, progress) {
+            const preview = document.getElementById('story-image-dialog-preview');
+            const nextPhoto = dialog._storyPhotos[dialog._storyPhotoIndex + direction];
+            if (!nextPhoto) {
+                preview.style.opacity = '0';
+                return false;
             }
+
+            if (preview.src !== nextPhoto.src) preview.src = nextPhoto.src;
+            const reveal = Math.min(1, Math.max(0, progress));
+            const offset = -direction * 30 * (1 - reveal);
+            const scale = 0.96 + (0.04 * reveal);
+            preview.style.transform = `translateX(${offset}px) scale(${scale})`;
+            preview.style.opacity = String(0.24 + reveal * 0.76);
+            return true;
         }
 
-        function getOurStoryReactionKey(photo) {
-            try {
-                return new URL(photo.src, window.location.href).pathname;
-            } catch (error) {
-                return photo.src.split('?')[0];
-            }
-        }
-
-        function updateOurStoryReactionButtons(dialog) {
-            const photo = dialog._storyPhotos?.[dialog._storyPhotoIndex];
-            if (!photo) return;
-            const reactions = readOurStoryReactions();
-            const selected = reactions[getOurStoryReactionKey(photo)] || '';
-
-            dialog.querySelectorAll('.story-reaction-button').forEach(button => {
-                const isSelected = button.dataset.reaction === selected;
-                button.classList.toggle('is-selected', isSelected);
-                button.setAttribute('aria-pressed', String(isSelected));
-                button.querySelector('.story-reaction-count').textContent = isSelected ? '1' : '0';
-                const reactionName = button.dataset.reaction === 'love' ? 'Love' : 'Like';
-                button.setAttribute('aria-label', `${reactionName} this photo, ${isSelected ? 1 : 0} reactions on this device`);
-            });
-        }
-
-        function toggleOurStoryReaction(type) {
-            const dialog = document.getElementById('story-image-dialog');
-            const photo = dialog._storyPhotos?.[dialog._storyPhotoIndex];
-            if (!photo) return;
-
-            const reactions = readOurStoryReactions();
-            const key = getOurStoryReactionKey(photo);
-            if (reactions[key] === type) delete reactions[key];
-            else reactions[key] = type;
-
-            try {
-                localStorage.setItem(OUR_STORY_REACTIONS_KEY, JSON.stringify(reactions));
-            } catch (error) {
-                ourStoryReactionMemory = reactions;
-            }
-            updateOurStoryReactionButtons(dialog);
+        function sendStoryReaction(type, button) {
+            const frame = document.querySelector('.story-image-dialog-frame');
+            const frameRect = frame.getBoundingClientRect();
+            const buttonRect = button.getBoundingClientRect();
+            const reaction = document.createElement('span');
+            reaction.className = 'story-reaction-float';
+            reaction.textContent = type === 'love' ? '❤️' : '👍';
+            reaction.style.left = `${buttonRect.left + buttonRect.width / 2 - frameRect.left}px`;
+            reaction.style.top = `${buttonRect.top - frameRect.top}px`;
+            reaction.style.setProperty('--reaction-drift', `${Math.round(Math.random() * 56 - 28)}px`);
+            frame.querySelector('.story-reaction-floats').appendChild(reaction);
+            reaction.addEventListener('animationend', () => reaction.remove(), { once: true });
         }
 
         function moveOurStoryPhoto(direction) {
             const dialog = document.getElementById('story-image-dialog');
             const nextIndex = dialog._storyPhotoIndex + direction;
-            if (!dialog.open || nextIndex < 0 || nextIndex >= dialog._storyPhotos.length) return false;
+            if (!dialog.open || dialog._storyAnimating || nextIndex < 0 || nextIndex >= dialog._storyPhotos.length) return false;
 
-            dialog._storyPhotoIndex = nextIndex;
-            showOurStoryPhoto(dialog, true, direction);
+            const image = document.getElementById('story-image-dialog-photo');
+            const preview = document.getElementById('story-image-dialog-preview');
+            const photo = dialog._storyPhotos[nextIndex];
+            dialog._storyAnimating = true;
+            setStoryPhotoPreview(dialog, direction, 0);
+            preview.style.transition = 'none';
+            image.style.transition = 'none';
+            image.offsetWidth;
+            image.style.transition = 'transform 320ms cubic-bezier(.22,.75,.22,1), opacity 260ms ease';
+            preview.style.transition = 'transform 320ms cubic-bezier(.22,.75,.22,1), opacity 260ms ease';
+
+            requestAnimationFrame(() => {
+                image.style.transform = `translateX(${direction * 115}%) rotate(${direction * 5}deg)`;
+                image.style.opacity = '0';
+                preview.style.transform = 'translateX(0) scale(1)';
+                preview.style.opacity = '1';
+            });
+
+            let finished = false;
+            const finish = () => {
+                if (finished) return;
+                finished = true;
+                image.removeEventListener('transitionend', onTransitionEnd);
+                dialog._storyPhotoIndex = nextIndex;
+                image.style.transition = 'none';
+                image.src = photo.src;
+                image.alt = `Our Story photograph ${nextIndex + 1} of ${dialog._storyPhotos.length}`;
+                image.style.transform = '';
+                image.style.opacity = '';
+                preview.style.transition = 'none';
+                preview.style.opacity = '0';
+                preview.style.transform = 'scale(.96)';
+                preview.removeAttribute('src');
+                dialog._storyAnimating = false;
+                requestAnimationFrame(() => {
+                    image.style.transition = '';
+                    preview.style.transition = '';
+                });
+                showOurStoryPhoto(dialog);
+            };
+            const onTransitionEnd = event => {
+                if (event.target === image && event.propertyName === 'transform') finish();
+            };
+            image.addEventListener('transitionend', onTransitionEnd);
+            window.setTimeout(finish, 380);
             return true;
         }
 
@@ -922,16 +950,17 @@
             const dialog = document.getElementById('story-image-dialog');
             const closeButton = dialog.querySelector('.story-image-dialog-close');
             const image = document.getElementById('story-image-dialog-photo');
+            const preview = document.getElementById('story-image-dialog-preview');
             let pointerStart = null;
 
             dialog.querySelectorAll('.story-reaction-button').forEach(button => {
-                button.addEventListener('click', () => toggleOurStoryReaction(button.dataset.reaction));
+                button.addEventListener('click', () => sendStoryReaction(button.dataset.reaction, button));
             });
 
             image.addEventListener('pointerdown', event => {
                 if (!event.isPrimary || event.button !== 0) return;
+                if (dialog._storyAnimating) return;
                 pointerStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
-                image.classList.remove('story-photo-enter-next', 'story-photo-enter-previous');
                 image.setPointerCapture(event.pointerId);
             });
             image.addEventListener('pointermove', event => {
@@ -940,8 +969,9 @@
                 const dy = event.clientY - pointerStart.y;
                 if (Math.abs(dx) < Math.abs(dy) * 1.15) return;
 
-                const atEdge = (dx < 0 && dialog._storyPhotoIndex <= 0) ||
-                    (dx > 0 && dialog._storyPhotoIndex >= dialog._storyPhotos.length - 1);
+                const direction = dx > 0 ? 1 : -1;
+                const canMove = setStoryPhotoPreview(dialog, direction, Math.min(1, Math.abs(dx) / 150));
+                const atEdge = !canMove;
                 const resistedDx = atEdge ? dx * 0.18 : dx;
                 image.style.transition = 'none';
                 image.style.transform = `translateX(${resistedDx}px) rotate(${Math.max(-4, Math.min(4, resistedDx / 30))}deg)`;
@@ -952,23 +982,41 @@
                 const dx = event.clientX - pointerStart.x;
                 const dy = event.clientY - pointerStart.y;
                 pointerStart = null;
-                image.style.transition = '';
-                image.style.transform = '';
-                image.style.opacity = '';
+                const isSwipe = Math.abs(dx) >= 48 && Math.abs(dx) > Math.abs(dy) * 1.2;
+                const direction = dx > 0 ? 1 : -1;
+                const hasNextPhoto = dialog._storyPhotoIndex + direction >= 0 &&
+                    dialog._storyPhotoIndex + direction < dialog._storyPhotos.length;
 
-                if (Math.abs(dx) >= 48 && Math.abs(dx) > Math.abs(dy) * 1.2) {
-                    moveOurStoryPhoto(dx > 0 ? 1 : -1);
+                if (isSwipe && hasNextPhoto) {
+                    moveOurStoryPhoto(direction);
+                } else {
+                    image.style.transition = 'transform 220ms ease, opacity 220ms ease';
+                    preview.style.transition = 'transform 220ms ease, opacity 220ms ease';
+                    image.style.transform = '';
+                    image.style.opacity = '';
+                    preview.style.transform = 'scale(.96)';
+                    preview.style.opacity = '0';
+                    window.setTimeout(() => {
+                        preview.removeAttribute('src');
+                        image.style.transition = '';
+                        preview.style.transition = '';
+                    }, 240);
                 }
             };
             image.addEventListener('pointerup', finishSwipe);
             image.addEventListener('pointercancel', () => {
                 pointerStart = null;
-                image.style.transition = '';
+                image.style.transition = 'transform 220ms ease, opacity 220ms ease';
+                preview.style.transition = 'transform 220ms ease, opacity 220ms ease';
                 image.style.transform = '';
                 image.style.opacity = '';
-            });
-            image.addEventListener('animationend', () => {
-                image.classList.remove('story-photo-enter-next', 'story-photo-enter-previous');
+                preview.style.transform = 'scale(.96)';
+                preview.style.opacity = '0';
+                window.setTimeout(() => {
+                    preview.removeAttribute('src');
+                    image.style.transition = '';
+                    preview.style.transition = '';
+                }, 240);
             });
             dialog.addEventListener('keydown', event => {
                 if (event.key === 'ArrowLeft' && moveOurStoryPhoto(-1)) event.preventDefault();
