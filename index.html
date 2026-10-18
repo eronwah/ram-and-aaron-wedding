@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=28">
+    <link rel="stylesheet" href="style.css?v=29">
 </head>
 <body>
 
@@ -383,71 +383,95 @@
 
     <!-- RSVP SECTION -->
     <section id="rsvp" class="scroll-section">
-        <h2>RSVP</h2>
-        <div class="rsvp-wrapper">
-            
-            <div id="lookup-section">
-                <p style="text-align: center; margin-bottom: 30px; font-family: 'Playfair Display', serif; font-size: 1.2em; color: #1a252f;">Please enter your name to find your invitation.</p>
-                <div class="input-group">
-                    <label for="firstName">First Name</label>
-                    <div class="rsvp-input-shell">
-                        <input type="text" id="firstName" class="rsvp-text-input" placeholder="e.g. John" required>
-                        <span class="rsvp-input-highlight" aria-hidden="true"></span>
-                        <span class="rsvp-input-bar" aria-hidden="true"></span>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label for="lastName">Last Name</label>
-                    <div class="rsvp-input-shell">
-                        <input type="text" id="lastName" class="rsvp-text-input" placeholder="e.g. Smith" required>
-                        <span class="rsvp-input-highlight" aria-hidden="true"></span>
-                        <span class="rsvp-input-bar" aria-hidden="true"></span>
-                    </div>
-                </div>
-                <button class="rsvp-btn form-submit-btn" onclick="searchGuest()">Find Invitation</button>
-                <p id="search-msg" class="message error-text"></p>
-            </div>
-
-            <div id="response-section" style="display: none; position: relative;">
-                <button onclick="resetRSVPForm()" style="background: transparent; border: none; color: #7f8c8d; cursor: pointer; font-size: 0.9em; text-decoration: underline; padding: 0; margin-bottom: 20px; font-family: 'Montserrat', sans-serif;">&larr; Not your name? Search again</button>
-                <h4 id="welcome-msg" style="text-align: center; font-size: 1.8em; margin-bottom: 10px;"></h4>
-                <p id="eligibility-msg" style="text-align: center; margin-bottom: 30px;"></p>
-                
-                <div style="margin: 25px 0;">
-                    <label style="font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; color: #7f8c8d;">Will you be attending?</label><br>
-                    <div style="margin-top: 15px;">
-                        <input type="radio" name="attending" value="Attending" onclick="toggleGuests(true)"> <span style="font-family: 'Playfair Display', serif; font-size: 1.1em; color: #1a252f;">Joyfully Accepts</span><br>
-                    </div>
-                    <div style="margin-top: 15px;">
-                        <input type="radio" name="attending" value="Not Attending" onclick="toggleGuests(false)"> <span style="font-family: 'Playfair Display', serif; font-size: 1.1em; color: #1a252f;">Regretfully Declines</span>
-                    </div>
-                </div>
-
-                <div class="input-group" id="guest-count-section" style="display: none; margin-top: 30px;">
-                    <label>How many additional guests will you bring?</label>
-                    <select id="confirmedGuests" onchange="generateGuestNameInputs()" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 4px; font-family: 'Montserrat', sans-serif; background: #ffffff; color: #2c3e50; cursor: pointer; appearance: auto;" required>
-                    </select>
-                    <div id="guest-names-container" style="margin-top: 20px;"></div>
-                </div>
-
-                <button class="rsvp-btn form-submit-btn" onclick="submitRSVP()">Submit RSVP</button>
-                <p id="submit-msg" class="message"></p>
-            </div>
-
-            <div id="success-section" style="display: none; text-align: center;">
-                <h4 style="color: #2c3e50; font-size: 1.8em; margin-bottom: 10px; font-family: 'Playfair Display', serif;">RSVP Submitted!</h4>
-                <p style="color: #7f8c8d; font-style: italic; font-size: 1.1em;">Thank you for letting us know. We can't wait to celebrate with you!</p>
-                <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" style="margin-top: 30px;" onclick="resetRSVPForm()">Back to form</button>
-            </div>
-
-            <div id="already-responded-section" style="display: none; text-align: center;">
-                <h4 style="color: #2c3e50; font-size: 1.5em; margin-bottom: 10px;">You have already submitted your RSVP.</h4>
-                <p style="color: #7f8c8d; font-style: italic;">Thank you!</p>
-                <p style="margin: 30px 0;">Do you need to change your guest count or cancel your attendance?</p>
-                <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" onclick="openContactModal()">Yes, I need to make changes</button>
-                <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" style="margin-top: 10px; border: none; background: transparent; text-decoration: underline;" onclick="resetRSVPForm()">Search another name</button>
-            </div>
+        <h2 class="rsvp-section-heading">KINDLY REPLY</h2>
+        <span class="rsvp-mini-divider" aria-hidden="true"></span>
+        <p class="rsvp-section-script">RSVP</p>
+        <div class="rsvp-invitation-copy">
+            <p class="rsvp-deadline">Kindly RSVP by <strong>[DATE]</strong></p>
+            <p class="rsvp-deadline-note">If we don't receive your response by the deadline, we'll unfortunately have to mark you as unable to attend.</p>
         </div>
+        <button id="open-rsvp-button" class="rsvp-btn rsvp-open-button" type="button" onclick="openRsvpForm()">Please RSVP Here</button>
+
+        <dialog id="rsvp-form-dialog" class="rsvp-form-dialog" aria-label="Wedding RSVP form">
+            <button class="rsvp-dialog-close" type="button" aria-label="Close RSVP form" onclick="closeRsvpForm()">&times;</button>
+            <div id="rsvp-flow-loader" class="rsvp-flow-loader" data-mode="intro" role="status" aria-live="polite" hidden>
+                <div class="rsvp-loader-content">
+                    <img class="rsvp-loader-monogram" src="assets/rsvp-monogram.png" alt="Aaron and Ram monogram" onerror="this.hidden = true">
+                    <div class="rsvp-loader-progress" aria-hidden="true"><span></span></div>
+                    <p id="rsvp-loader-title" class="rsvp-loader-title">Taking you to our RSVP...</p>
+                    <p id="rsvp-loader-note" class="rsvp-loader-note" hidden></p>
+                </div>
+            </div>
+
+            <div id="rsvp-form-panel" class="rsvp-form-panel" tabindex="-1" hidden>
+                <header class="rsvp-form-header">
+                    <img class="rsvp-form-monogram" src="monogram.png" alt="Aaron and Ram monogram">
+                    <p class="rsvp-form-couple">Aaron <span>&amp;</span> Ram</p>
+                    <span class="rsvp-mini-divider" aria-hidden="true"></span>
+                </header>
+                <p class="rsvp-form-welcome">Your presence would mean the world to us.<br>Kindly let us know if you will be joining us on our special day.</p>
+                <p class="rsvp-form-prompt">Type your name and we will find your place.</p>
+
+                <div class="rsvp-wrapper">
+                    <div id="lookup-section">
+                        <div class="input-group">
+                            <label for="firstName">First Name</label>
+                            <div class="rsvp-input-shell">
+                                <input type="text" id="firstName" class="rsvp-text-input" placeholder="e.g. John" required>
+                                <span class="rsvp-input-highlight" aria-hidden="true"></span>
+                                <span class="rsvp-input-bar" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="lastName">Last Name</label>
+                            <div class="rsvp-input-shell">
+                                <input type="text" id="lastName" class="rsvp-text-input" placeholder="e.g. Smith" required>
+                                <span class="rsvp-input-highlight" aria-hidden="true"></span>
+                                <span class="rsvp-input-bar" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <button class="rsvp-btn form-submit-btn" type="button" onclick="searchGuest()">Find Invitation</button>
+                        <p id="search-msg" class="message error-text"></p>
+                    </div>
+
+                    <div id="response-section" style="display: none; position: relative;">
+                        <button class="rsvp-search-again" type="button" onclick="resetRSVPForm()">&larr; Not your name? Search again</button>
+                        <h4 id="welcome-msg" class="rsvp-welcome-name"></h4>
+                        <p id="eligibility-msg" class="rsvp-eligibility-message"></p>
+                        <div class="rsvp-attendance-options">
+                            <label class="rsvp-attendance-label">Will you be attending?</label>
+                            <label class="rsvp-attendance-choice"><input type="radio" name="attending" value="Attending" onclick="toggleGuests(true)"><span>Joyfully Accepts</span></label>
+                            <label class="rsvp-attendance-choice"><input type="radio" name="attending" value="Not Attending" onclick="toggleGuests(false)"><span>Regretfully Declines</span></label>
+                        </div>
+                        <div class="input-group" id="guest-count-section" style="display: none; margin-top: 30px;">
+                            <label for="confirmedGuests">How many additional guests will you bring?</label>
+                            <select id="confirmedGuests" onchange="generateGuestNameInputs()" required></select>
+                            <div id="guest-names-container" style="margin-top: 20px;"></div>
+                        </div>
+                        <button class="rsvp-btn form-submit-btn" type="button" onclick="submitRSVP()">Submit RSVP</button>
+                        <p id="submit-msg" class="message"></p>
+                    </div>
+
+                    <div id="success-section" class="rsvp-success-section" style="display: none;">
+                        <div class="rsvp-success-check" aria-hidden="true"><svg viewBox="0 0 52 52"><path d="M14 27.5 22 35l17-19" /></svg></div>
+                        <h4 id="success-greeting" class="rsvp-success-greeting">See you there!</h4>
+                        <span class="rsvp-mini-divider" aria-hidden="true"></span>
+                        <p class="rsvp-success-message">Your RSVP has been received, and your seat is saved. We are truly overjoyed that you will celebrate with us.</p>
+                        <p class="rsvp-success-note">We can't wait to share this day with you. Until then, we are counting down days.</p>
+                        <p class="rsvp-success-signoff">With Love, Aaron &amp; Ram</p>
+                        <button class="rsvp-btn form-submit-btn rsvp-done-button" type="button" onclick="closeRsvpForm()">Done</button>
+                    </div>
+
+                    <div id="already-responded-section" style="display: none; text-align: center;">
+                        <h4 style="color: #2c3e50; font-size: 1.5em; margin-bottom: 10px;">You have already submitted your RSVP.</h4>
+                        <p style="color: #7f8c8d; font-style: italic;">Thank you!</p>
+                        <p style="margin: 30px 0;">Do you need to change your guest count or cancel your attendance?</p>
+                        <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" type="button" onclick="openContactModal()">Yes, I need to make changes</button>
+                        <button class="rsvp-btn rsvp-btn-secondary form-submit-btn" style="margin-top: 10px; border: none; background: transparent; text-decoration: underline;" type="button" onclick="resetRSVPForm()">Search another name</button>
+                    </div>
+                </div>
+            </div>
+        </dialog>
     </section>
 
     <!-- FAQ SECTION -->
@@ -834,6 +858,22 @@
                 const bottomPadding = 24;
                 let scrollAmount = 0;
 
+                const dialog = document.getElementById('rsvp-form-dialog');
+                const dialogPanel = activeField.closest('.rsvp-form-panel');
+                if (dialog && dialog.open && dialogPanel) {
+                    const panelRect = dialogPanel.getBoundingClientRect();
+                    const visibleTop = Math.max(viewportTop + 12, panelRect.top + 12);
+                    const visibleBottom = Math.min(viewportBottom - bottomPadding, panelRect.bottom - 12);
+
+                    if (rect.bottom > visibleBottom) scrollAmount = rect.bottom - visibleBottom;
+                    else if (rect.top < visibleTop) scrollAmount = rect.top - visibleTop;
+
+                    if (Math.abs(scrollAmount) > 3) {
+                        dialogPanel.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+                    }
+                    return;
+                }
+
                 if (rect.bottom > viewportBottom - bottomPadding) {
                     scrollAmount = rect.bottom - (viewportBottom - bottomPadding);
                 } else if (rect.top < viewportTop + 12) {
@@ -1120,6 +1160,64 @@
         
         let currentRow = 0;
         let extraCompanionsAllowed = 0;
+        let currentGreetingName = '';
+        let rsvpOpenTrigger = null;
+        let rsvpIntroTimer = null;
+
+        function startRsvpLoader(mode, title, note = '') {
+            const loader = document.getElementById('rsvp-flow-loader');
+            loader.dataset.mode = mode;
+            document.getElementById('rsvp-loader-title').textContent = title;
+            const noteElement = document.getElementById('rsvp-loader-note');
+            noteElement.textContent = note;
+            noteElement.hidden = !note;
+            loader.hidden = false;
+            return performance.now();
+        }
+
+        async function finishRsvpLoader(startedAt) {
+            const minimumVisibleMs = 550;
+            const remaining = Math.max(0, minimumVisibleMs - (performance.now() - startedAt));
+            if (remaining) await new Promise(resolve => window.setTimeout(resolve, remaining));
+            document.getElementById('rsvp-flow-loader').hidden = true;
+        }
+
+        function openRsvpForm() {
+            const dialog = document.getElementById('rsvp-form-dialog');
+            if (dialog.open) return;
+
+            rsvpOpenTrigger = document.getElementById('open-rsvp-button');
+            resetRSVPForm();
+            document.getElementById('rsvp-form-panel').hidden = true;
+            startRsvpLoader('intro', 'Taking you to our RSVP...');
+            dialog.showModal();
+            lockPageScroll();
+
+            rsvpIntroTimer = window.setTimeout(() => {
+                if (!dialog.open) return;
+                document.getElementById('rsvp-flow-loader').hidden = true;
+                document.getElementById('rsvp-form-panel').hidden = false;
+                document.getElementById('rsvp-form-panel').focus({ preventScroll: true });
+            }, 900);
+        }
+
+        function closeRsvpForm() {
+            const dialog = document.getElementById('rsvp-form-dialog');
+            if (dialog.open) dialog.close();
+        }
+
+        document.getElementById('rsvp-form-dialog').addEventListener('click', event => {
+            if (event.target === event.currentTarget) closeRsvpForm();
+        });
+        document.getElementById('rsvp-form-dialog').addEventListener('close', () => {
+            window.clearTimeout(rsvpIntroTimer);
+            document.getElementById('rsvp-flow-loader').hidden = true;
+            document.getElementById('rsvp-form-panel').hidden = true;
+            resetRSVPForm();
+            unlockPageScrollIfNoPopup();
+            if (rsvpOpenTrigger) rsvpOpenTrigger.focus({ preventScroll: true });
+            rsvpOpenTrigger = null;
+        });
 
         document.getElementById('firstName').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -1155,8 +1253,13 @@
                 return; 
             }
             
-            msg.innerText = "Searching..."; msg.style.color = "#7f8c8d"; btn.disabled = true;
-            
+            msg.innerText = ''; btn.disabled = true;
+            const loaderStartedAt = startRsvpLoader(
+                'lookup',
+                'Looking for your name',
+                'Just a moment while we check the guest list.'
+            );
+
             try {
                 const response = await fetch(`${SCRIPT_URL}?firstName=${encodeURIComponent(first)}&lastName=${encodeURIComponent(last)}`);
                 const data = await response.json();
@@ -1181,6 +1284,7 @@
                         const nickname = String(data.nickname ?? '').trim();
                         const usableNickname = /^(undefined|null)$/i.test(nickname) ? '' : nickname;
                         const greetingName = usableNickname || String(data.firstName || first).trim();
+                        currentGreetingName = greetingName;
                         document.getElementById('welcome-msg').innerText = `Hello, ${greetingName}!`;
                         
                         currentRow = data.row; 
@@ -1193,8 +1297,13 @@
                         document.getElementById('eligibility-msg').innerHTML = eligibilityMsg;
                     }
                 } else { msg.innerText = data.message; msg.style.color = "#e74c3c"; }
-            } catch (error) { msg.innerText = "An error occurred. Please try again."; msg.style.color = "#e74c3c"; }
-            btn.disabled = false;
+            } catch (error) {
+                msg.innerText = "An error occurred. Please try again.";
+                msg.style.color = "#e74c3c";
+            } finally {
+                await finishRsvpLoader(loaderStartedAt);
+                btn.disabled = false;
+            }
         }
 
         function toggleGuests(isAttending) {
@@ -1301,8 +1410,14 @@
                 }
             }
 
-            msg.innerText = "Submitting your response..."; msg.style.color = "#7f8c8d"; btn.disabled = true;
+            msg.innerText = ''; btn.disabled = true;
             const finalGuestNames = guestNamesArray.join(', ');
+            const loaderStartedAt = startRsvpLoader(
+                'submit',
+                'Sending your response.',
+                'Saving it in our guest book. Please stay on this page.'
+            );
+            let submissionSucceeded = false;
 
             try {
                 const response = await fetch(SCRIPT_URL, { 
@@ -1316,10 +1431,22 @@
                 });
                 const data = await response.json();
                 if(data.result === 'success') {
+                    submissionSucceeded = true;
+                    const successName = currentGreetingName || String(document.getElementById('firstName').value).trim() || 'there';
+                    document.getElementById('success-greeting').textContent = `See you there, ${successName}!`;
                     document.getElementById('response-section').style.display = 'none';
                     document.getElementById('success-section').style.display = 'block';
+                } else {
+                    msg.innerText = data.message || 'We could not save your RSVP. Please try again.';
+                    msg.style.color = '#e74c3c';
                 }
-            } catch (error) { msg.innerText = "An error occurred."; msg.style.color = "#e74c3c"; btn.disabled = false; }
+            } catch (error) {
+                msg.innerText = "An error occurred. Please try again.";
+                msg.style.color = "#e74c3c";
+            } finally {
+                await finishRsvpLoader(loaderStartedAt);
+                if (!submissionSucceeded) btn.disabled = false;
+            }
         }
 
         function resetRSVPForm() {
@@ -1332,6 +1459,8 @@
             document.getElementById('lastName').value = '';
             document.getElementById('search-msg').innerText = '';
             document.getElementById('submit-msg').innerText = '';
+            document.getElementById('success-greeting').textContent = 'See you there!';
+            currentGreetingName = '';
             document.querySelector('#response-section button.form-submit-btn').disabled = false;
             
             const radios = document.querySelectorAll('input[name="attending"]');
