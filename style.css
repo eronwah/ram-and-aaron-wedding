@@ -562,6 +562,21 @@ nav#navbar {
     color: #2c3e50;
     font: 1rem 'Montserrat', sans-serif;
 }
+.rsvp-update-section { text-align: center; }
+.rsvp-update-section h4 {
+    margin: 4px 0 10px;
+    color: #263b4c;
+    font: 400 clamp(1.4rem, 5vw, 1.8rem)/1.3 'Playfair Display', serif;
+}
+.rsvp-update-section > p {
+    max-width: 390px;
+    margin: 0 auto 20px;
+    color: #71808b;
+    font-size: .9rem;
+    line-height: 1.6;
+    text-align: center;
+}
+.rsvp-update-section .rsvp-contact-list { max-width: 430px; margin: 0 auto 22px; }
 
 .rsvp-flow-loader {
     position: fixed;
@@ -1848,7 +1863,6 @@ body.page-scroll-locked {
 .accommodation-map-button { min-width: 0; padding: 10px 18px; font-size: 0.76em; }
 .accommodation-map-button[hidden] { display: none; }
 @media (max-width: 480px) {
-    #contact-modal .modal-content { padding: 30px 20px; }
     .rsvp-contact-row { gap: 8px; padding: 12px 10px; }
     .rsvp-contact-number { font-size: 0.96em; }
     .rsvp-contact-actions { gap: 5px; }
