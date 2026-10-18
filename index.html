@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=29">
+    <link rel="stylesheet" href="style.css?v=30">
 </head>
 <body>
 
@@ -409,9 +409,6 @@
                     <p class="rsvp-form-couple">Aaron <span>&amp;</span> Ram</p>
                     <span class="rsvp-mini-divider" aria-hidden="true"></span>
                 </header>
-                <p class="rsvp-form-welcome">Your presence would mean the world to us.<br>Kindly let us know if you will be joining us on our special day.</p>
-                <p class="rsvp-form-prompt">Type your name and we will find your place.</p>
-
                 <div class="rsvp-wrapper">
                     <div id="lookup-section">
                         <div class="input-group">
@@ -1066,7 +1063,8 @@
                     pageIsActive = true;
                 }
             });
-            window.addEventListener('blur', pauseWhenInactive);
+            // Blur also fires for normal focus changes inside some mobile browsers.
+            // visibilitychange/pagehide are the reliable signals for leaving the app.
             window.addEventListener('focus', () => { pageIsActive = true; });
             window.addEventListener('pagehide', pauseWhenInactive);
 

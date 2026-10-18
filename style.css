@@ -488,21 +488,6 @@ nav#navbar {
 }
 .rsvp-form-couple span { color: #8a5965; font-style: italic; }
 .rsvp-form-header .rsvp-mini-divider { margin: 14px auto 18px; }
-.rsvp-form-welcome {
-    max-width: 430px;
-    margin: 0 auto 16px;
-    color: #34495a;
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(.97rem, 2.8vw, 1.08rem);
-    line-height: 1.55;
-}
-.rsvp-form-prompt {
-    margin: 0 auto 24px;
-    color: #89939a;
-    font-family: 'Playfair Display', serif;
-    font-size: .88rem;
-    font-style: italic;
-}
 .rsvp-form-panel .rsvp-wrapper {
     width: 100%;
     max-width: 460px;
@@ -615,7 +600,7 @@ nav#navbar {
     line-height: 1.5;
 }
 
-.rsvp-success-section { padding: 6px 0 0; }
+.rsvp-success-section { padding: 6px 0 0; text-align: center; }
 .rsvp-success-check {
     display: grid;
     place-items: center;
@@ -641,11 +626,11 @@ nav#navbar {
 .rsvp-success-section > :nth-child(6) { animation-delay: .88s; }
 .rsvp-success-section > :nth-child(7) { animation-delay: 1.02s; }
 @keyframes rsvpSuccessFade { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: translateY(0); } }
-.rsvp-success-greeting { margin: 0; color: #34495a; font: 400 clamp(1.45rem, 5vw, 1.85rem)/1.3 'Playfair Display', serif; }
+.rsvp-success-greeting { margin: 0; color: #34495a; font: 400 clamp(1.45rem, 5vw, 1.85rem)/1.3 'Playfair Display', serif; text-align: center; }
 .rsvp-success-section .rsvp-mini-divider { margin: 15px auto 18px; }
-.rsvp-success-message { margin: 0 auto 14px; color: #4a5568; font-size: .95rem; line-height: 1.65; }
-.rsvp-success-note { margin: 0 auto 18px; color: #71808b; font: italic .88rem/1.6 'Playfair Display', serif; }
-.rsvp-success-signoff { margin: 0; color: #34495a; font: italic 1rem 'Playfair Display', serif; }
+.rsvp-success-message { max-width: 440px; margin: 0 auto 14px; color: #4a5568; font-size: .95rem; line-height: 1.65; text-align: center; }
+.rsvp-success-note { max-width: 420px; margin: 0 auto 18px; color: #71808b; font: italic .88rem/1.6 'Playfair Display', serif; text-align: center; }
+.rsvp-success-signoff { margin: 0; color: #34495a; font: italic 1rem 'Playfair Display', serif; text-align: center; }
 .rsvp-done-button { margin-top: 25px; }
 
 @media (max-width: 600px) {
@@ -655,8 +640,6 @@ nav#navbar {
     .rsvp-open-button { width: min(100%, 290px); min-height: 50px; }
     .rsvp-form-dialog { padding: 10px; }
     .rsvp-form-panel { width: 100%; max-height: calc(100dvh - 20px); padding: 24px 20px; border-radius: 7px; }
-    .rsvp-form-welcome { font-size: .96rem; }
-    .rsvp-form-prompt { margin-bottom: 20px; }
     .rsvp-dialog-close { top: max(10px, env(safe-area-inset-top)); right: max(10px, env(safe-area-inset-right)); }
 }
 
