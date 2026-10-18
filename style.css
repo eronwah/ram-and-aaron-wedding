@@ -488,6 +488,24 @@ nav#navbar {
 }
 .rsvp-form-couple span { color: #8a5965; font-style: italic; }
 .rsvp-form-header .rsvp-mini-divider { margin: 14px auto 18px; }
+.rsvp-lookup-intro[hidden] { display: none !important; }
+.rsvp-form-welcome {
+    max-width: 430px;
+    margin: 0 auto 14px;
+    color: #34495a;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(.97rem, 2.8vw, 1.08rem);
+    line-height: 1.55;
+    text-align: center;
+}
+.rsvp-form-prompt {
+    margin: 0 auto 22px;
+    color: #89939a;
+    font-family: 'Playfair Display', serif;
+    font-size: .88rem;
+    font-style: italic;
+    text-align: center;
+}
 .rsvp-form-panel .rsvp-wrapper {
     width: 100%;
     max-width: 460px;

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=30">
+    <link rel="stylesheet" href="style.css?v=31">
 </head>
 <body>
 
@@ -409,6 +409,10 @@
                     <p class="rsvp-form-couple">Aaron <span>&amp;</span> Ram</p>
                     <span class="rsvp-mini-divider" aria-hidden="true"></span>
                 </header>
+                <div id="rsvp-lookup-intro" class="rsvp-lookup-intro">
+                    <p class="rsvp-form-welcome">Your presence would mean the world to us.<br>Kindly let us know if you will be joining us on our special day.</p>
+                    <p class="rsvp-form-prompt">Type your name and we will find your place.</p>
+                </div>
                 <div class="rsvp-wrapper">
                     <div id="lookup-section">
                         <div class="input-group">
@@ -1263,6 +1267,7 @@
                 const data = await response.json();
                 
                 if(data.result === 'success') {
+                    document.getElementById('rsvp-lookup-intro').hidden = true;
                     const hasResponded = data.hasResponded === true ||
                         (data.hasResponded === undefined && Boolean(data.rsvpStatus));
                     if(hasResponded) {
@@ -1459,6 +1464,7 @@
             document.getElementById('submit-msg').innerText = '';
             document.getElementById('success-greeting').textContent = 'See you there!';
             currentGreetingName = '';
+            document.getElementById('rsvp-lookup-intro').hidden = false;
             document.querySelector('#response-section button.form-submit-btn').disabled = false;
             
             const radios = document.querySelectorAll('input[name="attending"]');
