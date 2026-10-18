@@ -547,7 +547,18 @@
         <button type="button" class="story-image-dialog-close" aria-label="Close story photo">&times;</button>
         <div class="story-image-dialog-frame">
             <img id="story-image-dialog-photo" src="" alt="">
-            <p id="story-image-dialog-caption" class="story-image-dialog-caption"></p>
+            <p id="story-image-dialog-guide" class="story-image-dialog-guide" aria-live="polite"></p>
+            <div class="story-image-dialog-caption">
+                <p id="story-image-dialog-caption-text"></p>
+                <div class="story-image-reactions" aria-label="React to this story photo">
+                    <button type="button" class="story-reaction-button" data-reaction="love" aria-label="Love this photo">
+                        <span aria-hidden="true">❤️</span><span class="story-reaction-count" data-count="love">0</span>
+                    </button>
+                    <button type="button" class="story-reaction-button" data-reaction="like" aria-label="Like this photo">
+                        <span aria-hidden="true">👍</span><span class="story-reaction-count" data-count="like">0</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </dialog>
 
@@ -820,7 +831,8 @@
             if (!photo) return;
 
             const image = document.getElementById('story-image-dialog-photo');
-            const caption = document.getElementById('story-image-dialog-caption');
+            const caption = document.getElementById('story-image-dialog-caption-text');
+            const guide = document.getElementById('story-image-dialog-guide');
             image.classList.remove('story-photo-enter-next', 'story-photo-enter-previous');
             image.style.transform = '';
             image.style.opacity = '';
@@ -828,9 +840,72 @@
             image.alt = `Our Story photograph ${dialog._storyPhotoIndex + 1} of ${dialog._storyPhotos.length}`;
             caption.textContent = photo.sentence;
 
+            const current = dialog._storyPhotoIndex + 1;
+            const total = dialog._storyPhotos.length;
+            if (total <= 1) guide.textContent = 'Our Story photo';
+            else if (dialog._storyPhotoIndex === 0) guide.textContent = `${current} / ${total} · Swipe right for next`;
+            else if (dialog._storyPhotoIndex === total - 1) guide.textContent = `${current} / ${total} · Swipe left to go back`;
+            else guide.textContent = `${current} / ${total} · ← Previous · Next →`;
+            updateOurStoryReactionButtons(dialog);
+
             if (animate && direction) {
                 image.classList.add(direction > 0 ? 'story-photo-enter-next' : 'story-photo-enter-previous');
             }
+        }
+
+        const OUR_STORY_REACTIONS_KEY = 'our-story-photo-reactions-v1';
+        let ourStoryReactionMemory = {};
+
+        function readOurStoryReactions() {
+            try {
+                const stored = JSON.parse(localStorage.getItem(OUR_STORY_REACTIONS_KEY) || '{}');
+                ourStoryReactionMemory = stored && typeof stored === 'object' ? stored : {};
+                return ourStoryReactionMemory;
+            } catch (error) {
+                return ourStoryReactionMemory;
+            }
+        }
+
+        function getOurStoryReactionKey(photo) {
+            try {
+                return new URL(photo.src, window.location.href).pathname;
+            } catch (error) {
+                return photo.src.split('?')[0];
+            }
+        }
+
+        function updateOurStoryReactionButtons(dialog) {
+            const photo = dialog._storyPhotos?.[dialog._storyPhotoIndex];
+            if (!photo) return;
+            const reactions = readOurStoryReactions();
+            const selected = reactions[getOurStoryReactionKey(photo)] || '';
+
+            dialog.querySelectorAll('.story-reaction-button').forEach(button => {
+                const isSelected = button.dataset.reaction === selected;
+                button.classList.toggle('is-selected', isSelected);
+                button.setAttribute('aria-pressed', String(isSelected));
+                button.querySelector('.story-reaction-count').textContent = isSelected ? '1' : '0';
+                const reactionName = button.dataset.reaction === 'love' ? 'Love' : 'Like';
+                button.setAttribute('aria-label', `${reactionName} this photo, ${isSelected ? 1 : 0} reactions on this device`);
+            });
+        }
+
+        function toggleOurStoryReaction(type) {
+            const dialog = document.getElementById('story-image-dialog');
+            const photo = dialog._storyPhotos?.[dialog._storyPhotoIndex];
+            if (!photo) return;
+
+            const reactions = readOurStoryReactions();
+            const key = getOurStoryReactionKey(photo);
+            if (reactions[key] === type) delete reactions[key];
+            else reactions[key] = type;
+
+            try {
+                localStorage.setItem(OUR_STORY_REACTIONS_KEY, JSON.stringify(reactions));
+            } catch (error) {
+                ourStoryReactionMemory = reactions;
+            }
+            updateOurStoryReactionButtons(dialog);
         }
 
         function moveOurStoryPhoto(direction) {
@@ -848,6 +923,10 @@
             const closeButton = dialog.querySelector('.story-image-dialog-close');
             const image = document.getElementById('story-image-dialog-photo');
             let pointerStart = null;
+
+            dialog.querySelectorAll('.story-reaction-button').forEach(button => {
+                button.addEventListener('click', () => toggleOurStoryReaction(button.dataset.reaction));
+            });
 
             image.addEventListener('pointerdown', event => {
                 if (!event.isPrimary || event.button !== 0) return;

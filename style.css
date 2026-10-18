@@ -1301,6 +1301,31 @@ body.page-scroll-locked {
     from { opacity: 0.55; transform: translateX(8%); }
     to { opacity: 1; transform: translateX(0); }
 }
+.story-image-dialog-guide {
+    position: absolute;
+    z-index: 1;
+    top: 16px;
+    left: 50%;
+    max-width: calc(100% - 96px);
+    margin: 0;
+    padding: 8px 14px;
+    transform: translateX(-50%);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 999px;
+    background: rgba(5, 9, 13, 0.72);
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(0.62rem, 2.2vw, 0.78rem);
+    line-height: 1.35;
+    text-align: center;
+    text-wrap: pretty;
+    pointer-events: none;
+    animation: storyGuideFade 0.5s ease both;
+}
+@keyframes storyGuideFade {
+    from { opacity: 0; transform: translate(-50%, -5px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
 .story-image-dialog-caption {
     position: absolute;
     right: 0;
@@ -1310,6 +1335,11 @@ body.page-scroll-locked {
     margin: 0;
     padding: clamp(58px, 10vh, 120px) clamp(18px, 5vw, 48px) clamp(20px, 3vh, 30px);
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
     background: linear-gradient(
         to top,
         rgba(5, 9, 13, 0.97) 0%,
@@ -1325,6 +1355,39 @@ body.page-scroll-locked {
     text-align: center;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
 }
+.story-image-dialog-caption > p {
+    width: 100%;
+    max-width: 760px;
+    margin: 0;
+}
+.story-image-reactions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex: 0 0 auto;
+}
+.story-reaction-button {
+    display: inline-flex;
+    min-width: 68px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 7px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font: 500 0.86rem/1 'Montserrat', sans-serif;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+.story-reaction-button:hover { background: rgba(255, 255, 255, 0.24); }
+.story-reaction-button:active { transform: scale(0.96); }
+.story-reaction-button.is-selected {
+    border-color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.28);
+}
+.story-reaction-button > span:first-child { font-size: 1rem; }
 
 .story-image-dialog-close {
     position: absolute;
@@ -1355,6 +1418,9 @@ body.page-scroll-locked {
         font-size: 0.92rem;
         line-height: 1.55;
     }
+    .story-image-dialog-guide { top: 12px; max-width: calc(100% - 82px); padding: 7px 10px; }
+    .story-image-reactions { gap: 8px; }
+    .story-reaction-button { min-width: 62px; padding: 7px 10px; }
 }
 
 /* On mobile, the scroll position controls image color. */
