@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=32">
+    <link rel="stylesheet" href="style.css?v=33">
 </head>
 <body>
 
@@ -793,18 +793,109 @@
         function openOurStoryPhoto(imgSrc, sentence, trigger) {
             const dialog = document.getElementById('story-image-dialog');
             const image = document.getElementById('story-image-dialog-photo');
-            document.getElementById('story-image-dialog-caption').textContent = sentence;
-            image.src = imgSrc;
-            image.alt = 'Our Story photograph';
+            const entries = Array.from(document.querySelectorAll('#our-story-entries .story-entry.has-image'));
+            dialog._storyPhotos = entries.map(entry => {
+                const photo = entry.querySelector('.story-image-frame img');
+                return {
+                    src: photo ? (photo.currentSrc || photo.src) : '',
+                    sentence: entry.querySelector('.story-entry-text p')?.textContent.trim() || '',
+                    trigger: entry.querySelector('.story-image-frame')
+                };
+            }).filter(photo => photo.src);
+            const requestedIndex = dialog._storyPhotos.findIndex(photo => photo.trigger === trigger);
+            dialog._storyPhotoIndex = requestedIndex >= 0 ? requestedIndex : 0;
+            if (!dialog._storyPhotos.length) {
+                dialog._storyPhotos = [{ src: imgSrc, sentence, trigger }];
+                dialog._storyPhotoIndex = 0;
+            }
+            showOurStoryPhoto(dialog, false);
             dialog._lastTrigger = trigger || document.activeElement;
             lockPageScroll();
             if (typeof dialog.showModal === 'function') dialog.showModal();
             else dialog.setAttribute('open', '');
         }
 
+        function showOurStoryPhoto(dialog, animate = false, direction = 0) {
+            const photo = dialog._storyPhotos?.[dialog._storyPhotoIndex];
+            if (!photo) return;
+
+            const image = document.getElementById('story-image-dialog-photo');
+            const caption = document.getElementById('story-image-dialog-caption');
+            image.classList.remove('story-photo-enter-next', 'story-photo-enter-previous');
+            image.style.transform = '';
+            image.style.opacity = '';
+            image.src = photo.src;
+            image.alt = `Our Story photograph ${dialog._storyPhotoIndex + 1} of ${dialog._storyPhotos.length}`;
+            caption.textContent = photo.sentence;
+
+            if (animate && direction) {
+                image.classList.add(direction > 0 ? 'story-photo-enter-next' : 'story-photo-enter-previous');
+            }
+        }
+
+        function moveOurStoryPhoto(direction) {
+            const dialog = document.getElementById('story-image-dialog');
+            const nextIndex = dialog._storyPhotoIndex + direction;
+            if (!dialog.open || nextIndex < 0 || nextIndex >= dialog._storyPhotos.length) return false;
+
+            dialog._storyPhotoIndex = nextIndex;
+            showOurStoryPhoto(dialog, true, direction);
+            return true;
+        }
+
         function setupOurStoryPhotoDialog() {
             const dialog = document.getElementById('story-image-dialog');
             const closeButton = dialog.querySelector('.story-image-dialog-close');
+            const image = document.getElementById('story-image-dialog-photo');
+            let pointerStart = null;
+
+            image.addEventListener('pointerdown', event => {
+                if (!event.isPrimary || event.button !== 0) return;
+                pointerStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
+                image.classList.remove('story-photo-enter-next', 'story-photo-enter-previous');
+                image.setPointerCapture(event.pointerId);
+            });
+            image.addEventListener('pointermove', event => {
+                if (!pointerStart || pointerStart.id !== event.pointerId) return;
+                const dx = event.clientX - pointerStart.x;
+                const dy = event.clientY - pointerStart.y;
+                if (Math.abs(dx) < Math.abs(dy) * 1.15) return;
+
+                const atEdge = (dx < 0 && dialog._storyPhotoIndex <= 0) ||
+                    (dx > 0 && dialog._storyPhotoIndex >= dialog._storyPhotos.length - 1);
+                const resistedDx = atEdge ? dx * 0.18 : dx;
+                image.style.transition = 'none';
+                image.style.transform = `translateX(${resistedDx}px) rotate(${Math.max(-4, Math.min(4, resistedDx / 30))}deg)`;
+                image.style.opacity = String(1 - Math.min(Math.abs(resistedDx) / 700, 0.28));
+            });
+            const finishSwipe = event => {
+                if (!pointerStart || pointerStart.id !== event.pointerId) return;
+                const dx = event.clientX - pointerStart.x;
+                const dy = event.clientY - pointerStart.y;
+                pointerStart = null;
+                image.style.transition = '';
+                image.style.transform = '';
+                image.style.opacity = '';
+
+                if (Math.abs(dx) >= 48 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+                    moveOurStoryPhoto(dx > 0 ? 1 : -1);
+                }
+            };
+            image.addEventListener('pointerup', finishSwipe);
+            image.addEventListener('pointercancel', () => {
+                pointerStart = null;
+                image.style.transition = '';
+                image.style.transform = '';
+                image.style.opacity = '';
+            });
+            image.addEventListener('animationend', () => {
+                image.classList.remove('story-photo-enter-next', 'story-photo-enter-previous');
+            });
+            dialog.addEventListener('keydown', event => {
+                if (event.key === 'ArrowLeft' && moveOurStoryPhoto(-1)) event.preventDefault();
+                if (event.key === 'ArrowRight' && moveOurStoryPhoto(1)) event.preventDefault();
+            });
+
             const closeDialog = () => {
                 if (typeof dialog.close === 'function') dialog.close();
                 else {
