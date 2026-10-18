@@ -419,7 +419,6 @@
                             <label for="firstName">First Name</label>
                             <div class="rsvp-input-shell">
                                 <input type="text" id="firstName" class="rsvp-text-input" placeholder="e.g. John" required>
-                                <span class="rsvp-input-highlight" aria-hidden="true"></span>
                                 <span class="rsvp-input-bar" aria-hidden="true"></span>
                             </div>
                         </div>
@@ -427,7 +426,6 @@
                             <label for="lastName">Last Name</label>
                             <div class="rsvp-input-shell">
                                 <input type="text" id="lastName" class="rsvp-text-input" placeholder="e.g. Smith" required>
-                                <span class="rsvp-input-highlight" aria-hidden="true"></span>
                                 <span class="rsvp-input-bar" aria-hidden="true"></span>
                             </div>
                         </div>
@@ -1345,15 +1343,12 @@
                 
                 input.addEventListener('focus', function() { this.style.borderBottom = '1px solid #2c3e50'; });
                 input.addEventListener('blur', function() { this.style.borderBottom = '1px solid #cbd5e1'; });
-                
-                const highlight = document.createElement('span');
-                highlight.className = 'rsvp-input-highlight';
-                highlight.setAttribute('aria-hidden', 'true');
+
                 const animatedBar = document.createElement('span');
                 animatedBar.className = 'rsvp-input-bar';
                 animatedBar.setAttribute('aria-hidden', 'true');
 
-                fieldShell.append(input, highlight, animatedBar);
+                fieldShell.append(input, animatedBar);
                 container.appendChild(fieldShell);
             }
         }

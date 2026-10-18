@@ -311,7 +311,6 @@ nav#navbar {
     box-shadow: 0 5px 14px rgba(38, 59, 76, 0.1);
     transform: translateY(-2px);
 }
-.rsvp-btn:focus-visible { outline: 2px solid #7b94a9; outline-offset: 3px; }
 #home .hero-buttons .rsvp-btn { min-width: 138px; }
 
 /* Floating back-to-top appears after the visitor reaches Details. */
@@ -357,7 +356,6 @@ nav#navbar {
     transform: translate(-50%, -2px);
 }
 #faq .back-to-top:hover svg { transform: translateY(-2px); }
-#faq .back-to-top:focus-visible { outline: 2px solid #2c3e50; outline-offset: 4px; }
 
 @media (max-width: 600px) {
     #home .hero-buttons { gap: 10px; }
@@ -952,17 +950,16 @@ p { font-size: 0.95em; font-weight: 300; }
 .input-group { margin-bottom: 25px; }
 .input-group label { display: block; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; color: #7f8c8d; margin-bottom: 8px; }
 .input-group input { width: 100%; padding: 12px 0; border: none; border-bottom: 1px solid #cbd5e1; background: transparent; font-family: 'Montserrat', sans-serif; font-size: 1em; color: #2c3e50; transition: border-color 0.3s ease; }
-.input-group input:focus { outline: none; border-bottom: 1px solid #2c3e50; }
 
-/* RSVP lookup input focus treatment: animated underline and subtle highlight. */
 #lookup-section .input-group > label {
     transform-origin: left center;
     transition: color 0.2s ease, transform 0.2s ease;
 }
 #lookup-section .input-group:focus-within > label {
-    color: #526a7e;
+    color: #2c3e50;
     transform: translateY(-2px);
 }
+
 #lookup-section .rsvp-input-shell {
     position: relative;
     width: 100%;
@@ -1002,7 +999,7 @@ p { font-size: 0.95em; font-weight: 300; }
     bottom: 0;
     width: 0;
     height: 2px;
-    background: #526a7e;
+    background: #2c3e50;
     content: "";
     transition: width 0.22s ease;
 }
@@ -1016,35 +1013,6 @@ p { font-size: 0.95em; font-weight: 300; }
 #guest-names-container .companion-name-input:focus ~ .rsvp-input-bar::after {
     width: 50%;
 }
-#lookup-section .rsvp-input-highlight {
-    position: absolute;
-    bottom: 8px;
-    left: 0;
-    width: 88px;
-    height: 58%;
-    pointer-events: none;
-    opacity: 0;
-}
-#guest-names-container .rsvp-input-highlight {
-    position: absolute;
-    bottom: 8px;
-    left: 0;
-    width: 88px;
-    height: 58%;
-    pointer-events: none;
-    opacity: 0;
-}
-#lookup-section .rsvp-text-input:focus ~ .rsvp-input-highlight {
-    animation: rsvpInputHighlight 0.32s ease forwards;
-}
-#guest-names-container .companion-name-input:focus ~ .rsvp-input-highlight {
-    animation: rsvpInputHighlight 0.32s ease forwards;
-}
-@keyframes rsvpInputHighlight {
-    0% { background: rgba(82, 106, 126, 0.2); opacity: 0.5; }
-    100% { background: transparent; opacity: 0; }
-}
-
 .rsvp-btn { display: inline-block; text-decoration: none; text-align: center; font-family: 'Montserrat', sans-serif; text-transform: uppercase; cursor: pointer; }
 .rsvp-btn:disabled { opacity: 0.65; cursor: wait; transform: none; }
 .form-submit-btn { width: 100%; margin-top: 20px; }
@@ -1094,7 +1062,8 @@ p { font-size: 0.95em; font-weight: 300; }
 .rsvp-contact-number:hover { text-decoration: underline; }
 .rsvp-contact-actions { display: flex; flex: 0 0 auto; gap: 8px; }
 .rsvp-contact-actions a { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #cbd5e1; border-radius: 50%; background: #fff; color: #2c3e50; transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease; }
-.rsvp-contact-actions a:hover, .rsvp-contact-actions a:focus-visible { background: #2c3e50; color: #fff; transform: translateY(-1px); }
+.rsvp-contact-actions a:hover,
+.rsvp-contact-actions a:focus-visible { background: #2c3e50; color: #fff; transform: translateY(-1px); }
 .rsvp-contact-actions svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .modal-content-img { display: block; margin: auto; max-width: 95%; max-height: 90vh; border-radius: 6px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); animation: zoomIn 0.3s ease; object-fit: contain; }
 .close-modal-btn { position: absolute; top: 20px; right: 30px; font-size: 45px; color: #ffffff; cursor: pointer; transition: color 0.3s ease; z-index: 10006; }
@@ -1259,8 +1228,11 @@ p { font-size: 0.95em; font-weight: 300; }
     display: none;
 }
 
-.photo-placeholder:focus-visible .party-photo,
 .photo-placeholder.is-color .party-photo {
+    filter: grayscale(0%) !important;
+}
+
+.photo-placeholder:focus-visible .party-photo {
     filter: grayscale(0%) !important;
 }
 
@@ -1268,11 +1240,6 @@ p { font-size: 0.95em; font-weight: 300; }
     .photo-placeholder:hover .party-photo {
         filter: grayscale(0%) !important;
     }
-}
-
-.photo-placeholder:focus-visible {
-    outline: 2px solid #2c3e50;
-    outline-offset: 3px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1372,9 +1339,11 @@ body.page-scroll-locked {
     }
 }
 
-/* On mobile, the scroll position controls color; focus/hover alone does not. */
+/* On mobile, the scroll position controls image color. */
 @media (max-width: 767px) {
-    .photo-placeholder:hover:not(.is-color) .party-photo,
+    .photo-placeholder:hover:not(.is-color) .party-photo {
+        filter: grayscale(100%) !important;
+    }
     .photo-placeholder:focus-visible:not(.is-color) .party-photo {
         filter: grayscale(100%) !important;
     }
@@ -1760,7 +1729,6 @@ body.page-scroll-locked {
     .accommodation-table-wrap { display: none; }
     .accommodation-mobile-list { display: grid; gap: 9px; width: 100%; }
     .accommodation-place-button { min-height: 52px; padding: 13px 14px; font-size: 0.86em; }
-    .accommodation-place-button:focus-visible { outline: 2px solid #2c3e50; outline-offset: 2px; }
     .accommodation-dialog { padding: 25px 18px 20px; }
 
     .dress-code-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
@@ -1857,7 +1825,6 @@ body.page-scroll-locked {
     box-shadow: 0 5px 14px rgba(38, 59, 76, 0.1);
     transform: translateY(-2px);
 }
-.rsvp-btn:focus-visible { outline: 2px solid #7b94a9; outline-offset: 3px; }
 .rsvp-btn:disabled { opacity: 0.65; cursor: wait; transform: none; }
 .venue-map-button,
 .accommodation-map-button { min-width: 0; padding: 10px 18px; font-size: 0.76em; }
@@ -1985,7 +1952,6 @@ body.page-scroll-locked {
 .music-list-copy { display: grid; min-width: 0; line-height: 1.35; }
 .music-list-copy strong { overflow: hidden; font-size: 0.74em; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
 .music-list-copy small { color: #879198; font-size: 0.62em; }
-.music-fab:focus-visible, .music-panel button:focus-visible { outline: 2px solid #7b94a9; outline-offset: 3px; }
 @media (max-width: 480px) {
     .music-widget { right: 14px; bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
     .music-fab { width: 50px; height: 50px; }
@@ -2293,11 +2259,6 @@ body { font-size: 16px; line-height: 1.65; }
     transform: translateY(-2px);
 }
 
-.secondary-sponsor-card:focus-visible {
-    outline: 2px solid #526779;
-    outline-offset: 3px;
-}
-
 .secondary-sponsor-dialog {
     position: fixed;
     inset: 0;
@@ -2548,7 +2509,6 @@ body { font-size: 16px; line-height: 1.65; }
     transform: translateX(32px);
 }
 
-.story-image-frame:focus-visible { outline: 3px solid #526a7e; outline-offset: 4px; }
 
 .story-entry.is-visible::before {
     opacity: 1;
@@ -2672,4 +2632,10 @@ body { font-size: 16px; line-height: 1.65; }
     .story-entry::before { transition: opacity 0.25s ease; transform: translate(-50%, -50%); }
     .story-entry-text,
     .story-entry .story-image-frame { transition: opacity 0.65s ease; transform: none !important; }
+}
+
+/* Suppress focus-triggered visual styling throughout the website. */
+*:focus,
+*:focus-visible {
+    outline: none !important;
 }
