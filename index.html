@@ -850,10 +850,10 @@
 
             const current = dialog._storyPhotoIndex + 1;
             const total = dialog._storyPhotos.length;
-            if (total <= 1) guide.textContent = 'Our Story photo';
-            else if (dialog._storyPhotoIndex === 0) guide.textContent = `${current} / ${total} · Swipe right for next`;
-            else if (dialog._storyPhotoIndex === total - 1) guide.textContent = `${current} / ${total} · Swipe left to go back · right to finish`;
-            else guide.textContent = `${current} / ${total} · ← Previous · Next →`;
+            if (total <= 1) guide.textContent = 'Swipe right to close';
+            else if (dialog._storyPhotoIndex === 0) guide.textContent = 'Swipe right to see the next photo';
+            else if (dialog._storyPhotoIndex === total - 1) guide.textContent = 'Swipe left to go back · swipe right to close';
+            else guide.textContent = 'Swipe left for the previous photo · swipe right for the next';
 
             [dialog._storyPhotos[dialog._storyPhotoIndex - 1], dialog._storyPhotos[dialog._storyPhotoIndex + 1]]
                 .filter(Boolean)
@@ -1012,10 +1012,10 @@
 
             const current = dialog._storyPhotoIndex + 1;
             const total = dialog._storyPhotos.length;
-            if (total <= 1) guide.textContent = 'Our Story photo';
-            else if (dialog._storyPhotoIndex === 0) guide.textContent = `${current} / ${total} · Swipe right for next`;
-            else if (dialog._storyPhotoIndex === total - 1) guide.textContent = `${current} / ${total} · Swipe left to go back · right to finish`;
-            else guide.textContent = `${current} / ${total} · ← Previous · Next →`;
+            if (total <= 1) guide.textContent = 'Swipe right to close';
+            else if (dialog._storyPhotoIndex === 0) guide.textContent = 'Swipe right to see the next photo';
+            else if (dialog._storyPhotoIndex === total - 1) guide.textContent = 'Swipe left to go back · swipe right to close';
+            else guide.textContent = 'Swipe left for the previous photo · swipe right for the next';
 
             [dialog._storyPhotos[dialog._storyPhotoIndex - 1], dialog._storyPhotos[dialog._storyPhotoIndex + 1]]
                 .filter(Boolean)
