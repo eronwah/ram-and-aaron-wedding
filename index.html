@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=35">
+    <link rel="stylesheet" href="style.css?v=36">
 </head>
 <body>
 
@@ -889,6 +889,7 @@
             reaction.style.left = `${buttonRect.left + buttonRect.width / 2 - frameRect.left}px`;
             reaction.style.top = `${buttonRect.top - frameRect.top}px`;
             reaction.style.setProperty('--reaction-drift', `${Math.round(Math.random() * 56 - 28)}px`);
+            reaction.style.setProperty('--reaction-rise', `${-Math.round(frameRect.height * 0.5)}px`);
             frame.querySelector('.story-reaction-floats').appendChild(reaction);
             reaction.addEventListener('animationend', () => reaction.remove(), { once: true });
         }
@@ -906,8 +907,8 @@
             preview.style.transition = 'none';
             image.style.transition = 'none';
             image.offsetWidth;
-            image.style.transition = 'transform 320ms cubic-bezier(.22,.75,.22,1), opacity 260ms ease';
-            preview.style.transition = 'transform 320ms cubic-bezier(.22,.75,.22,1), opacity 260ms ease';
+            image.style.transition = 'transform 230ms cubic-bezier(.2,.85,.25,1), opacity 200ms ease';
+            preview.style.transition = 'transform 230ms cubic-bezier(.2,.85,.25,1), opacity 200ms ease';
 
             requestAnimationFrame(() => {
                 image.style.transform = `translateX(${direction * 115}%) rotate(${direction * 5}deg)`;
@@ -942,7 +943,7 @@
                 if (event.target === image && event.propertyName === 'transform') finish();
             };
             image.addEventListener('transitionend', onTransitionEnd);
-            window.setTimeout(finish, 380);
+            window.setTimeout(finish, 300);
             return true;
         }
 
@@ -951,30 +952,36 @@
             const closeButton = dialog.querySelector('.story-image-dialog-close');
             const image = document.getElementById('story-image-dialog-photo');
             const preview = document.getElementById('story-image-dialog-preview');
+            const frame = dialog.querySelector('.story-image-dialog-frame');
             let pointerStart = null;
+
+            // Clean up old count markup if a cached page version still contains it.
+            dialog.querySelectorAll('.story-reaction-count').forEach(count => count.remove());
 
             dialog.querySelectorAll('.story-reaction-button').forEach(button => {
                 button.addEventListener('click', () => sendStoryReaction(button.dataset.reaction, button));
             });
 
-            image.addEventListener('pointerdown', event => {
+            frame.addEventListener('pointerdown', event => {
                 if (!event.isPrimary || event.button !== 0) return;
+                if (event.target.closest('.story-reaction-button')) return;
                 if (dialog._storyAnimating) return;
                 pointerStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
-                image.setPointerCapture(event.pointerId);
+                frame.setPointerCapture(event.pointerId);
             });
-            image.addEventListener('pointermove', event => {
+            frame.addEventListener('pointermove', event => {
                 if (!pointerStart || pointerStart.id !== event.pointerId) return;
                 const dx = event.clientX - pointerStart.x;
                 const dy = event.clientY - pointerStart.y;
                 if (Math.abs(dx) < Math.abs(dy) * 1.15) return;
 
                 const direction = dx > 0 ? 1 : -1;
-                const canMove = setStoryPhotoPreview(dialog, direction, Math.min(1, Math.abs(dx) / 150));
+                image.style.transition = 'none';
+                preview.style.transition = 'none';
+                const canMove = setStoryPhotoPreview(dialog, direction, Math.min(1, Math.abs(dx) / 100));
                 const atEdge = !canMove;
                 const resistedDx = atEdge ? dx * 0.18 : dx;
-                image.style.transition = 'none';
-                image.style.transform = `translateX(${resistedDx}px) rotate(${Math.max(-4, Math.min(4, resistedDx / 30))}deg)`;
+                image.style.transform = `translateX(${resistedDx}px) rotate(${Math.max(-2.5, Math.min(2.5, resistedDx / 55))}deg)`;
                 image.style.opacity = String(1 - Math.min(Math.abs(resistedDx) / 700, 0.28));
             });
             const finishSwipe = event => {
@@ -982,7 +989,8 @@
                 const dx = event.clientX - pointerStart.x;
                 const dy = event.clientY - pointerStart.y;
                 pointerStart = null;
-                const isSwipe = Math.abs(dx) >= 48 && Math.abs(dx) > Math.abs(dy) * 1.2;
+                const swipeThreshold = Math.max(22, frame.clientWidth * 0.06);
+                const isSwipe = Math.abs(dx) >= swipeThreshold && Math.abs(dx) > Math.abs(dy) * 1.05;
                 const direction = dx > 0 ? 1 : -1;
                 const hasNextPhoto = dialog._storyPhotoIndex + direction >= 0 &&
                     dialog._storyPhotoIndex + direction < dialog._storyPhotos.length;
@@ -990,8 +998,8 @@
                 if (isSwipe && hasNextPhoto) {
                     moveOurStoryPhoto(direction);
                 } else {
-                    image.style.transition = 'transform 220ms ease, opacity 220ms ease';
-                    preview.style.transition = 'transform 220ms ease, opacity 220ms ease';
+                    image.style.transition = 'transform 180ms ease-out, opacity 180ms ease-out';
+                    preview.style.transition = 'transform 180ms ease-out, opacity 180ms ease-out';
                     image.style.transform = '';
                     image.style.opacity = '';
                     preview.style.transform = 'scale(.96)';
@@ -1000,14 +1008,14 @@
                         preview.removeAttribute('src');
                         image.style.transition = '';
                         preview.style.transition = '';
-                    }, 240);
+                    }, 200);
                 }
             };
-            image.addEventListener('pointerup', finishSwipe);
-            image.addEventListener('pointercancel', () => {
+            frame.addEventListener('pointerup', finishSwipe);
+            frame.addEventListener('pointercancel', () => {
                 pointerStart = null;
-                image.style.transition = 'transform 220ms ease, opacity 220ms ease';
-                preview.style.transition = 'transform 220ms ease, opacity 220ms ease';
+                image.style.transition = 'transform 180ms ease-out, opacity 180ms ease-out';
+                preview.style.transition = 'transform 180ms ease-out, opacity 180ms ease-out';
                 image.style.transform = '';
                 image.style.opacity = '';
                 preview.style.transform = 'scale(.96)';
@@ -1016,7 +1024,7 @@
                     preview.removeAttribute('src');
                     image.style.transition = '';
                     preview.style.transition = '';
-                }, 240);
+                }, 200);
             });
             dialog.addEventListener('keydown', event => {
                 if (event.key === 'ArrowLeft' && moveOurStoryPhoto(-1)) event.preventDefault();
