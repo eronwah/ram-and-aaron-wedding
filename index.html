@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=21">
+    <link rel="stylesheet" href="style.css?v=22">
 </head>
 <body>
 
@@ -497,6 +497,15 @@
         <p class="footer-date">July 28, 2027</p>
     </footer>
 
+    <!-- OUR STORY PHOTO POP-UP -->
+    <dialog id="story-image-dialog" class="story-image-dialog" aria-label="Our Story photo">
+        <button type="button" class="story-image-dialog-close" aria-label="Close story photo">&times;</button>
+        <div class="story-image-dialog-frame">
+            <img id="story-image-dialog-photo" src="" alt="">
+            <p id="story-image-dialog-caption" class="story-image-dialog-caption"></p>
+        </div>
+    </dialog>
+
     <!-- IMAGE MODAL -->
     <div id="image-modal" class="modal-overlay" onclick="closeImageModal()">
         <span class="close-modal-btn" onclick="closeImageModal()">&times;</span>
@@ -642,6 +651,8 @@
             const isOpen = document.getElementById('navLinks').classList.contains('nav-active');
             document.getElementById('burgerMenu').setAttribute('aria-expanded', isOpen);
             document.getElementById('burgerMenu').setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+            if (isOpen) lockPageScroll();
+            else unlockPageScrollIfNoPopup();
         }
 
         function closeMenu() {
@@ -649,6 +660,7 @@
             document.getElementById('burgerMenu').classList.remove('toggle-active');
             document.getElementById('burgerMenu').setAttribute('aria-expanded', 'false');
             document.getElementById('burgerMenu').setAttribute('aria-label', 'Open navigation menu');
+            unlockPageScrollIfNoPopup();
         }
 
         function updateNavigationLayout() {
@@ -712,23 +724,85 @@
             document.fonts.ready.then(updateNavigationLayout);
         }
 
+        let pageScrollLockPosition = null;
+
+        function lockPageScroll() {
+            if (pageScrollLockPosition !== null) return;
+            pageScrollLockPosition = window.scrollY;
+            const scrollbarWidth = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
+            document.body.style.top = `-${pageScrollLockPosition}px`;
+            document.body.style.paddingRight = `${scrollbarWidth}px`;
+            document.documentElement.classList.add('page-scroll-locked');
+            document.body.classList.add('page-scroll-locked');
+        }
+
+        function unlockPageScrollIfNoPopup() {
+            const visibleOverlays = [...document.querySelectorAll('.modal-overlay')]
+                .some(overlay => getComputedStyle(overlay).display !== 'none');
+            const openDialogs = [...document.querySelectorAll('dialog')]
+                .some(dialog => dialog.open);
+            const navigationMenuOpen = document.getElementById('navLinks')?.classList.contains('nav-active');
+            if (visibleOverlays || openDialogs || navigationMenuOpen || pageScrollLockPosition === null) return;
+
+            const restorePosition = pageScrollLockPosition;
+            pageScrollLockPosition = null;
+            document.documentElement.classList.remove('page-scroll-locked');
+            document.body.classList.remove('page-scroll-locked');
+            document.body.style.removeProperty('top');
+            document.body.style.removeProperty('padding-right');
+            window.scrollTo(0, restorePosition);
+        }
+
         function openImageModal(imgSrc) {
             const modal = document.getElementById('image-modal');
             const modalImg = document.getElementById('modal-image');
             modalImg.src = imgSrc;
             modal.style.display = 'flex';
+            lockPageScroll();
         }
 
         function closeImageModal() {
             document.getElementById('image-modal').style.display = 'none';
+            unlockPageScrollIfNoPopup();
         }
 
         function openContactModal() {
             document.getElementById('contact-modal').style.display = 'flex';
+            lockPageScroll();
         }
 
         function closeContactModal() {
             document.getElementById('contact-modal').style.display = 'none';
+            unlockPageScrollIfNoPopup();
+        }
+
+        function openOurStoryPhoto(imgSrc, sentence) {
+            const dialog = document.getElementById('story-image-dialog');
+            const image = document.getElementById('story-image-dialog-photo');
+            document.getElementById('story-image-dialog-caption').textContent = sentence;
+            image.src = imgSrc;
+            image.alt = 'Our Story photograph';
+            if (typeof dialog.showModal === 'function') dialog.showModal();
+            else dialog.setAttribute('open', '');
+            lockPageScroll();
+        }
+
+        function setupOurStoryPhotoDialog() {
+            const dialog = document.getElementById('story-image-dialog');
+            const closeButton = dialog.querySelector('.story-image-dialog-close');
+            const closeDialog = () => {
+                if (typeof dialog.close === 'function') dialog.close();
+                else {
+                    dialog.removeAttribute('open');
+                    unlockPageScrollIfNoPopup();
+                }
+            };
+
+            closeButton.addEventListener('click', closeDialog);
+            dialog.addEventListener('click', event => {
+                if (event.target === dialog) closeDialog();
+            });
+            dialog.addEventListener('close', unlockPageScrollIfNoPopup);
         }
 
         function setupRsvpKeyboardVisibility() {
@@ -1280,13 +1354,22 @@
 
                 const storyRows = result.data
                     .filter(row => String(row.sentence || '').trim())
+                    .map((row, sourceIndex) => ({ ...row, _sourceIndex: sourceIndex }))
+                    .sort((a, b) => {
+                        const enteredA = Number(a.display_order);
+                        const enteredB = Number(b.display_order);
+                        const orderA = Number.isFinite(enteredA) && enteredA > 0 ? enteredA : a._sourceIndex + 1;
+                        const orderB = Number.isFinite(enteredB) && enteredB > 0 ? enteredB : b._sourceIndex + 1;
+                        return orderA - orderB || a._sourceIndex - b._sourceIndex;
+                    })
                     .slice(0, 7);
                 const fragment = document.createDocumentFragment();
 
                 storyRows.forEach((row, index) => {
                     const order = Number(row.display_order) || index + 1;
                     const entry = document.createElement('article');
-                    entry.className = `story-entry${index % 2 === 1 ? ' story-entry-reversed' : ''}`;
+                    entry.className = `story-entry ${index % 2 === 0 ? 'story-entry--text-left' : 'story-entry--text-right'}`;
+                    entry.dataset.storyIndex = String(index);
 
                     const text = document.createElement('div');
                     text.className = 'story-entry-text';
@@ -1298,11 +1381,16 @@
                     const imageFile = String(row.image_file || '').trim();
                     if (imageFile) {
                         entry.classList.add('has-image');
-                        const imageFrame = document.createElement('figure');
+                        const imageFrame = document.createElement('button');
+                        imageFrame.type = 'button';
                         imageFrame.className = 'story-image-frame';
+                        imageFrame.setAttribute('aria-label', `Open Our Story photo ${order}`);
                         const image = document.createElement('img');
                         image.alt = `Aaron and Ram, story photograph ${order}`;
                         image.loading = 'lazy';
+                        imageFrame.addEventListener('click', () => {
+                            openOurStoryPhoto(image.currentSrc || image.src, paragraph.textContent);
+                        });
                         image.addEventListener('error', () => {
                             entry.classList.remove('has-image');
                             imageFrame.remove();
@@ -1473,6 +1561,7 @@
                     } else {
                         dialog.setAttribute('open', '');
                     }
+                    lockPageScroll();
                 };
 
                 card.addEventListener('click', openPair);
@@ -1486,17 +1575,24 @@
 
             closeButton.addEventListener('click', () => {
                 if (typeof dialog.close === 'function') dialog.close();
-                else dialog.removeAttribute('open');
+                else {
+                    dialog.removeAttribute('open');
+                    unlockPageScrollIfNoPopup();
+                }
             });
             dialog.addEventListener('click', event => {
                 if (event.target === dialog) {
                     if (typeof dialog.close === 'function') dialog.close();
-                    else dialog.removeAttribute('open');
+                    else {
+                        dialog.removeAttribute('open');
+                        unlockPageScrollIfNoPopup();
+                    }
                 }
             });
             dialog.addEventListener('close', () => {
                 if (lastTrigger) lastTrigger.focus();
                 lastTrigger = null;
+                unlockPageScrollIfNoPopup();
             });
         }
 
@@ -1688,6 +1784,7 @@
             } else {
                 dialog.setAttribute('open', '');
             }
+            lockPageScroll();
         }
 
         function setupAccommodationDialog() {
@@ -1709,6 +1806,7 @@
                     dialog.close();
                 } else {
                     dialog.removeAttribute('open');
+                    unlockPageScrollIfNoPopup();
                 }
             };
 
@@ -1719,6 +1817,7 @@
             dialog.addEventListener('close', () => {
                 if (dialog._lastTrigger) dialog._lastTrigger.focus();
                 dialog._lastTrigger = null;
+                unlockPageScrollIfNoPopup();
             });
         }
 
@@ -1947,6 +2046,7 @@
         }
 
         loadOurStory();
+        setupOurStoryPhotoDialog();
         setupPartyPhotoPlaceholders();
         setupSecondarySponsorCards();
         loadWeddingPartyDetails();
