@@ -1082,7 +1082,9 @@
                         Math.hypot(event.clientX - lastImageTap.x, event.clientY - lastImageTap.y) < 36;
                     if (isDoubleTap) {
                         sendStoryReaction('love', null, { x: event.clientX, y: event.clientY });
-                        lastImageTap = null;
+                        // Keep the latest tap as the next reference so rapid repeated taps
+                        // continue to create hearts instead of requiring a fresh pair each time.
+                        lastImageTap = { x: event.clientX, y: event.clientY, time: now };
                     } else {
                         lastImageTap = { x: event.clientX, y: event.clientY, time: now };
                     }
