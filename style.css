@@ -2203,15 +2203,29 @@ body { font-size: 16px; line-height: 1.65; }
 .story-entry .story-image-frame img.is-loaded { opacity: 1; }
 
 .story-entry--text-left .story-entry-text {
-    transform: translateX(-32px);
+    padding-right: clamp(14px, 2.5vw, 30px);
+    text-align: right;
+    transform: translateX(32px);
 }
+.story-entry--text-left .story-entry-text p { text-align: right; }
 
 .story-entry--text-right .story-entry-text {
-    transform: translateX(32px);
+    padding-left: clamp(14px, 2.5vw, 30px);
+    text-align: left;
+    transform: translateX(-32px);
+}
+.story-entry--text-right .story-entry-text p { text-align: left; }
+
+.story-entry--text-left .story-image-frame {
+    width: 88%;
+    justify-self: start;
+    transform: translateX(-32px);
 }
 
 .story-entry--text-right .story-image-frame {
-    transform: translateX(-32px);
+    width: 88%;
+    justify-self: end;
+    transform: translateX(32px);
 }
 
 .story-image-frame:focus-visible { outline: 3px solid #526a7e; outline-offset: 4px; }
@@ -2268,10 +2282,30 @@ body { font-size: 16px; line-height: 1.65; }
         aspect-ratio: 1 / 1;
     }
 
-    .story-entry--text-left .story-entry-text { transform: translateX(-18px); }
-    .story-entry--text-left .story-image-frame { transform: translateX(18px); }
-    .story-entry--text-right .story-entry-text { transform: translateX(18px); }
-    .story-entry--text-right .story-image-frame { transform: translateX(-18px); }
+    .story-entry--text-left .story-entry-text {
+        padding-right: 10px;
+        padding-left: 2px;
+        text-align: right;
+        transform: translateX(18px);
+    }
+    .story-entry--text-left .story-entry-text p { text-align: right; }
+    .story-entry--text-left .story-image-frame {
+        width: 92%;
+        justify-self: start;
+        transform: translateX(-18px);
+    }
+    .story-entry--text-right .story-entry-text {
+        padding-right: 2px;
+        padding-left: 10px;
+        text-align: left;
+        transform: translateX(-18px);
+    }
+    .story-entry--text-right .story-entry-text p { text-align: left; }
+    .story-entry--text-right .story-image-frame {
+        width: 92%;
+        justify-self: end;
+        transform: translateX(18px);
+    }
     .story-entry-text p { font-size: clamp(0.76rem, 3vw, 0.92rem); line-height: 1.65; }
     .story-entry::before { left: 50%; width: 12px; height: 12px; }
 }
