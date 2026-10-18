@@ -1317,6 +1317,7 @@
 
                 entriesContainer.replaceChildren(fragment);
                 if (storyRows.length) {
+                    setupOurStoryTimeline(entriesContainer);
                     status.hidden = true;
                 } else {
                     status.textContent = 'Our story is being prepared.';
@@ -1327,6 +1328,45 @@
                 status.textContent = 'Our story could not be loaded right now. Please try again later.';
                 status.hidden = false;
             }
+        }
+
+        function setupOurStoryTimeline(container) {
+            const entries = [...container.querySelectorAll('.story-entry')];
+            if (!entries.length) return;
+
+            container.style.setProperty('--story-line-progress', '0%');
+
+            if (!('IntersectionObserver' in window)) {
+                entries.forEach(entry => entry.classList.add('is-visible'));
+                container.style.setProperty('--story-line-progress', '100%');
+                return;
+            }
+
+            let furthestVisibleIndex = -1;
+            const observer = new IntersectionObserver(observedEntries => {
+                observedEntries.forEach(observed => {
+                    if (!observed.isIntersecting) return;
+                    const entry = observed.target;
+                    entry.classList.add('is-visible');
+                    furthestVisibleIndex = Math.max(
+                        furthestVisibleIndex,
+                        Number(entry.dataset.storyIndex) || 0
+                    );
+                    observer.unobserve(entry);
+                });
+
+                const progress = ((furthestVisibleIndex + 1) / entries.length) * 100;
+                container.style.setProperty('--story-line-progress', `${progress}%`);
+            }, {
+                root: null,
+                rootMargin: '0px 0px -12% 0px',
+                threshold: 0.18
+            });
+
+            entries.forEach((entry, index) => {
+                entry.dataset.storyIndex = String(index);
+                observer.observe(entry);
+            });
         }
 
         // Read Wedding Party details from the separate, read-only Apps Script web app.

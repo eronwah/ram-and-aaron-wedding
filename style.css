@@ -1999,3 +1999,166 @@ body { font-size: 16px; line-height: 1.65; }
     line-height: 1.45;
     overflow-wrap: anywhere;
 }
+
+/* Our Story: alternating image-and-sentence timeline with scroll reveals */
+#our-story .story-subtitle {
+    max-width: 900px;
+}
+
+.story-entries {
+    position: relative;
+    isolation: isolate;
+    gap: clamp(18px, 3vw, 30px);
+    overflow: visible;
+}
+
+.story-entries::before {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: calc(50% - 1px);
+    width: 2px;
+    height: var(--story-line-progress, 0%);
+    background: linear-gradient(to bottom, #aebdca, #526a7e);
+    content: '';
+    transition: height 1s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.story-entry,
+.story-entry.has-image {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr);
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    max-width: 1000px;
+    min-height: 180px;
+    margin: 0 auto;
+    padding: 12px 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.story-entry::before {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: calc(50% - 7px);
+    width: 14px;
+    height: 14px;
+    border: 3px solid #f8fafc;
+    border-radius: 50%;
+    background: #526a7e;
+    box-shadow: 0 0 0 1px #526a7e;
+    content: '';
+    opacity: 0;
+    transform: scale(0.55);
+    transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s;
+}
+
+.story-entry-text,
+.story-entry .story-image-frame {
+    min-width: 0;
+    opacity: 0;
+    transition: opacity 0.75s ease, transform 0.75s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.story-entry-text {
+    grid-column: 1;
+    padding: clamp(8px, 2vw, 22px);
+    transform: translateX(-32px);
+}
+
+.story-entry .story-image-frame {
+    grid-column: 3;
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 4 / 3;
+    justify-self: center;
+    transform: translateX(32px);
+}
+
+.story-entry-reversed .story-entry-text {
+    grid-column: 3;
+    order: initial;
+    transform: translateX(32px);
+}
+
+.story-entry-reversed .story-image-frame {
+    grid-column: 1;
+    order: initial;
+    transform: translateX(-32px);
+}
+
+.story-entry.is-visible::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.story-entry.is-visible .story-entry-text,
+.story-entry.is-visible .story-image-frame {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+@media (max-width: 768px) {
+    #our-story .story-subtitle {
+        width: 100%;
+        max-width: none;
+        margin-bottom: 30px;
+        font-size: clamp(0.54rem, 3vw, 0.9rem);
+        letter-spacing: -0.025em;
+        line-height: 1.3;
+        white-space: nowrap;
+        text-wrap: nowrap;
+    }
+
+    .story-entries { gap: 16px; }
+
+    .story-entry,
+    .story-entry.has-image {
+        grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr);
+        min-height: 0;
+        padding: 12px 0;
+    }
+
+    .story-entry-text,
+    .story-entry.has-image .story-entry-text {
+        grid-column: 1;
+        padding: 8px 5px;
+        transform: translateX(-18px);
+    }
+
+    .story-entry .story-image-frame {
+        grid-column: 3;
+        width: 100%;
+        max-width: none;
+        aspect-ratio: 1 / 1;
+    }
+
+    .story-entry-reversed .story-entry-text { grid-column: 3; transform: translateX(18px); }
+    .story-entry-reversed .story-image-frame { grid-column: 1; }
+    .story-entry-text p { font-size: clamp(0.76rem, 3vw, 0.92rem); line-height: 1.65; }
+    .story-entry::before { left: calc(50% - 6px); width: 12px; height: 12px; }
+}
+
+@media (max-width: 340px) {
+    #our-story .story-subtitle { font-size: 0.5rem; }
+    .story-entry,
+    .story-entry.has-image { grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1fr); }
+    .story-entry-text,
+    .story-entry.has-image .story-entry-text { padding-right: 3px; padding-left: 3px; }
+    .story-entry-text p { font-size: 0.72rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .story-entries::before,
+    .story-entry::before,
+    .story-entry-text,
+    .story-entry .story-image-frame {
+        transition: none;
+    }
+}
