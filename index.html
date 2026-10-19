@@ -5,13 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=48">
+    <link rel="stylesheet" href="style.css?v=50">
 </head>
 <body class="invitation-loading">
 
     <!-- WEDDING INVITATION INTRO -->
     <div class="invitation-loader" id="invitation-loader" role="dialog" aria-modal="true" aria-label="Wedding invitation loading screen">
         <div class="invitation-loader-backdrop" aria-hidden="true"></div>
+        <div class="invitation-curtains" aria-hidden="true">
+            <span class="invitation-curtain invitation-curtain-left"><span class="invitation-curtain-fabric"></span></span>
+            <span class="invitation-curtain invitation-curtain-right"><span class="invitation-curtain-fabric"></span></span>
+        </div>
         <img class="invitation-loader-monogram" id="invitation-loader-monogram" src="monogram.png" alt="Aaron and Ram monogram">
         <div class="invitation-loader-content" id="invitation-loader-content">
             <span class="invitation-loader-divider" aria-hidden="true"></span>
@@ -1334,6 +1338,7 @@
                 if (!pageReady || invitationOpening) return;
                 invitationOpening = true;
                 loader.classList.add('is-finishing');
+                loader.classList.add('is-curtains-opening');
                 document.dispatchEvent(new Event('invitation:open'));
                 window.requestAnimationFrame(() => {
                     revealProgress = 1;
