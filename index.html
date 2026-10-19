@@ -5,21 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=43">
+    <link rel="stylesheet" href="style.css?v=44">
 </head>
 <body class="invitation-loading">
 
     <!-- WEDDING INVITATION INTRO -->
-    <div class="invitation-loader" id="invitation-loader" aria-label="Wedding invitation loading screen">
+    <div class="invitation-loader" id="invitation-loader" role="dialog" aria-modal="true" aria-label="Wedding invitation loading screen">
         <div class="invitation-loader-backdrop" aria-hidden="true"></div>
         <img class="invitation-loader-monogram" id="invitation-loader-monogram" src="monogram.png" alt="Aaron and Ram monogram">
         <div class="invitation-loader-content" id="invitation-loader-content">
             <span class="invitation-loader-divider" aria-hidden="true"></span>
+            <p class="invitation-loader-names">Aaron &amp; Ram</p>
             <time datetime="2027-07-28">July 28, 2027</time>
             <div class="invitation-loader-progress" id="invitation-loader-progress" role="progressbar" aria-label="Loading invitation" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
                 <span></span>
             </div>
-            <button class="invitation-loader-open" id="invitation-loader-open" type="button" hidden>Scroll up to open invitation</button>
+            <p class="invitation-loader-open" id="invitation-loader-open" hidden>
+                <span class="invitation-loader-arrow" aria-hidden="true">↑</span>
+                <span>Scroll up to open invitation</span>
+            </p>
         </div>
     </div>
 
@@ -1263,6 +1267,8 @@
             let loadingProgress = 4;
             let pointerY = null;
             let wheelTimer = null;
+            let wheelMotionTimer = null;
+            let resetTimer = null;
 
             const updateLogoTarget = () => {
                 const target = navLogo.getBoundingClientRect();
@@ -1283,9 +1289,10 @@
 
             const renderReveal = value => {
                 revealProgress = Math.max(0, Math.min(0.86, value));
-                updateLogoTarget();
                 const ratio = revealProgress;
                 loader.style.setProperty('--invitation-backdrop-y', `${-window.innerHeight * ratio}px`);
+                loader.style.setProperty('--invitation-backdrop-scale', String(1 - ratio * 0.12));
+                loader.style.setProperty('--invitation-backdrop-radius', `${ratio * 30}px`);
                 logo.style.setProperty('--invitation-logo-x', `${Number(logo.dataset.targetX || 0) * ratio}px`);
                 logo.style.setProperty('--invitation-logo-y', `${Number(logo.dataset.targetY || 0) * ratio}px`);
                 logo.style.setProperty('--invitation-logo-scale', `${1 + (Number(logo.dataset.targetScale || 0.3) - 1) * ratio}`);
@@ -1302,7 +1309,19 @@
                 progress.setAttribute('aria-valuenow', '100');
                 loader.classList.add('is-ready');
                 openButton.hidden = false;
-                openButton.focus({ preventScroll: true });
+            };
+
+            const cancelReset = () => {
+                window.clearTimeout(resetTimer);
+                loader.classList.remove('is-resetting');
+            };
+
+            const returnToStart = () => {
+                if (invitationOpening || revealProgress <= 0) return;
+                window.clearTimeout(wheelTimer);
+                loader.classList.add('is-resetting');
+                window.requestAnimationFrame(() => renderReveal(0));
+                resetTimer = window.setTimeout(() => loader.classList.remove('is-resetting'), 600);
             };
 
             const beginOpening = () => {
@@ -1313,6 +1332,8 @@
                 window.requestAnimationFrame(() => {
                     revealProgress = 1;
                     loader.style.setProperty('--invitation-backdrop-y', `${-window.innerHeight}px`);
+                    loader.style.setProperty('--invitation-backdrop-scale', '0.88');
+                    loader.style.setProperty('--invitation-backdrop-radius', '30px');
                     logo.style.setProperty('--invitation-logo-x', `${Number(logo.dataset.targetX || 0)}px`);
                     logo.style.setProperty('--invitation-logo-y', `${Number(logo.dataset.targetY || 0)}px`);
                     logo.style.setProperty('--invitation-logo-scale', String(Number(logo.dataset.targetScale || 0.3)));
@@ -1329,12 +1350,16 @@
             };
 
             const progressFromGesture = amount => {
-                if (!pageReady || invitationOpening || amount <= 0) return;
+                if (!pageReady || invitationOpening || amount === 0) return;
                 renderReveal(revealProgress + amount / Math.max(320, window.innerHeight * 0.42));
             };
 
             loader.addEventListener('pointerdown', event => {
                 if (event.button !== 0 || invitationOpening) return;
+                cancelReset();
+                loader.classList.remove('is-wheel-scrolling');
+                window.clearTimeout(wheelMotionTimer);
+                window.clearTimeout(wheelTimer);
                 pointerY = event.clientY;
                 if (loader.setPointerCapture) loader.setPointerCapture(event.pointerId);
             });
@@ -1342,28 +1367,34 @@
                 if (pointerY === null || invitationOpening) return;
                 const upwardDistance = pointerY - event.clientY;
                 pointerY = event.clientY;
-                if (upwardDistance > 0) {
+                if (upwardDistance !== 0) {
                     event.preventDefault();
                     progressFromGesture(upwardDistance);
                 }
             });
             loader.addEventListener('pointerup', () => {
                 pointerY = null;
-                if (pageReady && revealProgress >= 0.1) beginOpening();
+                if (!pageReady) return;
+                if (revealProgress >= 0.85) beginOpening();
+                else returnToStart();
             });
             loader.addEventListener('pointercancel', () => { pointerY = null; });
 
             loader.addEventListener('wheel', event => {
                 event.preventDefault();
                 if (!pageReady || invitationOpening || event.deltaY <= 0) return;
+                cancelReset();
+                loader.classList.add('is-wheel-scrolling');
+                window.clearTimeout(wheelMotionTimer);
+                wheelMotionTimer = window.setTimeout(() => loader.classList.remove('is-wheel-scrolling'), 140);
                 progressFromGesture(event.deltaY);
                 window.clearTimeout(wheelTimer);
                 wheelTimer = window.setTimeout(() => {
-                    if (revealProgress >= 0.1) beginOpening();
-                }, 180);
+                    if (revealProgress >= 0.85) beginOpening();
+                    else returnToStart();
+                }, 450);
             }, { passive: false });
 
-            openButton.addEventListener('click', beginOpening);
             document.addEventListener('keydown', event => {
                 if (!pageReady || invitationOpening) return;
                 if (['ArrowUp', 'PageDown', 'Enter', ' '].includes(event.key)) {
@@ -1372,6 +1403,7 @@
                 }
             });
             window.addEventListener('resize', () => {
+                updateLogoTarget();
                 if (!invitationOpening) renderReveal(revealProgress);
             });
 
