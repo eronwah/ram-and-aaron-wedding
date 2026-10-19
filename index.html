@@ -1246,7 +1246,7 @@
             });
         }
 
-        function setupInvitationLoader(contentLoads = []) {
+        function setupInvitationLoader() {
             const loader = document.getElementById('invitation-loader');
             const logo = document.getElementById('invitation-loader-monogram');
             const content = document.getElementById('invitation-loader-content');
@@ -1269,6 +1269,7 @@
             let wheelTimer = null;
             let wheelMotionTimer = null;
             let resetTimer = null;
+            let loadReadyTimer = null;
 
             const updateLogoTarget = () => {
                 const target = navLogo.getBoundingClientRect();
@@ -1307,6 +1308,7 @@
                 if (pageReady) return;
                 pageReady = true;
                 window.clearInterval(loadProgressTimer);
+                window.clearTimeout(loadReadyTimer);
                 progressFill.style.width = '100%';
                 progress.setAttribute('aria-valuenow', '100');
                 loader.classList.add('is-ready');
@@ -1411,68 +1413,16 @@
                 if (!invitationOpening) renderReveal(revealProgress);
             });
 
+            const loadingStartedAt = performance.now();
             const loadProgressTimer = window.setInterval(() => {
                 if (pageReady) return;
-                loadingProgress = Math.min(92, loadingProgress + Math.max(0.35, (92 - loadingProgress) * 0.055));
+                const elapsed = Math.min(1, (performance.now() - loadingStartedAt) / 3000);
+                const easedProgress = 1 - Math.pow(1 - elapsed, 2);
+                loadingProgress = 4 + (95 - 4) * easedProgress;
                 progressFill.style.width = `${loadingProgress}%`;
                 progress.setAttribute('aria-valuenow', String(Math.round(loadingProgress)));
-            }, 90);
-            const waitForInvitationImages = () => new Promise(resolve => {
-                let documentLoaded = document.readyState === 'complete';
-                let sectionsLoaded = contentLoads.length === 0;
-                let quietTimer = null;
-
-                const cleanup = () => {
-                    window.clearTimeout(quietTimer);
-                    observer.disconnect();
-                    document.removeEventListener('load', checkImages, true);
-                    document.removeEventListener('error', checkImages, true);
-                    window.removeEventListener('load', onDocumentLoad);
-                };
-
-                const hasPendingImages = () => {
-                    return Array.from(document.images).some(image => {
-                        const hasSource = Boolean(image.currentSrc || image.getAttribute('src') || image.getAttribute('srcset'));
-                        if (!hasSource) return false;
-                        if (image.loading === 'lazy') image.loading = 'eager';
-                        return !image.complete;
-                    });
-                };
-
-                const checkImages = () => {
-                    if (!documentLoaded || !sectionsLoaded) return;
-                    window.clearTimeout(quietTimer);
-                    if (hasPendingImages()) return;
-                    quietTimer = window.setTimeout(() => {
-                        if (hasPendingImages()) return checkImages();
-                        cleanup();
-                        resolve();
-                    }, 500);
-                };
-
-                const onDocumentLoad = () => {
-                    documentLoaded = true;
-                    checkImages();
-                };
-
-                const observer = new MutationObserver(checkImages);
-                observer.observe(document.documentElement, {
-                    childList: true,
-                    subtree: true,
-                    attributes: true,
-                    attributeFilter: ['src', 'srcset', 'loading']
-                });
-                document.addEventListener('load', checkImages, true);
-                document.addEventListener('error', checkImages, true);
-                if (!documentLoaded) window.addEventListener('load', onDocumentLoad, { once: true });
-                Promise.allSettled(contentLoads).then(() => {
-                    sectionsLoaded = true;
-                    checkImages();
-                });
-                checkImages();
-            });
-
-            waitForInvitationImages().then(finishLoading);
+            }, 60);
+            loadReadyTimer = window.setTimeout(finishLoading, 3000);
             navLogo.addEventListener('load', updateLogoTarget, { once: true });
             updateLogoTarget();
         }
@@ -2767,15 +2717,15 @@
             }
         }
 
-        const invitationStoryLoad = loadOurStory();
+        loadOurStory();
         setupOurStoryPhotoDialog();
         setupPartyPhotoPlaceholders();
         setupSecondarySponsorCards();
-        const invitationPartyLoad = loadWeddingPartyDetails();
+        loadWeddingPartyDetails();
         setupAccommodationDialog();
         loadAccommodationDetails();
         setupDressCodeCards();
-        setupInvitationLoader([invitationStoryLoad, invitationPartyLoad]);
+        setupInvitationLoader();
         setupActiveNavigation();
         setupMusicPlayer();
         setupRsvpKeyboardVisibility();
