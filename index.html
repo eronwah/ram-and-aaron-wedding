@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=52">
+    <link rel="stylesheet" href="style.css?v=53">
 </head>
 <body class="invitation-loading">
 
@@ -693,6 +693,69 @@
             window.addEventListener('scroll', updateActiveLink, { passive: true });
             window.addEventListener('resize', updateActiveLink);
             updateActiveLink();
+        }
+
+        function setupSectionReveals() {
+            const revealTargets = [
+                ...document.querySelectorAll('.venue-card'),
+                ...document.querySelectorAll('#details .info-card, #details .timeline-item, #details .details-followup-section'),
+                ...document.querySelectorAll('#wedding-party .party-group'),
+                ...document.querySelectorAll('#faq .faq-item'),
+                ...document.querySelectorAll('#site-footer')
+            ];
+
+            document.addEventListener('invitation:opened', () => {
+                document.body.classList.add('invitation-opened');
+            }, { once: true });
+
+            if (!revealTargets.length) return;
+            if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                revealTargets.forEach(target => target.classList.add('scroll-reveal-visible'));
+                return;
+            }
+
+            const revealObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('scroll-reveal-visible');
+                    revealObserver.unobserve(entry.target);
+                });
+            }, {
+                root: null,
+                rootMargin: '0px 0px -8% 0px',
+                threshold: 0.08
+            });
+
+            revealTargets.forEach((target, index) => {
+                target.classList.add('scroll-reveal');
+                target.style.setProperty('--scroll-reveal-delay', `${Math.min(index % 4, 3) * 75}ms`);
+                revealObserver.observe(target);
+            });
+        }
+
+        function setupStorySubtitleFit() {
+            const subtitle = document.querySelector('#our-story .story-subtitle');
+            if (!subtitle) return;
+
+            let resizeFrame = 0;
+            const fitSubtitle = () => {
+                subtitle.style.fontSize = '';
+                const availableWidth = subtitle.clientWidth;
+                const naturalWidth = subtitle.scrollWidth;
+                const baseSize = Number.parseFloat(getComputedStyle(subtitle).fontSize) || 16;
+                if (availableWidth > 0 && naturalWidth > availableWidth) {
+                    const fittedSize = Math.max(8, baseSize * (availableWidth / naturalWidth));
+                    subtitle.style.fontSize = `${fittedSize}px`;
+                }
+            };
+            const scheduleFit = () => {
+                cancelAnimationFrame(resizeFrame);
+                resizeFrame = requestAnimationFrame(fitSubtitle);
+            };
+
+            scheduleFit();
+            window.addEventListener('resize', scheduleFit, { passive: true });
+            if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleFit);
         }
 
         function toggleMenu() {
@@ -2784,6 +2847,8 @@
         setupMonogramVideo();
         setupInvitationLoader();
         setupActiveNavigation();
+        setupSectionReveals();
+        setupStorySubtitleFit();
         setupMusicPlayer();
         setupRsvpKeyboardVisibility();
         setupBackToTopVisibility();
