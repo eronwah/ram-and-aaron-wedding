@@ -92,7 +92,7 @@
     <header id="home" class="scroll-section animate-in" style="min-height: 100vh; justify-content: center;">
         <p style="font-family: 'Playfair Display', serif; font-size: 1.5em; color: #1a252f; font-style: italic; margin-bottom: 10px;">We are getting married!</p>
         
-        <video src="monogram.mp4" class="monogram-video" autoplay loop muted playsinline></video>
+        <video src="monogram.mp4" class="monogram-video" preload="none" loop muted playsinline></video>
         
         <p class="date" style="margin-top: 5px;">July 28, 2027 | Silang, Cavite</p>
 
@@ -1276,6 +1276,8 @@
             let revealProgress = 0;
             let loadingProgress = 4;
             let pointerY = null;
+            let pointerStartY = null;
+            let pointerStartAt = 0;
             let wheelTimer = null;
             let wheelMotionTimer = null;
             let resetTimer = null;
@@ -1366,6 +1368,7 @@
                     loader.classList.add('is-dismissed');
                     document.body.classList.remove('invitation-loading');
                     document.documentElement.classList.remove('invitation-loading');
+                    document.dispatchEvent(new Event('invitation:opened'));
                     window.setTimeout(() => loader.remove(), 220);
                 }, 1350);
             };
@@ -1382,6 +1385,8 @@
                 window.clearTimeout(wheelMotionTimer);
                 window.clearTimeout(wheelTimer);
                 pointerY = event.clientY;
+                pointerStartY = event.clientY;
+                pointerStartAt = performance.now();
                 if (loader.setPointerCapture) loader.setPointerCapture(event.pointerId);
             });
             loader.addEventListener('pointermove', event => {
@@ -1391,15 +1396,24 @@
                 if (upwardDistance !== 0) {
                     event.preventDefault();
                     progressFromGesture(upwardDistance);
+                    const swipeDistance = pointerStartY - event.clientY;
+                    const swipeDuration = performance.now() - pointerStartAt;
+                    if (swipeDistance >= 72 && swipeDuration <= 300) {
+                        renderReveal(0.75);
+                        pointerY = null;
+                        pointerStartY = null;
+                        beginOpening();
+                    }
                 }
             });
             loader.addEventListener('pointerup', () => {
                 pointerY = null;
+                pointerStartY = null;
                 if (!pageReady) return;
                 if (revealProgress >= 0.75) beginOpening();
                 else returnToStart();
             });
-            loader.addEventListener('pointercancel', () => { pointerY = null; });
+            loader.addEventListener('pointercancel', () => { pointerY = null; pointerStartY = null; });
 
             loader.addEventListener('wheel', event => {
                 event.preventDefault();
@@ -1649,6 +1663,20 @@
             updateTrackDisplay();
             loadTrack(0, false);
             status.textContent = 'Music will begin when you open the invitation.';
+        }
+
+        function setupMonogramVideo() {
+            const video = document.querySelector('.monogram-video');
+            if (!video) return;
+
+            video.autoplay = false;
+            video.preload = 'none';
+            video.pause();
+            document.addEventListener('invitation:opened', () => {
+                if (document.visibilityState === 'hidden') return;
+                const playback = video.play();
+                if (playback && typeof playback.catch === 'function') playback.catch(() => {});
+            }, { once: true });
         }
 
         function setupBackToTopVisibility() {
@@ -2753,6 +2781,7 @@
         setupAccommodationDialog();
         loadAccommodationDetails();
         setupDressCodeCards();
+        setupMonogramVideo();
         setupInvitationLoader();
         setupActiveNavigation();
         setupMusicPlayer();
