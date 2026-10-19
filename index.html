@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=57">
+    <link rel="stylesheet" href="style.css?v=58">
 </head>
 <body class="invitation-loading">
 
@@ -253,6 +253,7 @@
             </section>
             <section class="details-followup-section">
                 <h3>DRESS CODE</h3>
+                <p class="dress-code-guidance">Please see which role fits you.</p>
                 <div id="dress-code-grid" class="dress-code-grid" aria-label="Dress code samples"></div>
                 <div id="dress-code-mobile" class="dress-code-mobile" aria-label="Dress code categories"></div>
             </section>
@@ -2823,8 +2824,9 @@
 
                 let selectedCategory = null;
                 let selectedRoleButton = null;
+                const singleRoleGroup = groupCategories.length === 1;
 
-                const showSample = () => {
+                const showSample = (focusBackButton = true) => {
                     if (!selectedCategory) return;
                     const card = createDressCodeCard(selectedCategory, true);
                     card.querySelectorAll('img[data-src]').forEach(image => {
@@ -2834,7 +2836,9 @@
                     display.replaceChildren(card);
                     roleStep.hidden = true;
                     sampleStep.hidden = false;
-                    backButton.focus({ preventScroll: true });
+                    if (focusBackButton && !singleRoleGroup) {
+                        backButton.focus({ preventScroll: true });
+                    }
                 };
 
                 const backToRolePicker = () => {
@@ -2843,8 +2847,18 @@
                     selectedRoleButton?.focus({ preventScroll: true });
                 };
 
-                continueButton.addEventListener('click', showSample);
-                backButton.addEventListener('click', backToRolePicker);
+                if (singleRoleGroup) {
+                    selectedCategory = groupCategories[0];
+                    roleStep.hidden = true;
+                    backButton.hidden = true;
+                    group.addEventListener('toggle', () => {
+                        if (group.open) showSample(false);
+                        else sampleStep.hidden = true;
+                    });
+                } else {
+                    continueButton.addEventListener('click', showSample);
+                    backButton.addEventListener('click', backToRolePicker);
+                }
 
                 const selectRole = (category, selectedButton) => {
                     selectedCategory = category;

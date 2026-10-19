@@ -3549,6 +3549,20 @@ body.invitation-opened #home .hero-buttons { animation-delay: 480ms; }
 
     .dress-code-role-list { justify-content: center; padding: 4px 14px 14px; }
 
+    /* Four Honor Attendant choices stay in a compact two-by-two layout. */
+    .dress-code-group[data-group-index="0"] .dress-code-role-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .dress-code-group[data-group-index="0"] .dress-code-role-button {
+        width: 100%;
+        min-width: 0;
+        padding-inline: 7px;
+        text-align: center;
+    }
+
     .dress-code-role-button {
         min-height: 40px;
         padding: 8px 12px;
@@ -3591,6 +3605,8 @@ body.invitation-opened #home .hero-buttons { animation-delay: 480ms; }
         cursor: pointer;
     }
 
+    .dress-code-back[hidden] { display: none !important; }
+
     .dress-code-mobile-display { padding: 0; }
 
     /* Keep accommodation rows independent of dress-code accordion sizing. */
@@ -3631,6 +3647,34 @@ body.invitation-opened #home .hero-buttons { animation-delay: 480ms; }
         font-size: 1.1rem;
         font-weight: 400;
         line-height: 1;
+    }
+}
+
+/* Dress-code guidance sits directly below its heading on desktop and mobile. */
+#details .dress-code-guidance {
+    margin: -10px 0 20px;
+    color: #879197;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.84rem;
+    font-style: italic;
+    line-height: 1.5;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    #details .dress-code-guidance {
+        margin: -8px 0 16px;
+        font-size: 0.78rem;
+    }
+
+    #details .details-followup-titles {
+        grid-template-columns: minmax(0, 1fr);
+        align-items: start;
+    }
+
+    #accommodation-mobile-list {
+        grid-template-columns: minmax(0, 1fr);
+        align-content: start;
     }
 }
 
