@@ -1,13 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="invitation-loading">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=42">
+    <link rel="stylesheet" href="style.css?v=43">
 </head>
-<body>
+<body class="invitation-loading">
+
+    <!-- WEDDING INVITATION INTRO -->
+    <div class="invitation-loader" id="invitation-loader" aria-label="Wedding invitation loading screen">
+        <div class="invitation-loader-backdrop" aria-hidden="true"></div>
+        <img class="invitation-loader-monogram" id="invitation-loader-monogram" src="monogram.png" alt="Aaron and Ram monogram">
+        <div class="invitation-loader-content" id="invitation-loader-content">
+            <span class="invitation-loader-divider" aria-hidden="true"></span>
+            <time datetime="2027-07-28">July 28, 2027</time>
+            <div class="invitation-loader-progress" id="invitation-loader-progress" role="progressbar" aria-label="Loading invitation" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <span></span>
+            </div>
+            <button class="invitation-loader-open" id="invitation-loader-open" type="button" hidden>Scroll up to open invitation</button>
+        </div>
+    </div>
 
     <!-- NAVIGATION BAR -->
     <nav id="navbar">
@@ -1228,6 +1242,152 @@
             });
         }
 
+        function setupInvitationLoader() {
+            const loader = document.getElementById('invitation-loader');
+            const logo = document.getElementById('invitation-loader-monogram');
+            const content = document.getElementById('invitation-loader-content');
+            const progress = document.getElementById('invitation-loader-progress');
+            const progressFill = progress?.querySelector('span');
+            const openButton = document.getElementById('invitation-loader-open');
+            const navLogo = document.querySelector('#navbar .nav-monogram img');
+            if (!loader || !logo || !content || !progress || !progressFill || !openButton || !navLogo) {
+                document.body.classList.remove('invitation-loading');
+                document.documentElement.classList.remove('invitation-loading');
+                loader?.remove();
+                return;
+            }
+
+            let pageReady = false;
+            let invitationOpening = false;
+            let revealProgress = 0;
+            let loadingProgress = 4;
+            let pointerY = null;
+            let wheelTimer = null;
+
+            const updateLogoTarget = () => {
+                const target = navLogo.getBoundingClientRect();
+                const nav = document.getElementById('navbar').getBoundingClientRect();
+                const startWidth = logo.offsetWidth || 1;
+                const startHeight = logo.offsetHeight || 1;
+                const targetWidth = target.width || 44;
+                const targetHeight = target.height || 44;
+                const targetCenterX = target.width ? target.left + target.width / 2 : window.innerWidth / 2;
+                const targetCenterY = target.height ? target.top + target.height / 2 : nav.top + nav.height / 2;
+                const targetScale = Math.min(targetWidth / startWidth, targetHeight / startHeight);
+                const targetX = targetCenterX - window.innerWidth / 2;
+                const targetY = targetCenterY - window.innerHeight / 2;
+                logo.dataset.targetX = String(targetX);
+                logo.dataset.targetY = String(targetY);
+                logo.dataset.targetScale = String(targetScale);
+            };
+
+            const renderReveal = value => {
+                revealProgress = Math.max(0, Math.min(0.86, value));
+                updateLogoTarget();
+                const ratio = revealProgress;
+                loader.style.setProperty('--invitation-backdrop-y', `${-window.innerHeight * ratio}px`);
+                logo.style.setProperty('--invitation-logo-x', `${Number(logo.dataset.targetX || 0) * ratio}px`);
+                logo.style.setProperty('--invitation-logo-y', `${Number(logo.dataset.targetY || 0) * ratio}px`);
+                logo.style.setProperty('--invitation-logo-scale', `${1 + (Number(logo.dataset.targetScale || 0.3) - 1) * ratio}`);
+                content.style.opacity = String(1 - ratio);
+                content.style.transform = `translate(-50%, ${-22 * ratio}px)`;
+            };
+
+            const finishLoading = () => {
+                if (pageReady) return;
+                pageReady = true;
+                window.clearInterval(loadProgressTimer);
+                window.clearTimeout(loadFallbackTimer);
+                progressFill.style.width = '100%';
+                progress.setAttribute('aria-valuenow', '100');
+                loader.classList.add('is-ready');
+                openButton.hidden = false;
+                openButton.focus({ preventScroll: true });
+            };
+
+            const beginOpening = () => {
+                if (!pageReady || invitationOpening) return;
+                invitationOpening = true;
+                loader.classList.add('is-finishing');
+                document.dispatchEvent(new Event('invitation:open'));
+                window.requestAnimationFrame(() => {
+                    revealProgress = 1;
+                    loader.style.setProperty('--invitation-backdrop-y', `${-window.innerHeight}px`);
+                    logo.style.setProperty('--invitation-logo-x', `${Number(logo.dataset.targetX || 0)}px`);
+                    logo.style.setProperty('--invitation-logo-y', `${Number(logo.dataset.targetY || 0)}px`);
+                    logo.style.setProperty('--invitation-logo-scale', String(Number(logo.dataset.targetScale || 0.3)));
+                    content.style.opacity = '0';
+                    content.style.transform = 'translate(-50%, -22px)';
+                });
+
+                window.setTimeout(() => {
+                    loader.classList.add('is-dismissed');
+                    document.body.classList.remove('invitation-loading');
+                    document.documentElement.classList.remove('invitation-loading');
+                    window.setTimeout(() => loader.remove(), 220);
+                }, 720);
+            };
+
+            const progressFromGesture = amount => {
+                if (!pageReady || invitationOpening || amount <= 0) return;
+                renderReveal(revealProgress + amount / Math.max(320, window.innerHeight * 0.42));
+            };
+
+            loader.addEventListener('pointerdown', event => {
+                if (event.button !== 0 || invitationOpening) return;
+                pointerY = event.clientY;
+                if (loader.setPointerCapture) loader.setPointerCapture(event.pointerId);
+            });
+            loader.addEventListener('pointermove', event => {
+                if (pointerY === null || invitationOpening) return;
+                const upwardDistance = pointerY - event.clientY;
+                pointerY = event.clientY;
+                if (upwardDistance > 0) {
+                    event.preventDefault();
+                    progressFromGesture(upwardDistance);
+                }
+            });
+            loader.addEventListener('pointerup', () => {
+                pointerY = null;
+                if (pageReady && revealProgress >= 0.1) beginOpening();
+            });
+            loader.addEventListener('pointercancel', () => { pointerY = null; });
+
+            loader.addEventListener('wheel', event => {
+                event.preventDefault();
+                if (!pageReady || invitationOpening || event.deltaY <= 0) return;
+                progressFromGesture(event.deltaY);
+                window.clearTimeout(wheelTimer);
+                wheelTimer = window.setTimeout(() => {
+                    if (revealProgress >= 0.1) beginOpening();
+                }, 180);
+            }, { passive: false });
+
+            openButton.addEventListener('click', beginOpening);
+            document.addEventListener('keydown', event => {
+                if (!pageReady || invitationOpening) return;
+                if (['ArrowUp', 'PageDown', 'Enter', ' '].includes(event.key)) {
+                    event.preventDefault();
+                    beginOpening();
+                }
+            });
+            window.addEventListener('resize', () => {
+                if (!invitationOpening) renderReveal(revealProgress);
+            });
+
+            const loadProgressTimer = window.setInterval(() => {
+                if (pageReady) return;
+                loadingProgress = Math.min(92, loadingProgress + Math.max(0.35, (92 - loadingProgress) * 0.055));
+                progressFill.style.width = `${loadingProgress}%`;
+                progress.setAttribute('aria-valuenow', String(Math.round(loadingProgress)));
+            }, 90);
+            const loadFallbackTimer = window.setTimeout(finishLoading, 6500);
+            if (document.readyState === 'complete') window.requestAnimationFrame(finishLoading);
+            else window.addEventListener('load', finishLoading, { once: true });
+            navLogo.addEventListener('load', updateLogoTarget, { once: true });
+            updateLogoTarget();
+        }
+
         function setupMusicPlayer() {
             const audio = new Audio();
             const panel = document.getElementById('music-panel');
@@ -1262,8 +1422,9 @@
             let currentTrack = 0;
             let pageIsActive = document.visibilityState !== 'hidden';
             audio.preload = 'metadata';
-            audio.autoplay = true;
+            audio.autoplay = false;
             audio.volume = 0.38;
+            let invitationPlaybackStarted = false;
 
             const updateTrackDisplay = () => {
                 const track = playlist[currentTrack];
@@ -1424,10 +1585,16 @@
                 updatePlaybackDisplay();
             });
 
+            document.addEventListener('invitation:open', () => {
+                if (invitationPlaybackStarted) return;
+                invitationPlaybackStarted = true;
+                status.textContent = 'Starting music…';
+                playAudio();
+            }, { once: true });
+
             updateTrackDisplay();
             loadTrack(0, false);
-            status.textContent = 'Trying to start the music…';
-            playAudio();
+            status.textContent = 'Music will begin when you open the invitation.';
         }
 
         function setupBackToTopVisibility() {
@@ -2519,6 +2686,7 @@
         setupAccommodationDialog();
         loadAccommodationDetails();
         setupDressCodeCards();
+        setupInvitationLoader();
         setupActiveNavigation();
         setupMusicPlayer();
         setupRsvpKeyboardVisibility();
