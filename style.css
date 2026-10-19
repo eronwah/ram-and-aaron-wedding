@@ -33,12 +33,13 @@ body.invitation-loading {
     border-radius: var(--invitation-backdrop-radius, 0px);
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.975), rgba(247, 249, 248, 0.94));
     opacity: var(--invitation-backdrop-opacity, 1);
+    clip-path: circle(var(--invitation-backdrop-clip, 150vmax) at 50% 50%);
     -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
     box-shadow: 0 20px 70px rgba(40, 54, 65, 0.12);
     transform: translate3d(var(--invitation-backdrop-x, 0px), var(--invitation-backdrop-y, 0px), 0) scale(var(--invitation-backdrop-scale, 1));
     transform-origin: center center;
-    will-change: transform;
+    will-change: transform, clip-path, opacity;
 }
 
 .invitation-loader-monogram {
@@ -151,12 +152,15 @@ body.invitation-loading {
     transform: scaleX(0.86);
 }
 .invitation-loader.is-ready .invitation-loader-open:not([hidden]) { display: flex; }
-.invitation-loader.is-finishing .invitation-loader-backdrop,
 .invitation-loader.is-finishing .invitation-loader-monogram {
-    transition: transform 720ms cubic-bezier(0.22, 0.78, 0.24, 1), border-radius 720ms cubic-bezier(0.22, 0.78, 0.24, 1);
+    transition: transform 600ms cubic-bezier(0.22, 0.78, 0.24, 1);
 }
 .invitation-loader.is-finishing .invitation-loader-backdrop {
-    transition: transform 720ms cubic-bezier(0.22, 0.78, 0.24, 1), border-radius 720ms cubic-bezier(0.22, 0.78, 0.24, 1), opacity 720ms ease;
+    transition:
+        transform 620ms cubic-bezier(0.22, 0.78, 0.24, 1) 600ms,
+        clip-path 620ms cubic-bezier(0.22, 0.78, 0.24, 1) 600ms,
+        border-radius 620ms cubic-bezier(0.22, 0.78, 0.24, 1) 600ms,
+        opacity 180ms ease 1040ms;
 }
 .invitation-loader.is-finishing .invitation-loader-content {
     transition: opacity 280ms ease, transform 420ms ease;
@@ -188,7 +192,10 @@ body.invitation-loading #navbar .nav-monogram img { transition: opacity 120ms ea
 @media (prefers-reduced-motion: reduce) {
     .invitation-loader.is-finishing .invitation-loader-backdrop,
     .invitation-loader.is-finishing .invitation-loader-monogram,
-    .invitation-loader.is-finishing .invitation-loader-content { transition-duration: 1ms; }
+    .invitation-loader.is-finishing .invitation-loader-content {
+        transition-duration: 1ms;
+        transition-delay: 0ms;
+    }
     .invitation-loader-open { animation: none; }
     .invitation-loader-arrow { animation: none; }
 }

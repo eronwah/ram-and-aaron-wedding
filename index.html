@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=45">
+    <link rel="stylesheet" href="style.css?v=46">
 </head>
 <body class="invitation-loading">
 
@@ -1286,6 +1286,7 @@
                 logo.dataset.targetX = String(targetX);
                 logo.dataset.targetY = String(targetY);
                 logo.dataset.targetScale = String(targetScale);
+                logo.dataset.targetBackdropClip = String((Math.max(targetWidth, targetHeight) / 2 + 12) / Math.max(targetScale, 0.01));
             };
 
             const renderReveal = value => {
@@ -1297,6 +1298,7 @@
                 loader.style.setProperty('--invitation-backdrop-scale', String(1 + (targetScale - 1) * ratio));
                 loader.style.setProperty('--invitation-backdrop-radius', `${ratio * 54}px`);
                 loader.style.setProperty('--invitation-backdrop-opacity', '1');
+                loader.style.setProperty('--invitation-backdrop-clip', '150vmax');
                 logo.style.setProperty('--invitation-logo-x', `${Number(logo.dataset.targetX || 0) * ratio}px`);
                 logo.style.setProperty('--invitation-logo-y', `${Number(logo.dataset.targetY || 0) * ratio}px`);
                 logo.style.setProperty('--invitation-logo-scale', `${1 + (Number(logo.dataset.targetScale || 0.3) - 1) * ratio}`);
@@ -1340,6 +1342,7 @@
                     loader.style.setProperty('--invitation-backdrop-scale', String(Number(logo.dataset.targetScale || 0.3)));
                     loader.style.setProperty('--invitation-backdrop-radius', '54px');
                     loader.style.setProperty('--invitation-backdrop-opacity', '0');
+                    loader.style.setProperty('--invitation-backdrop-clip', `${Number(logo.dataset.targetBackdropClip || 100)}px`);
                     logo.style.setProperty('--invitation-logo-x', `${Number(logo.dataset.targetX || 0)}px`);
                     logo.style.setProperty('--invitation-logo-y', `${Number(logo.dataset.targetY || 0)}px`);
                     logo.style.setProperty('--invitation-logo-scale', String(Number(logo.dataset.targetScale || 0.3)));
@@ -1352,7 +1355,7 @@
                     document.body.classList.remove('invitation-loading');
                     document.documentElement.classList.remove('invitation-loading');
                     window.setTimeout(() => loader.remove(), 220);
-                }, 720);
+                }, 1220);
             };
 
             const progressFromGesture = amount => {
