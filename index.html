@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=55">
+    <link rel="stylesheet" href="style.css?v=57">
 </head>
 <body class="invitation-loading">
 
@@ -2536,7 +2536,7 @@
                 const chevron = document.createElement('span');
                 chevron.className = 'place-chevron';
                 chevron.setAttribute('aria-hidden', 'true');
-                chevron.textContent = '›';
+                chevron.textContent = '+';
 
                 button.append(name, chevron);
                 list.appendChild(button);
@@ -2793,22 +2793,68 @@
                 roleList.setAttribute('role', 'group');
                 roleList.setAttribute('aria-label', `${groupLabel} dress code roles`);
 
+                const roleStep = document.createElement('div');
+                roleStep.className = 'dress-code-role-step';
+
+                const roleQuestion = document.createElement('p');
+                roleQuestion.className = 'dress-code-role-question';
+                roleQuestion.textContent = 'Which role best describes you?';
+
+                const continueButton = document.createElement('button');
+                continueButton.className = 'dress-code-continue';
+                continueButton.type = 'button';
+                continueButton.textContent = 'View Sample & Palette';
+                continueButton.disabled = true;
+
+                roleStep.append(roleQuestion, roleList, continueButton);
+
+                const sampleStep = document.createElement('div');
+                sampleStep.className = 'dress-code-sample-step';
+                sampleStep.hidden = true;
+
+                const backButton = document.createElement('button');
+                backButton.className = 'dress-code-back';
+                backButton.type = 'button';
+                backButton.textContent = '← Back to roles';
+
                 const display = document.createElement('div');
                 display.className = 'dress-code-mobile-display';
                 display.setAttribute('aria-live', 'polite');
 
-                const selectRole = (category, selectedButton) => {
-                    roleList.querySelectorAll('.dress-code-role-button').forEach(button => {
-                        const isSelected = button === selectedButton;
-                        button.classList.toggle('is-selected', isSelected);
-                        button.setAttribute('aria-pressed', String(isSelected));
-                    });
-                    const card = createDressCodeCard(category, true);
+                let selectedCategory = null;
+                let selectedRoleButton = null;
+
+                const showSample = () => {
+                    if (!selectedCategory) return;
+                    const card = createDressCodeCard(selectedCategory, true);
                     card.querySelectorAll('img[data-src]').forEach(image => {
                         image.src = image.dataset.src;
                         delete image.dataset.src;
                     });
                     display.replaceChildren(card);
+                    roleStep.hidden = true;
+                    sampleStep.hidden = false;
+                    backButton.focus({ preventScroll: true });
+                };
+
+                const backToRolePicker = () => {
+                    sampleStep.hidden = true;
+                    roleStep.hidden = false;
+                    selectedRoleButton?.focus({ preventScroll: true });
+                };
+
+                continueButton.addEventListener('click', showSample);
+                backButton.addEventListener('click', backToRolePicker);
+
+                const selectRole = (category, selectedButton) => {
+                    selectedCategory = category;
+                    selectedRoleButton = selectedButton;
+                    roleList.querySelectorAll('.dress-code-role-button').forEach(button => {
+                        const isSelected = button === selectedButton;
+                        button.classList.toggle('is-selected', isSelected);
+                        button.setAttribute('aria-pressed', String(isSelected));
+                    });
+                    continueButton.disabled = false;
                 };
 
                 groupCategories.forEach((category, categoryIndex) => {
@@ -2826,14 +2872,12 @@
                             mobileList.querySelectorAll('.dress-code-group[open]').forEach(openGroup => {
                                 if (openGroup !== group) openGroup.open = false;
                             });
-                            if (!roleList.querySelector('.dress-code-role-button[aria-pressed="true"]')) {
-                                selectRole(category, roleButton);
-                            }
                         });
                     }
                 });
 
-                group.append(summary, roleList, display);
+                sampleStep.append(backButton, display);
+                group.append(summary, roleStep, sampleStep);
                 mobileList.appendChild(group);
             });
         }
