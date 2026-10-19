@@ -3344,3 +3344,189 @@ body.invitation-opened #home .hero-buttons { animation-delay: 480ms; }
 @media (prefers-reduced-motion: reduce) {
     .accommodation-dialog { animation-duration: 0.01ms; animation-iteration-count: 1; }
 }
+
+/* Compact mobile dress-code accordions; desktop retains its existing card grid. */
+.dress-code-mobile { display: none; }
+
+@media (max-width: 768px) {
+    .dress-code-grid { display: none; }
+
+    .dress-code-mobile {
+        display: grid;
+        gap: 10px;
+        width: min(100%, 650px);
+        margin: 0 auto;
+        text-align: left;
+    }
+
+    .dress-code-group {
+        overflow: hidden;
+        border: 1px solid #e1e6e8;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 5px 16px rgba(26, 37, 47, 0.035);
+    }
+
+    .dress-code-group > summary {
+        position: relative;
+        display: flex;
+        align-items: center;
+        min-height: 54px;
+        padding: 14px 46px 14px 16px;
+        color: #2c3e50;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.86rem;
+        font-weight: 600;
+        letter-spacing: 0.075em;
+        line-height: 1.35;
+        list-style: none;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+
+    .dress-code-group > summary::-webkit-details-marker { display: none; }
+    .dress-code-group > summary::after {
+        position: absolute;
+        top: 50%;
+        right: 16px;
+        color: #526a7e;
+        content: '+';
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.35rem;
+        font-weight: 300;
+        line-height: 1;
+        transform: translateY(-50%);
+    }
+    .dress-code-group[open] > summary::after { content: '−'; }
+    .dress-code-group[open] > summary { color: #526a7e; }
+
+    .dress-code-role-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 0 14px 14px;
+        border-top: 1px solid #edf0f1;
+    }
+
+    .dress-code-role-button {
+        min-height: 36px;
+        padding: 7px 11px;
+        border: 1px solid #d9e0e4;
+        border-radius: 999px;
+        background: #fff;
+        color: #526273;
+        font: 500 0.75rem/1.3 'Montserrat', sans-serif;
+        cursor: pointer;
+        transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease;
+    }
+
+    .dress-code-role-button.is-selected {
+        border-color: #526a7e;
+        background: #526a7e;
+        color: #fff;
+    }
+
+    .dress-code-mobile-display { padding: 0 14px 15px; }
+    .dress-code-mobile-display:empty { display: none; }
+    .dress-code-mobile-display .dress-code-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+    }
+    .dress-code-mobile-display .dress-code-card h4 {
+        min-height: 0;
+        margin: 0 0 9px;
+        color: #6f7d83;
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+    }
+    .dress-code-mobile-display .dress-code-art-frame {
+        height: clamp(116px, 34vw, 160px);
+        border-radius: 5px;
+    }
+    .dress-code-mobile-display .dress-code-palette-frame {
+        height: 36px;
+        margin-top: 8px;
+    }
+    .dress-code-mobile-display .dress-code-placeholder { font-size: 0.68rem; }
+}
+
+@media (max-width: 360px) {
+    .dress-code-group > summary { padding-left: 13px; font-size: 0.8rem; }
+    .dress-code-role-list { gap: 6px; padding-inline: 11px; }
+    .dress-code-role-button { padding-inline: 9px; font-size: 0.7rem; }
+    .dress-code-mobile-display { padding-inline: 11px; }
+}
+
+/* Refined FAQ accordion with one open answer at a time (enforced in JavaScript). */
+#faq .faq-container {
+    display: grid;
+    gap: 12px;
+    width: min(100%, 820px);
+    margin: 0 auto;
+}
+
+#faq .faq-item {
+    margin: 0;
+    padding: 0 clamp(16px, 3vw, 26px);
+    border: 1px solid #e1e6e8;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 5px 18px rgba(26, 37, 47, 0.035);
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+#faq .faq-item[open] {
+    border-color: #c8d3db;
+    box-shadow: 0 9px 24px rgba(26, 37, 47, 0.065);
+}
+
+#faq .faq-item summary {
+    min-height: 60px;
+    padding: 17px 36px 17px 0;
+    color: #2c3e50;
+    font-size: clamp(0.98rem, 1.5vw, 1.08rem);
+    font-weight: 500;
+    line-height: 1.45;
+    text-align: left;
+}
+
+#faq .faq-item summary::after {
+    right: 0;
+    color: #526a7e;
+    font-size: 1.35rem;
+    transition: transform 200ms ease;
+}
+
+#faq .faq-item[open] summary::after { transform: translateY(-50%) rotate(180deg); }
+
+#faq .faq-item p {
+    margin: 0;
+    padding: 0 0 20px;
+    color: #5f6c74;
+    font-size: 0.94rem;
+    line-height: 1.7;
+    text-align: left;
+    animation: faqAnswerReveal 220ms ease both;
+}
+
+@keyframes faqAnswerReveal {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+    #faq .faq-container { gap: 9px; }
+    #faq .faq-item { padding-inline: 16px; }
+    #faq .faq-item summary { min-height: 56px; padding: 15px 36px 15px 0 !important; font-size: 0.96rem !important; }
+    #faq .faq-item p { padding-bottom: 17px; font-size: 0.9rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dress-code-role-button,
+    #faq .faq-item { transition: none; }
+    #faq .faq-item p { animation: none; }
+}

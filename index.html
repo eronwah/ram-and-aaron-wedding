@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=54">
+    <link rel="stylesheet" href="style.css?v=55">
 </head>
 <body class="invitation-loading">
 
@@ -254,6 +254,7 @@
             <section class="details-followup-section">
                 <h3>DRESS CODE</h3>
                 <div id="dress-code-grid" class="dress-code-grid" aria-label="Dress code samples"></div>
+                <div id="dress-code-mobile" class="dress-code-mobile" aria-label="Dress code categories"></div>
             </section>
         </div>
     </section>
@@ -2717,19 +2718,20 @@
 
         function setupDressCodeCards() {
             const grid = document.getElementById('dress-code-grid');
+            const mobileList = document.getElementById('dress-code-mobile');
             const categories = [
-                ['Best Man', 'best-man'],
-                ['Maid of Honor', 'maid-of-honor'],
-                ['Man of Honor', 'man-of-honor'],
-                ['Bridesmen', 'bridesmen'],
-                ['Principal Sponsors', 'principal-sponsors'],
-                ['Secondary Sponsors', 'secondary-sponsors'],
-                ['Groomsmen', 'groomsmen'],
-                ['Bridesmaids', 'bridesmaids'],
-                ['Guests', 'guests']
+                { label: 'Best Man', filePrefix: 'best-man', group: 'Honor Attendants' },
+                { label: 'Maid of Honor', filePrefix: 'maid-of-honor', group: 'Honor Attendants' },
+                { label: 'Man of Honor', filePrefix: 'man-of-honor', group: 'Honor Attendants' },
+                { label: 'Bridesmen', filePrefix: 'bridesmen', group: 'Honor Attendants' },
+                { label: 'Principal Sponsors', filePrefix: 'principal-sponsors', group: 'Sponsors' },
+                { label: 'Secondary Sponsors', filePrefix: 'secondary-sponsors', group: 'Sponsors' },
+                { label: 'Groomsmen', filePrefix: 'groomsmen', group: 'Groomsmen & Bridesmaids' },
+                { label: 'Bridesmaids', filePrefix: 'bridesmaids', group: 'Groomsmen & Bridesmaids' },
+                { label: 'Guests', filePrefix: 'guests', group: 'Guests' }
             ];
 
-            categories.forEach(([label, filePrefix]) => {
+            const createDressCodeCard = ({ label, filePrefix }, deferImageLoad = false) => {
                 const card = document.createElement('article');
                 card.className = 'dress-code-card';
 
@@ -2748,7 +2750,9 @@
                 sample.addEventListener('load', () => samplePlaceholder.remove(), { once: true });
                 sample.addEventListener('error', () => sample.remove(), { once: true });
                 sampleFrame.append(sample, samplePlaceholder);
-                sample.src = `assets/dresscode/${filePrefix}-sample.jpg?v=1`;
+                const sampleUrl = `assets/dresscode/${filePrefix}-sample.jpg?v=1`;
+                if (deferImageLoad) sample.dataset.src = sampleUrl;
+                else sample.src = sampleUrl;
 
                 const paletteFrame = document.createElement('div');
                 paletteFrame.className = 'dress-code-palette-frame';
@@ -2762,10 +2766,87 @@
                 palette.addEventListener('load', () => palettePlaceholder.remove(), { once: true });
                 palette.addEventListener('error', () => palette.remove(), { once: true });
                 paletteFrame.append(palette, palettePlaceholder);
-                palette.src = `assets/dresscode/${filePrefix}-palette.jpg?v=1`;
+                const paletteUrl = `assets/dresscode/${filePrefix}-palette.jpg?v=1`;
+                if (deferImageLoad) palette.dataset.src = paletteUrl;
+                else palette.src = paletteUrl;
 
                 card.append(heading, sampleFrame, paletteFrame);
-                grid.appendChild(card);
+                return card;
+            };
+
+            categories.forEach(category => grid.appendChild(createDressCodeCard(category)));
+
+            const groupLabels = ['Honor Attendants', 'Sponsors', 'Groomsmen & Bridesmaids', 'Guests'];
+            groupLabels.forEach((groupLabel, groupIndex) => {
+                const groupCategories = categories.filter(category => category.group === groupLabel);
+                if (!groupCategories.length) return;
+
+                const group = document.createElement('details');
+                group.className = 'dress-code-group';
+                group.dataset.groupIndex = String(groupIndex);
+
+                const summary = document.createElement('summary');
+                summary.textContent = groupLabel;
+
+                const roleList = document.createElement('div');
+                roleList.className = 'dress-code-role-list';
+                roleList.setAttribute('role', 'group');
+                roleList.setAttribute('aria-label', `${groupLabel} dress code roles`);
+
+                const display = document.createElement('div');
+                display.className = 'dress-code-mobile-display';
+                display.setAttribute('aria-live', 'polite');
+
+                const selectRole = (category, selectedButton) => {
+                    roleList.querySelectorAll('.dress-code-role-button').forEach(button => {
+                        const isSelected = button === selectedButton;
+                        button.classList.toggle('is-selected', isSelected);
+                        button.setAttribute('aria-pressed', String(isSelected));
+                    });
+                    const card = createDressCodeCard(category, true);
+                    card.querySelectorAll('img[data-src]').forEach(image => {
+                        image.src = image.dataset.src;
+                        delete image.dataset.src;
+                    });
+                    display.replaceChildren(card);
+                };
+
+                groupCategories.forEach((category, categoryIndex) => {
+                    const roleButton = document.createElement('button');
+                    roleButton.className = 'dress-code-role-button';
+                    roleButton.type = 'button';
+                    roleButton.textContent = category.label;
+                    roleButton.setAttribute('aria-pressed', 'false');
+                    roleButton.addEventListener('click', () => selectRole(category, roleButton));
+                    roleList.appendChild(roleButton);
+
+                    if (categoryIndex === 0) {
+                        group.addEventListener('toggle', () => {
+                            if (!group.open) return;
+                            mobileList.querySelectorAll('.dress-code-group[open]').forEach(openGroup => {
+                                if (openGroup !== group) openGroup.open = false;
+                            });
+                            if (!roleList.querySelector('.dress-code-role-button[aria-pressed="true"]')) {
+                                selectRole(category, roleButton);
+                            }
+                        });
+                    }
+                });
+
+                group.append(summary, roleList, display);
+                mobileList.appendChild(group);
+            });
+        }
+
+        function setupFaqExclusiveOpen() {
+            const faqItems = [...document.querySelectorAll('#faq .faq-item')];
+            faqItems.forEach(item => {
+                item.addEventListener('toggle', () => {
+                    if (!item.open) return;
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.open) otherItem.open = false;
+                    });
+                });
             });
         }
 
@@ -2844,6 +2925,7 @@
         setupAccommodationDialog();
         loadAccommodationDetails();
         setupDressCodeCards();
+        setupFaqExclusiveOpen();
         setupMonogramVideo();
         setupInvitationLoader();
         setupActiveNavigation();
