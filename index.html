@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=50">
+    <link rel="stylesheet" href="style.css?v=51">
 </head>
 <body class="invitation-loading">
 
@@ -13,8 +13,14 @@
     <div class="invitation-loader" id="invitation-loader" role="dialog" aria-modal="true" aria-label="Wedding invitation loading screen">
         <div class="invitation-loader-backdrop" aria-hidden="true"></div>
         <div class="invitation-curtains" aria-hidden="true">
-            <span class="invitation-curtain invitation-curtain-left"><span class="invitation-curtain-fabric"></span></span>
-            <span class="invitation-curtain invitation-curtain-right"><span class="invitation-curtain-fabric"></span></span>
+            <span class="invitation-curtain invitation-curtain-left">
+                <span class="invitation-curtain-fabric"></span>
+                <span class="invitation-curtain-tie invitation-curtain-tie-left"><span class="invitation-curtain-bow"></span></span>
+            </span>
+            <span class="invitation-curtain invitation-curtain-right">
+                <span class="invitation-curtain-fabric"></span>
+                <span class="invitation-curtain-tie invitation-curtain-tie-right"><span class="invitation-curtain-bow"></span></span>
+            </span>
         </div>
         <img class="invitation-loader-monogram" id="invitation-loader-monogram" src="monogram.png" alt="Aaron and Ram monogram">
         <div class="invitation-loader-content" id="invitation-loader-content">
@@ -1360,7 +1366,7 @@
                     document.body.classList.remove('invitation-loading');
                     document.documentElement.classList.remove('invitation-loading');
                     window.setTimeout(() => loader.remove(), 220);
-                }, 1220);
+                }, 1350);
             };
 
             const progressFromGesture = amount => {
