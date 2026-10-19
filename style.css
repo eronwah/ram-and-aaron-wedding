@@ -202,7 +202,7 @@ body.invitation-loading {
 .invitation-loader-monogram {
     position: fixed;
     z-index: 2;
-    top: 50%;
+    top: calc(50% - clamp(30px, 4vh, 42px));
     left: 50%;
     width: clamp(112px, 24vw, 158px);
     height: clamp(112px, 24vw, 158px);

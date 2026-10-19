@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=51">
+    <link rel="stylesheet" href="style.css?v=52">
 </head>
 <body class="invitation-loading">
 
@@ -1292,7 +1292,8 @@
                 const targetCenterY = target.height ? target.top + target.height / 2 : nav.top + nav.height / 2;
                 const targetScale = Math.min(targetWidth / startWidth, targetHeight / startHeight);
                 const targetX = targetCenterX - window.innerWidth / 2;
-                const targetY = targetCenterY - window.innerHeight / 2;
+                const logoStartCenterY = Number.parseFloat(getComputedStyle(logo).top) + startHeight / 2;
+                const targetY = targetCenterY - logoStartCenterY;
                 logo.dataset.targetX = String(targetX);
                 logo.dataset.targetY = String(targetY);
                 logo.dataset.targetScale = String(targetScale);
