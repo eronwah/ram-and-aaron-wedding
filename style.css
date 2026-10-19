@@ -3267,3 +3267,80 @@ body.invitation-opened #home .hero-buttons { animation-delay: 480ms; }
         transition-delay: 0ms !important;
     }
 }
+
+/* Accommodation popup card matches the RSVP form panel. */
+.accommodation-dialog {
+    position: fixed;
+    inset: 0;
+    width: min(calc(100vw - 24px), 570px);
+    max-width: 570px;
+    max-height: calc(100dvh - 36px);
+    margin: auto;
+    padding: clamp(24px, 5vw, 42px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 1px solid rgba(212, 218, 221, 0.9);
+    border-radius: 8px;
+    background: #fff;
+    color: #2c3e50;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+    text-align: left;
+    animation: rsvpPanelAppear 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.accommodation-dialog::backdrop {
+    background: rgba(20, 29, 38, 0.58);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.accommodation-dialog h4 {
+    margin: 8px 42px 22px;
+    color: #283846;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.2rem, 4vw, 1.55rem);
+    font-weight: 400;
+    line-height: 1.3;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.accommodation-dialog-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0 0 2px;
+    border: 1px solid #e3e7e8;
+    border-radius: 50%;
+    background: #fff;
+    color: #263b4c;
+    font: 300 27px/1 'Montserrat', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.accommodation-dialog-close:hover { background: #f8fafc; }
+
+.accommodation-dialog-details { margin-bottom: 22px; }
+.accommodation-dialog-details dt { font-size: 0.74rem; }
+.accommodation-dialog-details dd { font-size: 0.95rem; line-height: 1.55; }
+
+@media (max-width: 600px) {
+    .accommodation-dialog {
+        width: calc(100vw - 20px);
+        max-height: calc(100dvh - 20px);
+        padding: 24px 20px;
+    }
+
+    .accommodation-dialog h4 { margin: 8px 38px 20px; }
+    .accommodation-dialog-close { top: 10px; right: 10px; width: 40px; height: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .accommodation-dialog { animation-duration: 0.01ms; animation-iteration-count: 1; }
+}
