@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=58">
+    <link rel="stylesheet" href="style.css?v=59">
 </head>
 <body class="invitation-loading">
 
@@ -228,6 +228,7 @@
         <div class="details-followup-titles">
             <section class="details-followup-section">
                 <h3>ACCOMMODATIONS</h3>
+                <p class="accommodation-guidance">Please explore our recommended places to stay.</p>
                 <p id="accommodation-status" class="accommodation-status" role="status" aria-live="polite">Loading accommodation options…</p>
                 <div class="accommodation-table-wrap" role="region" aria-label="Accommodation options" tabindex="0">
                     <table class="accommodation-table">
@@ -552,12 +553,11 @@
             </details>
         </div>
         
-        <a href="#home" class="back-to-top" aria-hidden="true" tabindex="-1">
-            <svg viewBox="0 0 24 24">
-                <line x1="12" y1="19" x2="12" y2="5"></line>
-                <polyline points="5 12 12 5 19 12"></polyline>
+        <a href="#home" class="back-to-top" aria-label="Back to top" title="Back to top" aria-hidden="true" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <polyline points="5 13 12 6 19 13"></polyline>
+                <polyline points="5 20 12 13 19 20"></polyline>
             </svg>
-            <span>Back to top</span>
         </a>
     </section>
 
@@ -635,6 +635,7 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13M9 18c0 1.1-1.6 2-3.5 2S2 19.1 2 18s1.6-2 3.5-2S9 16.9 9 18Zm12-2c0 1.1-1.6 2-3.5 2S14 17.1 14 16s1.6-2 3.5-2 3.5.9 3.5 2Z"/></svg>
             <span class="music-fab-pulse" aria-hidden="true"></span>
         </button>
+        <div class="music-track-toast" id="music-track-toast" aria-live="polite" aria-hidden="true"></div>
     </div>
 
     <!-- JavaScript Logic -->
@@ -1533,7 +1534,8 @@
             const list = document.getElementById('music-track-list');
             const widget = document.getElementById('music-widget');
             const closeButton = document.getElementById('music-close');
-            if (!panel || !toggle || !playButton || !list || !widget || !closeButton) return;
+            const trackToast = document.getElementById('music-track-toast');
+            if (!panel || !toggle || !playButton || !list || !widget || !closeButton || !trackToast) return;
 
             const playlist = [
                 {
@@ -1558,10 +1560,48 @@
             audio.autoplay = false;
             audio.volume = 0.38;
             let invitationPlaybackStarted = false;
+            let invitationHasOpened = false;
+            let trackToastTimer = 0;
+
+            const getTrackLabel = () => {
+                const track = playlist[currentTrack];
+                return `${track.title}${track.artist ? ` — ${track.artist}` : ''}`;
+            };
+
+            const hideTrackToast = () => {
+                window.clearTimeout(trackToastTimer);
+                trackToast.classList.remove('is-visible');
+                trackToast.setAttribute('aria-hidden', 'true');
+                widget.classList.remove('has-track-toast');
+            };
+
+            const showTrackToast = () => {
+                if (!invitationHasOpened) return;
+                trackToast.textContent = getTrackLabel();
+                trackToast.classList.add('is-visible');
+                trackToast.setAttribute('aria-hidden', 'false');
+                widget.classList.add('has-track-toast');
+                window.clearTimeout(trackToastTimer);
+                trackToastTimer = window.setTimeout(hideTrackToast, 4600);
+            };
+
+            const storySection = document.getElementById('our-story');
+            if (storySection && 'IntersectionObserver' in window) {
+                const storyHintObserver = new IntersectionObserver(entries => {
+                    if (entries.some(entry => entry.isIntersecting)) hideTrackToast();
+                }, { threshold: 0.01 });
+                storyHintObserver.observe(storySection);
+            } else if (storySection) {
+                window.addEventListener('scroll', () => {
+                    const storyBounds = storySection.getBoundingClientRect();
+                    if (storyBounds.top < window.innerHeight && storyBounds.bottom > 0) hideTrackToast();
+                }, { passive: true });
+            }
 
             const updateTrackDisplay = () => {
                 const track = playlist[currentTrack];
                 trackTitle.textContent = track.title;
+                if (trackToast.classList.contains('is-visible')) trackToast.textContent = getTrackLabel();
                 list.querySelectorAll('button').forEach((button, index) => {
                     const isCurrent = index === currentTrack;
                     button.classList.toggle('is-current', isCurrent);
@@ -1717,6 +1757,11 @@
                 status.textContent = 'Could not load the music file.';
                 updatePlaybackDisplay();
             });
+
+            document.addEventListener('invitation:opened', () => {
+                invitationHasOpened = true;
+                showTrackToast();
+            }, { once: true });
 
             document.addEventListener('invitation:open', () => {
                 if (invitationPlaybackStarted) return;

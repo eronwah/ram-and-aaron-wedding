@@ -3682,3 +3682,97 @@ body.invitation-opened #home .hero-buttons { animation-delay: 480ms; }
     .dress-code-continue,
     #accommodation-mobile-list .accommodation-place-button { transition: none; }
 }
+
+/* Small cue for the song that starts with the opened invitation. */
+.music-widget { transition: transform 220ms ease; }
+.music-widget.has-track-toast { transform: translateY(-48px); }
+.music-track-toast {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: max-content;
+    max-width: min(250px, calc(100vw - 28px));
+    padding: 9px 13px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    border-radius: 12px;
+    background: linear-gradient(135deg, #526a7e 0%, #263b4c 100%);
+    box-shadow: 0 7px 22px rgba(26, 37, 47, 0.2);
+    color: #fff;
+    font: 500 0.73rem/1.4 'Montserrat', sans-serif;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition: opacity 220ms ease, visibility 220ms ease, transform 220ms ease;
+}
+.music-track-toast.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Round Back to Top matches the music control; the double arrow gently floats. */
+#faq .back-to-top {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    border-radius: 50%;
+    background: linear-gradient(135deg, #526a7e 0%, #263b4c 100%);
+    box-shadow: 0 7px 22px rgba(26, 37, 47, 0.26);
+    color: #fff;
+    text-shadow: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+#faq .back-to-top svg {
+    display: block;
+    width: 25px !important;
+    height: 25px !important;
+    overflow: visible;
+    stroke: currentColor;
+    stroke-width: 2.1;
+    animation: backToTopArrowFloat 1.55s ease-in-out infinite;
+}
+#faq .back-to-top:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+    background: linear-gradient(135deg, #60788c 0%, #30495d 100%);
+    box-shadow: 0 10px 26px rgba(26, 37, 47, 0.3);
+    color: #fff;
+    transform: translate(-50%, -2px) scale(1.04);
+}
+#faq .back-to-top:hover svg { transform: none; }
+@keyframes backToTopArrowFloat {
+    0%, 100% { transform: translateY(2px); }
+    50% { transform: translateY(-2px); }
+}
+
+#details .accommodation-guidance {
+    margin: -8px 0 16px;
+    color: #879197;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.84rem;
+    font-style: italic;
+    line-height: 1.5;
+    text-align: center;
+}
+#details .accommodation-status { margin: 0 auto 16px; text-align: center; }
+
+@media (max-width: 600px) {
+    .music-widget.has-track-toast { transform: none; }
+    .music-track-toast { max-width: min(230px, calc(100vw - 28px)); }
+    #faq .back-to-top { width: 50px; height: 50px; }
+    #faq .back-to-top svg { width: 23px !important; height: 23px !important; }
+    #details .accommodation-guidance { margin: -8px 0 14px; font-size: 0.78rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .music-widget,
+    .music-track-toast,
+    #faq .back-to-top { transition: none; }
+    #faq .back-to-top svg { animation: none; }
+}
