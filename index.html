@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=46">
+    <link rel="stylesheet" href="style.css?v=48">
 </head>
 <body class="invitation-loading">
 
@@ -2057,16 +2057,29 @@
                         imageFrame.setAttribute('aria-label', `Open Our Story photo ${order}`);
                         const image = document.createElement('img');
                         image.alt = `Aaron and Ram, story photograph ${order}`;
-                        image.loading = 'lazy';
+                        image.loading = index < 2 ? 'eager' : 'lazy';
+                        image.decoding = 'async';
+                        image.fetchPriority = index === 0 ? 'high' : index < 3 ? 'auto' : 'low';
                         image.addEventListener('load', () => image.classList.add('is-loaded'), { once: true });
                         imageFrame.addEventListener('click', () => {
                             openOurStoryPhoto(image.currentSrc || image.src, paragraph.textContent, imageFrame);
                         });
+                        const originalImageUrl = `assets/ourstory/${encodeURIComponent(imageFile)}?v=2`;
+                        const optimizedImageFile = imageFile.replace(/\.(jpe?g)$/i, '.optimized.$1');
+                        const optimizedImageUrl = optimizedImageFile !== imageFile
+                            ? `assets/ourstory/${encodeURIComponent(optimizedImageFile)}?v=1`
+                            : originalImageUrl;
+                        let triedOriginalImage = false;
                         image.addEventListener('error', () => {
+                            if (!triedOriginalImage && optimizedImageUrl !== originalImageUrl) {
+                                triedOriginalImage = true;
+                                image.src = originalImageUrl;
+                                return;
+                            }
                             entry.classList.remove('has-image');
                             imageFrame.remove();
-                        }, { once: true });
-                        image.src = `assets/ourstory/${encodeURIComponent(imageFile)}?v=${Date.now()}`;
+                        });
+                        image.src = optimizedImageUrl;
                         const hint = document.createElement('span');
                         hint.className = 'story-image-open-hint';
                         hint.setAttribute('aria-hidden', 'true');
