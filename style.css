@@ -29,17 +29,9 @@ body.invitation-loading {
 .invitation-loader-backdrop {
     position: absolute;
     inset: 0;
-    border: 1px solid rgba(255, 255, 255, 0.72);
-    border-radius: var(--invitation-backdrop-radius, 0px);
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.975), rgba(247, 249, 248, 0.94));
-    opacity: var(--invitation-backdrop-opacity, 1);
-    clip-path: circle(var(--invitation-backdrop-clip, 150vmax) at 50% 50%);
-    -webkit-backdrop-filter: blur(5px);
-    backdrop-filter: blur(5px);
-    box-shadow: 0 20px 70px rgba(40, 54, 65, 0.12);
-    transform: translate3d(var(--invitation-backdrop-x, 0px), var(--invitation-backdrop-y, 0px), 0) scale(var(--invitation-backdrop-scale, 1));
-    transform-origin: center center;
-    will-change: transform, clip-path, opacity;
+    opacity: 1;
+    will-change: opacity;
 }
 
 /* White curtain panels with subtle idle motion and a delayed opening. */
@@ -313,25 +305,23 @@ body.invitation-loading {
     transition: transform 600ms cubic-bezier(0.22, 0.78, 0.24, 1);
 }
 .invitation-loader.is-finishing .invitation-loader-backdrop {
-    transition:
-        transform 620ms cubic-bezier(0.22, 0.78, 0.24, 1) 600ms,
-        clip-path 620ms cubic-bezier(0.22, 0.78, 0.24, 1) 600ms,
-        border-radius 620ms cubic-bezier(0.22, 0.78, 0.24, 1) 600ms,
-        opacity 180ms ease 1040ms;
+    opacity: 0;
+    transition: opacity 620ms ease 600ms;
 }
 .invitation-loader.is-finishing .invitation-loader-content {
     transition: opacity 280ms ease, transform 420ms ease;
 }
-.invitation-loader.is-resetting .invitation-loader-backdrop,
 .invitation-loader.is-resetting .invitation-loader-monogram {
-    transition: transform 560ms cubic-bezier(0.2, 0.72, 0.24, 1), border-radius 560ms ease;
+    transition: transform 560ms cubic-bezier(0.2, 0.72, 0.24, 1);
 }
 .invitation-loader.is-resetting .invitation-loader-content {
     transition: opacity 420ms ease, transform 420ms ease;
 }
-.invitation-loader.is-wheel-scrolling .invitation-loader-backdrop,
-.invitation-loader.is-wheel-scrolling .invitation-loader-monogram {
-    transition: transform 100ms ease-out, border-radius 100ms ease-out;
+.invitation-loader.is-pointer-swiping .invitation-curtain-fabric,
+.invitation-loader.is-wheel-scrolling .invitation-curtain-fabric,
+.invitation-loader.is-pointer-swiping .invitation-curtain-tie,
+.invitation-loader.is-wheel-scrolling .invitation-curtain-tie {
+    animation-play-state: paused;
 }
 .invitation-loader.is-dismissed .invitation-loader-backdrop { opacity: 0; transition: opacity 180ms ease; }
 .invitation-loader.is-dismissed .invitation-loader-monogram { opacity: 0; transition: opacity 180ms ease; }

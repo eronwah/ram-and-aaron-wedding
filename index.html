@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wedding of Aaron & Ram</title>
     <link rel="icon" type="image/png" href="monogram.png">
-    <link rel="stylesheet" href="style.css?v=59">
+    <link rel="stylesheet" href="style.css?v=60">
 </head>
 <body class="invitation-loading">
 
@@ -1348,6 +1348,8 @@
             let wheelMotionTimer = null;
             let resetTimer = null;
             let loadReadyTimer = null;
+            let pendingGestureDelta = 0;
+            let revealUpdateFrame = 0;
 
             const updateLogoTarget = () => {
                 const target = navLogo.getBoundingClientRect();
@@ -1365,19 +1367,11 @@
                 logo.dataset.targetX = String(targetX);
                 logo.dataset.targetY = String(targetY);
                 logo.dataset.targetScale = String(targetScale);
-                logo.dataset.targetBackdropClip = String((Math.max(targetWidth, targetHeight) / 2 + 12) / Math.max(targetScale, 0.01));
             };
 
             const renderReveal = value => {
                 revealProgress = Math.max(0, Math.min(0.75, value));
                 const ratio = revealProgress;
-                loader.style.setProperty('--invitation-backdrop-x', `${Number(logo.dataset.targetX || 0) * ratio}px`);
-                loader.style.setProperty('--invitation-backdrop-y', `${Number(logo.dataset.targetY || 0) * ratio}px`);
-                const targetScale = Number(logo.dataset.targetScale || 0.3);
-                loader.style.setProperty('--invitation-backdrop-scale', String(1 + (targetScale - 1) * ratio));
-                loader.style.setProperty('--invitation-backdrop-radius', `${ratio * 54}px`);
-                loader.style.setProperty('--invitation-backdrop-opacity', '1');
-                loader.style.setProperty('--invitation-backdrop-clip', '150vmax');
                 logo.style.setProperty('--invitation-logo-x', `${Number(logo.dataset.targetX || 0) * ratio}px`);
                 logo.style.setProperty('--invitation-logo-y', `${Number(logo.dataset.targetY || 0) * ratio}px`);
                 logo.style.setProperty('--invitation-logo-scale', `${1 + (Number(logo.dataset.targetScale || 0.3) - 1) * ratio}`);
@@ -1401,9 +1395,23 @@
                 loader.classList.remove('is-resetting');
             };
 
+            const flushPendingGesture = () => {
+                if (revealUpdateFrame) {
+                    window.cancelAnimationFrame(revealUpdateFrame);
+                    revealUpdateFrame = 0;
+                }
+                const delta = pendingGestureDelta;
+                pendingGestureDelta = 0;
+                if (delta && pageReady && !invitationOpening) {
+                    renderReveal(revealProgress + delta);
+                }
+            };
+
             const returnToStart = () => {
+                flushPendingGesture();
                 if (invitationOpening || revealProgress <= 0) return;
                 window.clearTimeout(wheelTimer);
+                loader.classList.remove('is-pointer-swiping', 'is-wheel-scrolling');
                 loader.classList.add('is-resetting');
                 window.requestAnimationFrame(() => renderReveal(0));
                 resetTimer = window.setTimeout(() => loader.classList.remove('is-resetting'), 600);
@@ -1411,18 +1419,14 @@
 
             const beginOpening = () => {
                 if (!pageReady || invitationOpening) return;
+                flushPendingGesture();
                 invitationOpening = true;
+                loader.classList.remove('is-pointer-swiping', 'is-wheel-scrolling');
                 loader.classList.add('is-finishing');
                 loader.classList.add('is-curtains-opening');
                 document.dispatchEvent(new Event('invitation:open'));
                 window.requestAnimationFrame(() => {
                     revealProgress = 1;
-                    loader.style.setProperty('--invitation-backdrop-x', `${Number(logo.dataset.targetX || 0)}px`);
-                    loader.style.setProperty('--invitation-backdrop-y', `${Number(logo.dataset.targetY || 0)}px`);
-                    loader.style.setProperty('--invitation-backdrop-scale', String(Number(logo.dataset.targetScale || 0.3)));
-                    loader.style.setProperty('--invitation-backdrop-radius', '54px');
-                    loader.style.setProperty('--invitation-backdrop-opacity', '0');
-                    loader.style.setProperty('--invitation-backdrop-clip', `${Number(logo.dataset.targetBackdropClip || 100)}px`);
                     logo.style.setProperty('--invitation-logo-x', `${Number(logo.dataset.targetX || 0)}px`);
                     logo.style.setProperty('--invitation-logo-y', `${Number(logo.dataset.targetY || 0)}px`);
                     logo.style.setProperty('--invitation-logo-scale', String(Number(logo.dataset.targetScale || 0.3)));
@@ -1441,13 +1445,23 @@
 
             const progressFromGesture = amount => {
                 if (!pageReady || invitationOpening || amount === 0) return;
-                renderReveal(revealProgress + amount / Math.max(320, window.innerHeight * 0.42));
+                pendingGestureDelta += amount / Math.max(320, window.innerHeight * 0.42);
+                if (revealUpdateFrame) return;
+                revealUpdateFrame = window.requestAnimationFrame(() => {
+                    revealUpdateFrame = 0;
+                    const delta = pendingGestureDelta;
+                    pendingGestureDelta = 0;
+                    if (delta && pageReady && !invitationOpening) {
+                        renderReveal(revealProgress + delta);
+                    }
+                });
             };
 
             loader.addEventListener('pointerdown', event => {
                 if (event.button !== 0 || invitationOpening) return;
                 cancelReset();
                 loader.classList.remove('is-wheel-scrolling');
+                loader.classList.add('is-pointer-swiping');
                 window.clearTimeout(wheelMotionTimer);
                 window.clearTimeout(wheelTimer);
                 pointerY = event.clientY;
@@ -1465,6 +1479,7 @@
                     const swipeDistance = pointerStartY - event.clientY;
                     const swipeDuration = performance.now() - pointerStartAt;
                     if (swipeDistance >= 72 && swipeDuration <= 300) {
+                        flushPendingGesture();
                         renderReveal(0.75);
                         pointerY = null;
                         pointerStartY = null;
@@ -1475,11 +1490,18 @@
             loader.addEventListener('pointerup', () => {
                 pointerY = null;
                 pointerStartY = null;
+                loader.classList.remove('is-pointer-swiping');
+                flushPendingGesture();
                 if (!pageReady) return;
                 if (revealProgress >= 0.75) beginOpening();
                 else returnToStart();
             });
-            loader.addEventListener('pointercancel', () => { pointerY = null; pointerStartY = null; });
+            loader.addEventListener('pointercancel', () => {
+                pointerY = null;
+                pointerStartY = null;
+                loader.classList.remove('is-pointer-swiping');
+                flushPendingGesture();
+            });
 
             loader.addEventListener('wheel', event => {
                 event.preventDefault();
@@ -1491,6 +1513,7 @@
                 progressFromGesture(event.deltaY);
                 window.clearTimeout(wheelTimer);
                 wheelTimer = window.setTimeout(() => {
+                    flushPendingGesture();
                     if (revealProgress >= 0.75) beginOpening();
                     else returnToStart();
                 }, 450);
